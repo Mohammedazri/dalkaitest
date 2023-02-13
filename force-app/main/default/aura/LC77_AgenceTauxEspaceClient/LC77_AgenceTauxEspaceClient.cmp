@@ -1,0 +1,39 @@
+<!--c:LC77_AgenceTauxEspaceClient-->
+<!--** 
+* @author Dona Kfoury
+* @date 15/09/2020 
+* @description Composant qui montre le taux "Taux d'adoption à l'EC de l'agence" de l'agence de l'utilisateur pour l'annee actuelle.
+*-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction" controller="LC77_AgenceTauxEspaceClient_Controller"  access="global">
+    <aura:attribute  name="TauxAgenceEC" type="Decimal"/>
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="custom-background" >
+        <!--loading spinner start-->
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.TauxAgenceEC == -1}">
+            <br/>
+            <p  class="erreurTaux">{!$Label.c.LC77_PasDeTaux}</p>
+            <aura:set attribute="else">
+                <div class="colonneNomTaux">
+                    <div class="slds-truncate">{!$Label.c.LC77_TauxEC}</div>
+                </div>
+                <div>
+                    <center>
+                        <p class ="colonneTaux">{!v.TauxAgenceEC}%</p>
+                    </center>
+                </div>
+            </aura:set>
+        </aura:if>
+        <br/>
+    </div>
+</aura:component>

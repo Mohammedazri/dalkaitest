@@ -1,0 +1,26 @@
+<apex:component controller="VFC02_MapFilterComponent" >
+      
+    <apex:attribute name="pageController" type="VFC01_MapFilter" assignTo="{!VFC01_MapFilter_instance}" required="true" description="The controller for the page." />
+    <div id="tabs" class="slds-tabs--scoped" style="width:auto; background-color:white;">
+        <ul class="slds-tabs--scoped__nav" role="tablist">
+            <li class="slds-tabs--scoped__item slds-active" title="Item One" role="presentation">
+                <input type="checkbox" style="float:left; display:block; position:absolute; height: 27px; margin-top:10px; margin-left:5px;"  />
+                <a class="slds-tabs--scoped__link" href="#tabs-1" onclick="toggleSelectedTab(this);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item">
+                    <span style="width:15px; height:15px; padding:7px;" />
+                Partenaire</a></li>
+            <li class="slds-tabs--scoped__item" title="Item Two" role="presentation">
+                <input type="checkbox" style="float:left; display:block; position:absolute; height: 27px; margin-top:10px; margin-left:5px;"  />
+                <a class="slds-tabs--scoped__link" href="#tabs-2" onclick="toggleSelectedTab(this);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item"><span style="width:15px; height:15px; padding:7px;" />Projet Commercial</a></li>
+            <li class="slds-tabs--scoped__item" title="Item Three" role="presentation">
+                <input type="checkbox" style="float:left; display:block; position:absolute; height: 27px; margin-top:10px; margin-left:5px;"  />
+                <a class="slds-tabs--scoped__link" href="#tabs-3" onclick="toggleSelectedTab(this);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item"><span style="width:15px; height:15px; padding:7px;" />Contrat</a></li>
+            <li class="slds-tabs--scoped__item" title="Item Four" role="presentation">
+                <input type="checkbox" style="float:left; display:block; position:absolute; height: 27px; margin-top:10px; margin-left:5px;"  />
+                <a class="slds-tabs--scoped__link" href="#tabs-4" onclick="toggleSelectedTab(this);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-4" id="tab-default-4__item"><span style="width:15px; height:15px; padding:7px;" />Site</a></li>
+        </ul>
+        <div id="tabs-1" class="slds-tabs--scoped__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item"><c:C03_AccountFilterComponent /></div>
+        <div id="tabs-2" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item"><h2>Projet Commercial Filters</h2></div>
+        <div id="tabs-3" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item"><h2>Contrat Filters</h2></div>
+        <div id="tabs-4" class="slds-tabs--scoped__content slds-hide" role="tabpanel" aria-labelledby="tab-default-4__item"><h2>Site Filters</h2></div>
+    </div>
+</apex:component>

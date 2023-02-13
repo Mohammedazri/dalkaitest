@@ -1,0 +1,44 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="LC52_MettreOffreZero_Cont">
+    <aura:attribute name="oppId" type="String" />  
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    <aura:attribute name="FDSname" type= "String"/>
+    <aura:attribute name="ShowPopUp" type="Boolean" default="false"/> 
+    <aura:attribute name="ShowSpinner" type="Boolean" default="true"/> 
+    <aura:attribute name="newOpp" type= "String"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+   
+    <aura:if isTrue="{!v.ShowSpinner}">
+    <div class="SpinCss">
+        <lightning:spinner alternativeText="Loading" size="Large" />
+    </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.ShowPopUp}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container"> 
+                <div class="slds-modal__header">
+                    <h2 id="header99" class="slds-text-heading--medium">{!$Label.c.LC52_titre}</h2>
+                </div> 
+                <div class="slds-modal__content slds-p-around--medium ">
+                    <aura:if isTrue="{! !empty(v.error)}">
+                        <div class="slds-notify_container slds-is-relative">
+                            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                    {!$Label.c.LC52_MessageFDS} : {!v.FDSname} ?
+                </div> 
+                <div class="slds-modal__footer"> 
+                    <lightning:button label="{!$Label.c.LC35_Oui}" onclick="{!c.Handle_ok}" class="slds-button_neutral slds-align_absolute-left slds-size_1-of-6"/>
+                    <lightning:button label="{!$Label.c.LC35_Non}" onclick="{!c.Handle_Annuler}" class="slds-button_brand slds-align_absolute-right slds-size_1-of-6"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+</aura:component>

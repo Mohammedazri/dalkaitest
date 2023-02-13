@@ -1,0 +1,75 @@
+<!--c:LC24_createRelationClientEtInterne-->
+<aura:component controller="LC24_crteRelationClientInt_Controller">
+    <aura:attribute name="IfModalRC" type="boolean" default="false"/>
+    <aura:attribute name="IfRefreshRC" type="boolean" default="false"/>
+    <aura:attribute name="IfCreateMode" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="RelationToEdit" type="Contact_User__c" default=""/>
+    <aura:attribute name="disableSave" type="boolean" default="false"/>
+    <aura:attribute name="disableButton" type="boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String" default="" required="false" access="private"/>
+    <aura:attribute name="newRC" type="Contact_User__c" default="{'sobjectType': 'Contact_User__c',
+                                                                 'Contact_Client__c' : '',
+                                                                 'Contact_Interne__c' : ''}"/>
+    <aura:handler name="change" value="{!v.RelationToEdit}" action="{!c.FillData}"/>
+
+    <div class="demo-only" style="height: 640px;">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="margin-top:5%">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        <aura:if isTrue="{!v.IfCreateMode}">
+                            {!$Label.c.LC24_Cree}
+                            <aura:set attribute="else">
+                                {!$Label.c.LC24_Modifier}
+                            </aura:set>
+                        </aura:if>
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" style="color:red">{!v.errorMessage}</div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <table>
+                        <tr>
+                            <td width="49%">
+                                <!--<p><span style="color:red">*</span>&nbsp;{!$Label.c.LC24_Contact_Client}</p>-->
+                                <lightning:recordEditForm aura:id="recordViewForm"
+                                  objectApiName="Contact_User__c">
+                                <!--<c:InputLookup aura:id="InputContact"
+                                               type="Contact"  
+                                               value="{!v.newRC.Contact_Client__c}"
+                                               className="form-control"/><br/>
+                                 <force:inputField aura:id="InputContact" value="{!v.newRC.Contact_Client__c}"/><br/>-->
+                                    <br/>
+                                    <br/>
+                                                                        <div class="slds-box slds-theme_default">
+
+                                    <lightning:inputField aura:id="InputContact" fieldName="Contact_Client__c" value="{!v.newRC.Contact_Client__c}"/>
+                                    </div>
+                                <!--<p><span style="color:red">*</span>&nbsp;{!$Label.c.LC24_Contact_Interne}</p>-->
+                                <!--<c:InputLookup aura:id="InputUser"
+                                               type="User"  
+                                               value="{!v.newRC.Contact_Interne__c}"
+                                               className="form-control"/><br/><br/>-->
+                                <!-- <force:inputField aura:id="InputUser" value="{!v.newRC.Contact_Interne__c}"/><br/>-->
+                                    <br/>
+                                    <br/>
+                                    <div class="slds-box slds-theme_default">
+                                    <lightning:inputField aura:id="InputUser" fieldName="Contact_Interne__c" value="{!v.newRC.Contact_Interne__c}"/>
+                                    </div>
+                                        <br/>
+                                    <br/>
+                                </lightning:recordEditForm>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ExitCreateRC}">{!$Label.c.Annuler}</button>
+                    <ui:button aura:id="saveButton" class="slds-button slds-button_brand" 
+                               press="{!c.Save}" disabled="{!v.disableSave}">{!$Label.c.Enregistrer}</ui:button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" ></div>
+    </div>
+</aura:component>

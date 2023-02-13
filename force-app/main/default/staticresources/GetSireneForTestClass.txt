@@ -1,0 +1,41 @@
+{
+    "dkCodePartenaire": "K00002088U",
+    "etablissement": {
+        "immatriculationLegale": "44308999000032",
+        "libelleEtablissement": "NISSAN AUTOMOTIVE EUROPE",
+        "denominationCommerciale": "",
+        "siegeSocialPartenaire": true,
+        "effectifSalarie": null,
+        "dateDebut": "2017-04-10",
+        "dateFin": null,
+        "etatAdministratifEtablissement": "A",
+        "codeActiviteLocal": "70.22Z",
+        "societe": {
+            "immatriculationLegale": "443089990",
+            "denominationUniteLegale": "NISSAN AUTOMOTIVE EUROPE",
+            "nomNaissance": null,
+            "nomUsage": null,
+            "prenoms": "",
+            "acronymeSigleSociete": null,
+            "lieuImmatriculationLegale": "VERSAILLES",
+            "formeJuridiqueInsee": "5710",
+            "codeActiviteLocal": "70.22Z",
+            "rna": null,
+            "etatAdmin": "A",
+            "nicSiege": "00032",
+            "sexe": null
+        },
+        "adresse": [
+            {
+                "precisionIdentificationAdresse": null,
+                "numeroVoie": "8",
+                "typeDeVoie": "RUE",
+                "libelleVoie": "JEAN PIERRE TIMBAUD",
+                "complementAdresse": null,
+                "codePostal": "78180",
+                "ville": "MONTIGNY LE BRETONNEUX",
+                "pays": "DZ"
+            }
+        ]
+    }
+}

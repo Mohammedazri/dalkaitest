@@ -1,0 +1,4 @@
+<!--c:LE02_ContactSearch-->
+<aura:event type="APPLICATION" description="set the expand attribute of all children rows to false" >
+    <aura:attribute name="IFCloseRoot" type="boolean"/>
+</aura:event>

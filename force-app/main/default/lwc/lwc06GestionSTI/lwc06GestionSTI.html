@@ -1,0 +1,157 @@
+<!--
+  @description       : 
+  @author            : Othmane Choulli
+  @group             : 
+  @last modified on  : 25-10-2022
+  @last modified by  : Othmane Choulli
+-->
+<template>
+    <lightning-card>
+        <div if:true={showSpinner} class="slds-spinner_container">
+            <div class="slds-spinner--brand slds-spinner slds-spinner--small slds-is-relative"
+                role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+        <lightning-messages></lightning-messages>
+        <span class="slds-m-left_large slds-form-element__label slds-m-bottom_x-medium slds-text-title_bold slds-var-p-top_small slds-var-p-bottom_small">Suivi des appels technicien</span>
+        <div class="slds-grid slds-gutters slds-m-left_xx-small slds-m-bottom_x-large slds-m-right_small">
+            <div class="slds-col">
+                <lightning-combobox name="Action"
+                placeholder="Choisir une action..."
+                options={picklistActions}
+                value={selectedAction}
+                dropdown-alignment="Center"
+                autocomplete
+                onchange={handleActionChange}
+                style="display: flex !important;"
+                disabled={disablePicklistActions}></lightning-combobox>
+            </div>
+            <div class="slds-col">
+                <lightning-combobox name="Action"
+                placeholder="Temps à prolonger..."
+                options={picklistProlongation}
+                value={selectedProlongation}
+                dropdown-alignment="Center"
+                autocomplete
+                onchange={handleProlongationChange}
+                style="display: flex !important;"
+                disabled={disablePicklistProlongation}></lightning-combobox>
+            </div>
+            <div class="slds-col">
+                <lightning-button variant="brand" label="Valider" title="Valider" onclick={handleClickValider} disabled={disableButtonValider}></lightning-button>
+            </div>
+            </div>
+        <div class="slds-grid slds-gutters slds-m-bottom_x-large slds-m-left_small slds-m-right_small">
+            <div class="slds-col slds-size_2-of-6">
+                <div class="parent">
+                    <span class="child">
+                        {etapeActuelle}
+                    </span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <div class={classCSSKo1}>
+                    <span class="child">
+                        KO
+                    </span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <div class={classCSSKo2}>
+                    <span class="child">
+                        KO
+                    </span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <div class={classCSSKo3}>
+                    <span class="child">
+                        KO
+                    </span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <div class={classCSSOK}>
+                    <span class="child">
+                        OK
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div if:true={showEmpreinte} class="slds-grid slds-gutters slds-m-left_small slds-m-right_small">
+            <div class="slds-col slds-size_3-of-6">
+                <span class="label">
+                    Heure du prochain appel :
+                </span>
+            </div>
+            <div class="slds-col slds-size_3-of-6">
+                <span class="value">
+                    {empreinte}
+                </span>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-m-left_small slds-m-right_small">
+            <div class="slds-col slds-size_3-of-6">
+                <span class="label">
+                    Total de KO :
+                </span>
+            </div>
+            <div class="slds-col slds-size_3-of-6">
+                <span class="value">
+                    {nombreTotalKO}
+                </span>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-m-left_small slds-m-right_small">
+            <div class="slds-col slds-size_3-of-6">
+                <span class="label">
+                    Total de prolongation :
+                </span>
+            </div>
+            <div class="slds-col slds-size_3-of-6">
+                <span class="value">
+                    {prolongation} min
+                </span>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-m-left_small slds-m-right_small">
+            <div class="slds-col slds-size_3-of-6">
+                <span class="label">
+                    Nom du technicien :
+                </span>
+            </div>
+            <div class="slds-col slds-size_3-of-6">
+                <span class="value">
+                    {nomTechnicien}
+                </span>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters slds-m-left_small slds-m-right_small">
+            <div class="slds-col slds-size_3-of-6">
+                <span class="label">
+                    N° de téléphone :
+                </span>
+            </div>
+            <div class="slds-col slds-size_3-of-6">
+                <span class="value">
+                    <lightning-formatted-phone value={telephoneTechnicien} ></lightning-formatted-phone>
+                </span>
+            </div>
+        </div>
+        <!--<div class="slds-grid slds-gutters slds-m-left_small slds-m-right_small">
+            <div class="slds-col slds-size_3-of-6">
+                <span class="label">
+                    N° de téléphone :
+                </span>
+            </div>
+            <div class="slds-col slds-size_3-of-6">
+                <span class="value">
+                    <lightning-click-to-dial value={telephoneTechnicien} record-id={recordId}></lightning-click-to-dial>
+                </span>
+            </div>
+        </div>-->
+    </lightning-card>
+</template>

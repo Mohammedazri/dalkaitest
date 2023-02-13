@@ -1,0 +1,77 @@
+<template>
+  <article class="slds-card">
+    <template if:true={isLoading}>
+      <div class="slds-align_absolute-center">
+        <div class="slds-spinner_container">
+          <div
+            role="status"
+            class="slds-spinner slds-spinner_medium slds-spinner_brand"
+          >
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <div class="slds-card__header slds-grid slds-p-bottom_small" style="background-color: #f3f3f3">
+      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+        <div class="slds-media__figure">
+          <div
+          class="extraSmall forceEntityIcon"
+          style="background-color: #e7806f"
+          >
+          <span class="slds-icon_container" title="Équipe de contrat">
+            <img
+            src="/img/icon/t4v35/standard/team_member_120.png"
+            alt="Équipe de contrat"
+            title="Équipe de contrat"
+            />
+            <span class="slds-assistive-text"> Équipe de contrat </span>
+          </span>
+        </div>
+      </div>
+      <div class="slds-media__body">
+        <h2 class="slds-card__header-title">
+          <span> Équipe de contrat ({showCount})</span>
+        </h2>
+      </div>
+      <template if:true={cancreate}>
+      <div class="slds-float_right">
+        <c-lwc07-create-contrat-member contratid={recordId} onrefreshparent={refreshComponent}></c-lwc07-create-contrat-member>
+      </div>
+    </template>
+    </header>
+  </div>
+  <div class="slds-grid slds-wrap slds-p-left_small slds-p-bottom_small slds-p-bottom_small">
+    <template for:each={relatedContratShare} for:item="relatedcs">
+        <div class="slds-col slds-size_1-of-2 slds-var-p-top_xx-small slds-var-p-left_xx-small slds-var-p-bottom_xx-small slds-var-p-bottom_xx-small" key = {relatedcs.UserOrGroupId}>
+        <c-lwc06-display-equipe-contrat username ={relatedcs.UserName} useraccess={relatedcs.UserAccess} userprofileurl ={relatedcs.photoURL} userid ={relatedcs.UserId} csid={relatedcs.csId} notdeleteable={relatedcs.notdeleteable} onrefreshparent={refreshComponent}></c-lwc06-display-equipe-contrat>
+      </div>    
+  </template> 
+</div>
+<lightning-layout class="slds-m-bottom_xx-small" horizontal-align="space">
+  <lightning-layout-item flexibility="auto">
+    <lightning-button
+    icon-name="utility:chevronleft"
+    onclick={previousHandler}
+    label="Précédent"
+    disabled={isFirstPage}
+    >
+  </lightning-button>
+</lightning-layout-item>
+<lightning-layout-item flexibility="auto">
+  <p class="slds-p-top_xx-small">Page {page} de {totalPage}</p>
+</lightning-layout-item>
+<lightning-layout-item flexibility="auto">
+  <lightning-button
+  icon-name="utility:chevronright"
+  icon-position="right"
+  onclick={nextHandler}
+  label="Suivant"
+  disabled={isLastPage}
+  ></lightning-button>
+</lightning-layout-item>
+</lightning-layout>
+</article> 
+</template>

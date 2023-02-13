@@ -1,0 +1,17 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC04_Organigramme_Controller">
+   <!-- <img src="{!$Resource.ImagesTemp + '/Organigramme.png'}" />-->
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="listWrapper" type="wrapperVueMirroirRow[]" default="null" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div class="tree mytree">
+        <div class="myDiv">
+        <aura:iteration items="{!v.listWrapper}" var="contactWrapper">
+            <c:LC09_OrganigrammeRow contactWrapper="{!contactWrapper}" Racine="true"/>
+        </aura:iteration>
+        <div style="clear:both;">
+        </div>
+        </div>
+    </div>
+
+</aura:component>

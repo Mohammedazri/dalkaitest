@@ -1,0 +1,4 @@
+<!--c:LE01_ContactAction-->
+<aura:event type="APPLICATION" description="send the wrapperVueMirroirRow as a parameter when a contact row is clicked" >
+    <aura:attribute name="contactWrapper" type="wrapperVueMirroirRow"/>
+</aura:event>

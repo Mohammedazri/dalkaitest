@@ -1,0 +1,126 @@
+<aura:component controller="LC73_ActivitiesOnAccount_Cont" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="navigateParameter" type="string" default="initialLoad"/>
+    <aura:attribute name="pageNumber" type="integer" />
+    <aura:attribute name="ContList" type="list" />
+    <aura:attribute name="contListPaginateWise" type="list" />
+    <aura:attribute name="totalRecords" type="integer" />
+    <aura:attribute name="lastPageNumber" type="integer" />
+    <aura:attribute name="finalListToAdd" type="list" />
+    <aura:attribute name="isDisabled" type="Boolean" default="true" />
+    <aura:attribute name="Spinner" type="boolean" default="true"/> 
+    <aura:attribute name="selectedNumber" type="integer" default ="0"/> 
+    
+     <aura:if isTrue="{!v.Spinner}">
+                <div aura:id="spinnerId" class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+    <aura:if isTrue="{!v.lastPageNumber!=0}">
+        <div style="padding:0.5rem;background:#16325c">
+            <div class="slds-text-color_inverse thStyle">{!$Label.c.LC73_Explication}</div>
+        </div>
+        <div class="slds-box slds-theme_shade">
+            <div class="slds-float_right">
+                <lightning:button label="Exporter les Contrats" onclick="{!c.downloadSelectedCont}" disabled="{!v.isDisabled}" class="slds-button slds-button_neutral"/>
+            </div>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-table--fixed-layout">
+                <thead>
+                    <tr >
+                        <div class="slds-form-element">
+                            <div class="slds-form-element_control">
+                                <label class="slds-checkbox">
+                                    <ui:inputCheckbox change="{!c.selectAllORDeselectAll}"/>
+                                    <span class="slds-checkbox_faux"/>
+                                    <span class="slds-form-element_label"/>
+                                </label>
+                            </div>
+                        </div>
+                        <th scope="col">
+                            <div  title="Reg" class="thStyle">{!$Label.c.LC73_Region}</div>
+                        </th>
+                        <th scope="col">
+                            <div  title="NomCont" class="thStyle">{!$Label.c.LC73_NomContrat}</div>
+                        </th>
+                        <th scope="col">
+                            <div  title="Part" class="thStyle">{!$Label.c.LC73_Partenaire}</div>
+                        </th>
+                        <th scope="col">
+                            <div  title="Pilote" class="thStyle">{!$Label.c.LC73_Pilote}</div>
+                        </th>
+                        <th scope="col">
+                            <div  title="Agence" class="thStyle">{!$Label.c.LC73_Agence}</div>
+                        </th>
+                        <th scope="col">
+                            <div  title="TotalP1234" class="thStyle">{!$Label.c.LC73_TotalP1234}</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.contListPaginateWise}" var="a">
+                        <tr >
+                            <th  scope="row" class="slds-cell-wrap">
+                                <div class="slds-form-element slds-line-clamp">
+                                    <div class="slds-form-element_control slds-line-clamp">
+                                        <label class="slds-checkbox">
+                                            <ui:inputCheckbox change ="{!c.handleButton}" value="{!a.check}"/>
+                                            <span class="slds-checkbox_faux"/>
+                                            <span class="slds-form-element_label"/>
+                                        </label>
+                                    </div>
+                                </div>
+                            </th>
+                            <th  scope="row" class="slds-cell-wrap"> <div class="slds-line-clamp">
+                                {!a.obj.LibelleRegion__c}
+                                </div>
+                            </th>
+                            <th  scope="row" class="slds-cell-wrap"> <div class="slds-line-clamp">
+                                {!a.obj.Name}
+                                </div>
+                            </th>
+                            <th  scope="row" class="slds-cell-wrap"> <div class="slds-line-clamp">
+                                {!a.obj.NomPartenaire__r.Name}
+                                </div>
+                            </th>
+                            <th  scope="row" class="slds-cell-wrap"> <div class="slds-line-clamp">
+                                {!a.obj.techOwner__c}
+                                </div>
+                            </th>
+                            <th  scope="row" class="slds-cell-wrap"> <div class="slds-line-clamp">
+                                {!a.obj.Nom_d_Agence__c}
+                                </div>
+                            </th>
+                            <th  scope="row" class="slds-cell-wrap"> <div class="slds-line-clamp">
+                                {!a.obj.TotalCABudgetP1P2P3P4__c} €
+                                </div>
+                            </th>
+                        </tr>
+                    </aura:iteration> 
+                </tbody>
+            </table>
+            
+            <div class="slds-align_absolute-center">
+                <aura:if isTrue="{!v.pageNumber!=1}">
+                    <lightning:button label="Précédent" onclick="{!c.goToPrevious}" class="slds-button slds-button_neutral"/>
+                </aura:if>
+                <aura:if isTrue="{!(v.pageNumber!=v.lastPageNumber)}">
+                    <lightning:button label="Suivant" onclick="{!c.goToNext}" class="slds-button slds-button_neutral"/>
+                </aura:if>
+            </div>
+            <div class="slds-align_absolute-center">
+                <b> Page {!v.pageNumber} de {!v.lastPageNumber}</b>
+            </div>
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-text-color_error">
+                {!$Label.c.LC73_PasdeContrats }
+            </div>
+        </aura:set>
+    </aura:if>
+    
+    
+</aura:component>

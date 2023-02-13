@@ -1,0 +1,27 @@
+.THIS {
+}
+.THIS.exampleHolder{
+    position: relative;
+    display: inline-block;
+    margin-left: 15px;
+    width: 55px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.THIS .required{
+    color:red;
+}
+.THIS .slds-wrap {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 4px;
+}
+
+.THIS .error{
+    color:red;
+}
+
+.THIS .map-dropdown{
+    border: var(--lwc-borderWidthThin,1px) solid var(--lwc-colorBorder,rgb(221, 219, 218));
+    border-radius: var(--lwc-borderRadiusMedium,0.25rem);
+}

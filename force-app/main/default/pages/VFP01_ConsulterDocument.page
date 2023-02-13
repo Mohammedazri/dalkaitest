@@ -1,0 +1,111 @@
+<apex:page controller="LC51_CreateContract_Controller" action="{!getConsulterDocument}" >
+    <apex:slds />
+    <apex:form >
+        <!--<apex:outputPanel id="vfParamPanel">
+            The value of parameter is : {!vfParam}
+        </apex:outputPanel> -->
+        <apex:pageMessages ></apex:pageMessages>
+        <!--
+        <iframe src="data:{PDF};base64,{!newblobMessage}" ></iframe>
+        <a href="data:application/octet-stream;base64, {!newblobMessage}">Download PDF</a>
+        -->
+        
+        <div id="div1">
+            <br/>
+            
+            <apex:outputText style="font-weight: 1000; color:red;" value="Veuillez cliquer sur le bouton ci-dessous afin de télécharger le document contractuel sauvegardé dans la GED du Référentiel" />
+            
+            <br/>
+            <br/>
+            
+            <apex:commandButton value="Télécharger le document" image="{!URLFOR($Resource.Telecharger_Fichier)}"  onclick="downloadFile(); return false;"/>    
+        </div>
+        
+        <!-- SPINNER -->
+        <div id="spinner" class="slds-align--absolute-center slds-spinner_container slds-hide">
+            <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+        
+        <div id="errorMsg" class="slds-hide">
+            <br/>
+            <br/>
+            <apex:outputText style="font-weight: 1000; color:red;" value="Une erreur est survenue. Veuillez contacter votre administrateur !" />
+        </div>
+        
+        <div id="scanNotFound" class="slds-hide">
+            <br/>
+            <br/>
+            <apex:outputText style="font-weight: 1000; color:red;" value="Le document contractuel n'existe pas dans la GED contractuelle du Référentiel !" />
+        </div>
+        
+        <script>
+        
+        function downloadFile() {
+            
+            document.getElementById('errorMsg').className = 'slds-hide';
+            document.getElementById('scanNotFound').className = 'slds-hide';
+            document.getElementById('spinner').className = 'slds-align--absolute-center slds-spinner_container';
+            
+            var token = '{!generatedToken}';
+            var numeroPiece = '{!numPiece}';
+            
+            var url = VFP01_UrlConsultation + numeroPiece;
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.setRequestHeader("Accept", "*/*");
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+            
+            xhr.responseType = "blob";
+            xhr.send();
+            
+            xhr.onreadystatechange = function () {
+                
+                //alert(this.readyState + ' // ' +this.status)
+                if (this.readyState == 4 && this.status == 200) {
+                    
+                    document.getElementById('spinner').className = 'slds-hide';
+                    
+                    
+                    console.log(xhr.getAllResponseHeaders());
+                    console.log(xhr.getResponseHeader('Content-Disposition'));
+                    
+                    var filename = "";
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) { 
+                            filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+                    
+                    const imageURL = window.URL.createObjectURL(this.response);
+                    const anchor = document.createElement("a");
+                    anchor.href = imageURL;
+                    anchor.download = filename;
+                    document.body.appendChild(anchor);
+                    anchor.click();
+                }
+                
+                if (this.readyState == 4 && this.status == 502) {
+                    
+                    document.getElementById('spinner').className = 'slds-hide';
+                    document.getElementById('scanNotFound').className = '';
+                }
+                
+                if (this.readyState == 4 && this.status != 200 && this.status != 502) {
+                    
+                    document.getElementById('spinner').className = 'slds-hide';
+                    document.getElementById('errorMsg').className = '';
+                }
+            };
+        }
+        
+        </script>
+        
+    </apex:form>
+</apex:page>

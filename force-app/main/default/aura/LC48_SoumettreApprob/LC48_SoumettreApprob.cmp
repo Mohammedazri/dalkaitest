@@ -1,0 +1,88 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" controller="LC48_SoumettreApprob_Controller">
+    
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="ShowSpinner" type="Boolean" default="false"/> 
+    <aura:attribute name="CurrentRecord" type="Fiche_de_synthese__c" default="{'sobjectType': 'Fiche_de_synthese__c',
+                                                                              'Approbateur1__c' : '', 
+                                                                              'Approbateur2__c' : '',
+                                                                              'Approbateur3__c' : '',
+                                                                              'Approbateur4__c' : '' }"/>
+    <aura:attribute name="ifErrorExists" type="Boolean" default="False"/>
+    <!--aura:attribute name="error1" type="Boolean" default="False"/>
+    <aura:attribute name="error2" type="Boolean" default="False"/-->
+    <aura:attribute name="errorMsg" type="String" default="False"/>
+    
+    <aura:attribute name="ApprobCommentaire" type="String"/>
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        
+        .uiModal--medium .modal-container {
+        width: 50%;
+        }
+        
+    </aura:html>
+    
+    <header class="slds-modal__header">
+        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Soumettre Pour Approbation</h2>
+    </header>
+    <br/>
+    <div class="slds-modal__content slds-size_1-of-1 slds-is-relative" aura:id="modalbody" id="modalbody">
+        <form class="slds-form--stacked">
+            <aura:if isTrue="{!v.ShowSpinner}">
+                <div class="SpinCss">
+                    <lightning:spinner alternativeText="Loading" size="Large" />
+                </div>
+            </aura:if>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <aura:if isTrue="{!v.ifErrorExists}"> 
+                    <div class="slds-align_absolute-center" style="color:red">
+                        {!v.errorMsg}
+                    </div>
+                </aura:if>
+                <br/>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col fixwidth">
+                        <div class="slds-form-element__label">{!$Label.c.LC48_Approbateur} 1</div>
+                        <force:inputField aura:id="InputUser1"  value="{!v.CurrentRecord.Approbateur1__c}"/>
+                    </div>
+                    <div class="slds-col fixwidth">
+                        <div class="slds-form-element__label">{!$Label.c.LC48_Approbateur} 2</div>
+                        <force:inputField aura:id="InputUser2"  value="{!v.CurrentRecord.Approbateur2__c}"/>
+                    </div>
+                </div>
+                
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col fixwidth">
+                        <div class="slds-form-element__label">{!$Label.c.LC48_Approbateur} 3</div>
+                        <force:inputField aura:id="InputUser3"  value="{!v.CurrentRecord.Approbateur3__c}"/>
+                    </div>  
+                    <div class="slds-col fixwidth">
+                        <div class="slds-form-element__label">{!$Label.c.LC48_Approbateur} 4</div>
+                        <force:inputField aura:id="InputUser4"  value="{!v.CurrentRecord.Approbateur4__c}"/>
+                    </div>
+                </div>
+                
+                <br/>
+                
+                <div class="slds-form-element__label">{!$Label.c.LC48_Commentaire}</div>
+                <lightning:textarea value="{!v.ApprobCommentaire}"></lightning:textarea>
+                <br/>
+            </div>
+        </form>
+    </div>
+    <footer class="slds-modal__footer">
+        <lightning:button  aura:id="disablebuttonid" label="{!$Label.c.Save}"   onclick="{!c.Save}" class="slds-button slds-button_neutral" disabled="{!v.ShowSpinner}" />
+        <lightning:button label="{!$Label.c.Cancel}" onclick="{!c.Cancel}" class="slds-button slds-button_neutral" disabled="{!v.ShowSpinner}" />
+    </footer>
+    
+</aura:component>

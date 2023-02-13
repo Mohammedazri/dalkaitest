@@ -1,0 +1,173 @@
+.THIS body{
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: 14px;
+    line-height: 1.71428571;
+    color: #666666;
+    background-color: #fff;
+}
+.THIS div#visualization {
+    background-image: url(/resource/1477324116000/timeline_logo);
+    background-repeat: no-repeat;
+    background-size: 60px;
+    padding-top: 20px;
+}
+.THIS.vis-timeline {
+    border: 1px solid #E6E6E6;
+}
+.THIS.vis-time-axis .vis-grid.vis-minor{
+    border-color: transparent;
+}
+.THIS.vis-text.vis-major.vis-december.vis-odd{
+    top: 24px;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    /*border-top: 1px solid red;*/
+    font-weight: 600;
+}
+.THIS .vis-item.red {
+    color: white;
+    background-color: #F14E4E;
+    border-color: transparent;
+    /*border-radius: 10px;*/
+}
+.THIS.vis-item .vis-item-content {
+    cursor: default;
+}
+.THIS .vis-item.green {
+    color: white;
+    background-color: #78dd2e;
+    border-color: transparent;
+    -webkit-border-radius: 10px 0 10px 10px;
+    -moz-border-radius: 10px 0 10px 10px;
+    -ms-border-radius: 10px 0 10px 10px;
+    -o-border-radius: 10px 0 10px 10px;
+    /*border-radius: 10px 0 10px 10px;*/
+}
+
+.THIS .vis-item.Enj {
+    color: white;
+    background-color: #ffbb99;
+    border-color: transparent;
+    -webkit-border-radius: 10px 0 10px 10px;
+    -moz-border-radius: 10px 0 10px 10px;
+    -ms-border-radius: 10px 0 10px 10px;
+    -o-border-radius: 10px 0 10px 10px;
+    /*border-radius: 10px 0 10px 10px;*/
+}
+
+.THIS .vis-item.Sat {
+    color: white;
+    background-color: rgb(0, 112, 210);
+    border-color: transparent;
+    -webkit-border-radius: 10px 0 10px 10px;
+    -moz-border-radius: 10px 0 10px 10px;
+    -ms-border-radius: 10px 0 10px 10px;
+    -o-border-radius: 10px 0 10px 10px;
+    /*border-radius: 10px 0 10px 10px;*/
+}
+
+.THIS .vis-item.Rel {
+    color: #fff;
+    background-color: #00cc88;
+    border-color: transparent;
+    -webkit-border-radius: 10px 0 10px 10px;
+    -moz-border-radius: 10px 0 10px 10px;
+    -ms-border-radius: 10px 0 10px 10px;
+    -o-border-radius: 10px 0 10px 10px;
+    /*border-radius: 10px 0 10px 10px;*/
+}
+
+/*.THIS .vis-item.Sat{
+    border-radius: 0px 0px 0px 0px;
+}*/
+
+.THIS .Sat{
+    color:rgb(0, 112, 210);
+    text-align: center; 
+}
+
+/*.THIS .vis-item.Enj{
+    border-radius: 10px 10px 10px 10px;
+    
+}*/
+
+.THIS .Enj{
+    color:#ffbb99;
+    text-align: center; 
+
+}
+
+/*.THIS .vis-item.Rel{
+    border-radius: 10px 0 10px 10px;
+}*/
+.THIS .vis-item.rond{
+    border-radius: 10px 10px 10px 10px;
+}
+
+.THIS .vis-item.rect{
+    border-radius: 0px 0px 0px 0px;
+}
+
+.THIS .Rel{
+    color:#00cc88;
+    text-align: center; 
+
+}
+
+.THIS .vis-item.Aucune{
+    /*border-radius: 0px 10px 10px 10px;*/
+    color: white;
+    background-color: #00cc88;
+    border-color: transparent;
+    -webkit-border-radius: 10px 0 10px 10px;
+    -moz-border-radius: 10px 0 10px 10px;
+    -ms-border-radius: 10px 0 10px 10px;
+    -o-border-radius: 10px 0 10px 10px;
+    /*border-radius: 10px 0 10px 10px;*/
+}
+.THIS.vis-time-axis .vis-text {
+    color: #1D519E;
+}
+.THIS.vis-text.vis-minor.vis-may.vis-current-month {
+    font-weight: bold;
+    color: #073c87;
+}
+.THIS .res_info {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    border-radius: 3px 3px 10px 3px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #B1B1B1;
+    color: #063E93;
+    box-shadow: 0px 0px 4px 1px rgba(88, 88, 88, 0.38);
+}
+.THIS h3.openLink2 {
+    color: #68bc29;
+    font-size: 17px;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin: 0px;
+    margin-bottom: 10px;
+    line-height: 20px;
+}
+.THIS h3.openLink:hover {
+    border-bottom: 1px solid;
+}
+.THIS .block .openLink:hover {
+    text-decoration: underline;
+}
+.THIS .block {
+    background: #F7F7F7;
+    margin: 2px 0px;
+    text-align: left;
+    padding-left: 20px;
+    padding-bottom: 4px;
+}
+.THIS .label {
+    color: #636363;
+    text-align: left;            
+    font-size: 13px;
+}

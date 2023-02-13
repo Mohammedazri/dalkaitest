@@ -1,0 +1,66 @@
+<!--c:LC25_CreateOpportunity-->
+<!--This component is used to override the "New" button of Opportunity in order to
+ give a default value for the "étape" field-->
+
+<aura:component implements="lightning:actionOverride,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction" access="global" controller="LC25_CreateOpportunity_Controller">
+    <aura:attribute name="ChooseRT" type="boolean" default="false"/>
+    <aura:attribute name="selectRT" type="String" />
+    <aura:attribute name = "selectRTId" type="String"/>
+    <aura:attribute name="canCreateOpp" type="Boolean" />
+    <aura:attribute name="oneRecType" type="Boolean" />
+    <aura:attribute name="recordTypes" type="RecordTypeObj[]"/>
+    <aura:attribute name="recordId" type="String" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.ChooseRT}">
+        <!--Choose Recordtype Modal-->
+        <div  aura:id="Modalbox" role="dialog" class="slds-modal slds-modal--large">
+            <div class="slds-modal__container" style="width: 50%;">
+                <div class="slds-modal__header" style="font-weight: 300;font-size: 1.25rem;line-height: 1.25;">
+                    <h2 id="header43" class="slds-text-heading--medium">{!$Label.c.LC25_NouvelleOpportunite}</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium setHeight">
+                    <center>
+                        <aura:if isTrue="{!v.canCreateOpp}">
+                            <div class="changeRecordTypeLeftColumn ">
+                                {!$Label.c.LC25_SelectionnerRT}
+                            </div>
+                            <div aura:id="main">
+                                <!-- List of opportunity's RT-->
+                                <aura:iteration items="{!v.recordTypes}" var="recordType">
+                                    <div class="uiInput uiInputRadio uiInput--default uiInput--radio myRT">
+                                        <label class="uiLabel-left form-element__label uiLabel ">
+                                            <div class="slds-grid">
+                                                <div class="slds-form-element__label"> 
+                                                    <ui:inputRadio label="" change="{!c.onRadio}" text="{!recordType}" name="rtVal" value="false" aura:id="myRt"/>
+                                                </div>
+                                                <div class="slds-form-element__label">
+                                                    <span>{!recordType.RTName}</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </aura:iteration>
+                            </div>
+                            <aura:set attribute="else">
+                                <!-- User can't create an opportunity-->
+                                {!$Label.c.LC25_VousNetesPasAutorise}
+                            </aura:set>
+                        </aura:if>
+                    </center>
+                </div>
+                <div class="slds-modal__footer">
+                    <aura:if isTrue="{!v.canCreateOpp}">
+                        <ui:button label="{!$Label.c.LC25_Continuer}" class="slds-button slds-button--brand" press="{!c.creationOPP}"/>                        
+                        <ui:button label="{!$Label.c.LC07_Annuler}" class="slds-button slds-button--brand"  press="{!c.Annuler}"/>
+                        <aura:set attribute="else">
+                            <ui:button label="{!$Label.c.LC03_OK}" class="slds-button slds-button--brand" press="{!c.Annuler}"/>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+        <div aura:id="Modalbackdrop" class="slds-backdrop"></div>        
+    </aura:if>
+</aura:component>

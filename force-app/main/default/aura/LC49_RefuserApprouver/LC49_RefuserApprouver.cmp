@@ -1,0 +1,60 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" controller="LC49_RefuserApprouver">
+    
+    <aura:attribute name="ApprobCommentaire" type="String"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="hasAccess" type = "Boolean" default ="false"/>
+    <aura:attribute name="NoAccess" type = "Boolean" default ="false"/>
+    <aura:attribute name="ShowSpinner" type="Boolean" default="false"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+        <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        
+        .uiModal--medium .modal-container {
+        width: fit-content;
+        }
+        
+    </aura:html>
+    
+    <aura:if isTrue="{!v.hasAccess}">
+        <header class="slds-modal__header" style="text-transform: capitalize;">
+            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!$Label.c.refuser}</h2>
+        </header>
+        <div class="slds-modal__content slds-size_1-of-1 slds-is-relative" aura:id="modalbody" id="modalbody">
+            <form class="slds-form--stacked">
+                <aura:if isTrue="{!v.ShowSpinner}">
+                    <div class="SpinCss">
+                        <lightning:spinner alternativeText="Loading" size="Large" />
+                    </div>
+                </aura:if>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <br/>
+                    <div class="slds-form-element__label">{!$Label.c.LC48_Commentaire}</div>
+                    <lightning:textarea value="{!v.ApprobCommentaire}"></lightning:textarea>
+                    <br/>
+                    </div>
+            </form>
+        </div>
+        <footer class="slds-modal__footer">
+            <lightning:button disabled="{!v.ShowSpinner}" aura:id="disablebuttonid" label="Soumettre"   onclick="{!c.Soumettre}" class="slds-button slds-button_neutral"  />
+            <lightning:button disabled="{!v.ShowSpinner}" label="{!$Label.c.Cancel}" onclick="{!c.Cancel}" class="slds-button slds-button_neutral"  />
+        </footer>
+    </aura:if>
+   <aura:if isTrue="{!v.NoAccess}">
+        <div class="slds-notify slds-notify_toast slds-theme_error">
+            <span class="slds-assistive-text">error</span>
+            <div class="slds-notify__content">
+                <p class="slds-align_absolute-center"> {!$Label.c.LC49_AccessError}&nbsp;{!$Label.c.refuser}.</p>                
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

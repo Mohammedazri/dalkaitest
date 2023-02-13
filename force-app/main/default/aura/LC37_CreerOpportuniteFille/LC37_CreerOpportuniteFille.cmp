@@ -1,0 +1,133 @@
+<!--cLC37_CreerOpportuniteFille-->
+<!--** 
+* @author Alain Ghoussoub
+* @date 08/09/2020 
+* @description Composant qui cree une opportunite fille
+*-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,lightning:actionOverride,force:hasSObjectName,force:lightningQuickActionWithoutHeader" controller="LC37_CreationOppFille" access="global" >
+    
+    <aura:attribute name="recordId" type="Id" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="NewOpp" type="Opportunity" default="{sobjectType: 'Opportunity'}"/>
+    <aura:attribute name="OppMere" type="Opportunity" default="{sobjectType: 'Opportunity'}"/>
+    <aura:attribute name="Oppstage" type="List" default="[]"/>
+    <aura:attribute name="Mois" type="List" default="[]"/>
+    <aura:attribute name="Annee" type="List" default="[]"/>
+    <aura:attribute name="NewOppId" type="Id" />
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>  
+    <aura:attribute name="ifShowOppFille" type="boolean" default="false"/>
+    <aura:attribute name="ifNotShowOppFille" type="boolean" default="false"/>
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        
+        .uiModal--medium .modal-container {
+        width: 50%;
+        }
+        
+    </aura:html>
+    <div class="modal-header slds-modal__header slds-size_1-of-1">
+        <h4 class="title slds-text-heading--medium" >{!$Label.c.Nouvelle_police_d_abonnement}</h4>
+    </div> 
+    <div class="slds-modal__content slds-size_1-of-1 slds-is-relative" aura:id="modalbody" id="modalbody">
+        <form class="slds-form--stacked">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <!--loading spinner start... style=Brand Medium (blue dots)-->
+                <aura:if isTrue="{!v.Spinner}">
+                    <div aura:id="spinnerId" class="slds-spinner_container">
+                        <div class="slds-spinner--brand  slds-spinner slds-spinner--large" role="alert">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+                <!-- Loading spinner end-->
+                <!-- error section -->
+                <aura:if isTrue="{!v.ifNotShowOppFille}">
+                    <center>
+                        <div class="slds-notify_container slds-is-relative" style="height: 100px">
+                            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert" >
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small ">{!$Label.c.LC37_MessageErreur}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </center>
+                </aura:if>
+                <!-- error section end -->
+                <!-- main div -->
+                <aura:if isTrue="{!v.ifShowOppFille}">
+                    <aura:if isTrue="{! !empty(v.error)}">
+                            <div class="slds-notify_container slds-is-relative">
+                                <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                                    <div class="slds-notify__content">
+                                        <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        
+                         <div class="slds-form-element">
+                            <label class="slds-form-element__label">{!$Label.c.Opportunit_Mere}</label> 
+                            <br></br>{!v.OppMere.Name}
+                            <!--force:outputField value="{!v.OppMere.Name}" /--> 
+                            <br></br>
+                        </div>  
+                        <div class="slds-form slds-form_stacked">   
+                            
+                            <!--label class="slds-form-element__label"><div style="color:#b30000; display:inline; font-weight: bold;">* </div>
+                                <div style="display:inline">{!$Label.c.OppName}</div></label> 
+                            <br></br-->
+                            <!--force:inputField value="{!v.NewOpp.Name}" required="True" /-->
+                            <lightning:input style="padding: inherit;" label="{!$Label.c.OppName}" value="{!v.NewOpp.Name}" required="true" />
+                        </div>  
+                        <div class="slds-form slds-form_stacked"> 
+                            <ui:inputSelect aura:id="stages" label="{!$Label.c.oppstages}" value="{!v.NewOpp.StageName}" required="True" >
+                                <aura:iteration items="{!v.Oppstage}" var="stage" indexVar="key">
+                                    <ui:inputSelectOption text="{!stage.value}" class="dynamic" label="{!stage.label}"/>
+                                </aura:iteration>
+                            </ui:inputSelect>
+                        </div>  
+                        <div class="slds-form slds-form_stacked"> 
+                            <ui:inputDate label="{!$Label.c.OppCloseDate}" class="field" value="{!v.NewOpp.CloseDate}" displayDatePicker="true" required="True" format="dd/MM/yyyy"/>
+                        </div>  
+                        <div class="slds-form slds-form_stacked"> 
+                            <ui:inputSelect aura:id="oppMois" value="{!v.NewOpp.Moisdesignature__c}" label="{!$Label.c.OppTrimestre}"  >
+                                <aura:iteration items="{!v.Mois}" var="Mois">
+                                    <ui:inputSelectOption text="{!Mois.value}" class="dynamic" label="{!Mois.label}"/>
+                                </aura:iteration>
+                            </ui:inputSelect> 
+                        </div>  
+                        <div class="slds-form slds-form_stacked"> 
+                            <ui:inputSelect aura:id="oppAnnee" value="{!v.NewOpp.Annee_de_signature__c}" label="{!$Label.c.OppAnnee}"  >
+                                <aura:iteration items="{!v.Annee}" var="ann">
+                                    <ui:inputSelectOption text="{!ann.value}" class="dynamic" label="{!ann.label}"/>
+                                </aura:iteration>
+                            </ui:inputSelect>
+                        </div>
+                </aura:if>
+            </div>
+        </form>
+    </div>
+    <!-- MODAL FOOTER -->
+    <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+        <div class="forceChangeRecordTypeFooter">
+            <ui:button class="slds-button slds-button_neutral" label="{!$Label.c.Cancel}" press="{!c.Cancel}" disabled="{!v.Spinner}"/> 
+            <aura:if isTrue="{!v.ifShowOppFille}">
+                <ui:button class="slds-button slds-button--brand"
+                           label="{!$Label.c.Save}" press="{!c.Save}" disabled="{!v.Spinner}"/>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

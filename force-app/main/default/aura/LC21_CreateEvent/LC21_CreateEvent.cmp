@@ -1,0 +1,124 @@
+<!--LC21_CreateEvent-->
+<aura:component controller="LC21_CreateEvent_Controller" implements="force:hasRecordId">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="IfCreateEvent" type="boolean" default="false"/>
+    <aura:attribute name="IfRefreshEvent" type="boolean" default="false"/>
+    <aura:attribute name="disbaleButton" type="boolean" default="false" required="false" access="private"/>
+    <aura:attribute name="errorMessage" type="String" default="" required="false" access="private"/>
+    <aura:attribute name="TypeOptions" type="String[]" default="" required="false" access="private"/>
+    <aura:attribute name="ActivityTypeOptions" type="String[]" default="" required="false" access="private"/>
+    <aura:attribute name="newEvent" type="Event" default="{'sobjectType': 'Event',
+                                                          Subject:'',
+                                                          OwnerId:'',
+                                                          Location:'',
+                                                          Type:'',
+                                                          StartDateTime:'',
+                                                          ActivityDateTime:'',
+                                                          IsAllDayEvent:'',
+                                                          EndDateTime:'',
+                                                          WhatId:'',
+                                                          WhoId:'',
+                                                          Ajouter_au_plan_de_compte__c:true,
+                                                          genre_comite__c:'',
+                                                          Cree_dans_SF1__c:false,
+                                                          Description:''}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div class="demo-only" style="height: 640px;">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="margin-top:5%">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!$Label.c.CmpCreateEventHeader}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" style="color:red">{!v.errorMessage}</div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <table>
+                        <tr>
+                            <td width="49%">
+                                <lightning:input type="text" aura:id="InputSubject" label="{!$Label.c.CmpCreateEventObjet}" value="{!v.newEvent.Subject}"
+                                                 required="true" />
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <p><span style="color:red">*</span>&nbsp;{!$Label.c.CmpCreateEventAttribue}</p>
+                                <c:InputLookup aura:id="InputAttribue" type="User" value="{!v.newEvent.OwnerId}"
+                                               className="form-control"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="49%">
+                                <lightning:input type="text" aura:id="InputEmplacement" label="{!$Label.c.CmpCreateEventEmplacement}" 
+                                                 value="{!v.newEvent.Location}" />
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <!--<ui:inputSelect label="{!$Label.c.CmpCreateEventType}" class="dynamic" 
+                                                aura:id="InputSelectType" value="{!v.newEvent.Type}" required="true"/>-->
+                                <lightning:select label="{!$Label.c.CmpCreateEventType}" aura:id="InputSelectType"
+                                                  value="{!v.newEvent.Type}" required="true">
+                                    <aura:iteration var="item" items="{!v.TypeOptions}">
+                                        <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="49%">
+                                <ui:inputDateTime aura:id="EvtStartTime" label="{!$Label.c.CmpCreateEventDebut}" value="{!v.newEvent.StartDateTime}" displayDatePicker="true"/>
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <label>{!$Label.c.CmpCreateEventAllDay}</label>
+                                <ui:inputCheckbox value="{!v.newEvent.IsAllDayEvent}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="49%">
+                                <ui:inputDateTime aura:id="EvtEndTime" label="{!$Label.c.CmpCreateEventFin}" value="{!v.newEvent.EndDateTime}" displayDatePicker="true"/>
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <!--<ui:inputSelect label="{!$Label.c.CmpCreateEventTypeActivity}" class="dynamic" 
+                                                aura:id="InputSelectTypeActivity" required="true" value="{!v.newEvent.genre_comite__c}"/>-->
+                                <lightning:select label="{!$Label.c.CmpCreateEventTypeActivity}" name="InputSelectTypeActivity"
+                                                  value="{!v.newEvent.genre_comite__c}" required="true">
+                                    <aura:iteration var="item" items="{!v.ActivityTypeOptions}">
+                                        <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="49%">
+                                <label>{!$Label.c.CmpCreateEventAssocie}</label>
+                                <c:InputLookup type="Account"  
+                                               value="{!v.newEvent.WhatId}"
+                                               className="form-control"/>
+                                <!--<ui:outputText aura:id="InputAssocie" value="{!v.newEvent.WhatId}"/>-->
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <label>{!$Label.c.CmpCreateEventNom}</label>
+                                <c:InputLookup type="Contact"  
+                                               value="{!v.newEvent.WhoId}"
+                                               className="form-control"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="49%">
+                                <label>{!$Label.c.CmpCreateEventDescription}</label>
+                                <ui:inputTextArea value="{!v.newEvent.Description}" rows="3"/>
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <label>{!$Label.c.CmpCreateEventAction}</label>
+                                <ui:inputCheckbox value="{!v.newEvent.Ajouter_au_plan_de_compte__c}"/>
+                                <br/><label>{!$Label.c.CmpCreateTaskCreeDsSF1}</label>
+                                <ui:inputCheckbox value="{!v.newEvent.Cree_dans_SF1__c}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ExitCreateEvent}">{!$Label.c.CmpCreateEventCancel}</button>
+                    <ui:button aura:id="saveButton" class="slds-button slds-button_brand" 
+                               press="{!c.Save}" disabled="{!v.disbaleButton}">{!$Label.c.CmpCreateEventSave}</ui:button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" ></div>
+    </div>
+</aura:component>

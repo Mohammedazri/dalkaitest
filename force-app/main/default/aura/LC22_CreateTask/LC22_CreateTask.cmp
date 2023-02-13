@@ -1,0 +1,100 @@
+<!--LC22_CreateTask-->
+<aura:component controller="LC22_CreateTask_Controller" implements="force:hasRecordId">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="IfCreateTask" type="boolean" default="false"/>
+    <aura:attribute name="IfRefreshTask" type="boolean" default="false"/>
+    <aura:attribute name="disbaleButton" type="boolean" default="false" required="false" access="private"/>
+    <aura:attribute name="errorMessage" type="String" default="" required="false" access="private"/>
+    <aura:attribute name="newTask" type="Task" default="{'sobjectType': 'Task',
+                                                         Subject:'',
+                                                         ActivityDate:'',
+                                                         OwnerId:'',
+                                                         IsRecurrence:false,
+                                                         WhoId:'',
+                                                         WhatId:'',
+                                                         genre_comite__c:'',
+                                                         Ajouter_au_plan_de_compte__c:true,
+                                                         Status:'',
+                                                         Priority:'',
+                                                         Cree_dans_SF1__c:false,
+                                                         Description:''}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="demo-only" style="height: 640px;">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="margin-top:5%">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!$Label.c.CmpCreateTaskHeader}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" style="color:red">{!v.errorMessage}</div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <table>
+                        <tr>
+                            <td width="49%">
+                                <lightning:input type="text" aura:id="InputSubject" label="{!$Label.c.CmpCreateTaskObjet}" value="{!v.newTask.Subject}"
+                                              required="true" />
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <p><span style="color:red">*</span>&nbsp;{!$Label.c.CmpCreateTaskEcheance}</p>
+                                <ui:inputDate aura:id="inputActivityDate" value="{!v.newTask.ActivityDate}" 
+                                              displayDatePicker="true" format="dd/MM/yyyy"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="49%">
+                                <p><span style="color:red">*</span>&nbsp;{!$Label.c.CmpCreateTaskAttribue}</p>
+                                <c:InputLookup aura:id="InputAttribue" type="User" value="{!v.newTask.OwnerId}"
+                                               className="form-control"/>
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <label>{!$Label.c.CmpCreateTaskAssocie} </label>
+                                <c:InputLookup type="Account"  
+                                               value="{!v.newTask.WhatId}"
+                                               className="form-control"/>
+                                <!--<force:inputField aura:id="InputAssocie" value="{!v.newTask.WhatId}"/>-->
+                            </td>                        
+                        </tr>
+                        <tr>
+                            <td width="49%">
+                                <label>{!$Label.c.CmpCreateTaskNom}</label>
+                                <c:InputLookup type="Contact"  
+                                       value="{!v.newTask.WhoId}"
+                                       className="form-control"/>
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <label>{!$Label.c.CmpCreateTaskAction}</label>
+                                <ui:inputCheckbox value="{!v.newTask.Ajouter_au_plan_de_compte__c}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="49%">
+                            	<ui:inputSelect label="{!$Label.c.CmpCreateTaskTypeActivite}" class="dynamic" 
+                                                aura:id="InputSelectTypeActivity" required="true" value="{!v.newTask.genre_comite__c}"/>
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <ui:inputSelect label="{!$Label.c.CmpCreateTaskPriorite}" class="dynamic" 
+                                                aura:id="InputSelectPriority" required="true" value="{!v.newTask.Priority}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="49%">
+                                <label>{!$Label.c.CmpCreateTaskCommentaires}</label>
+                                <ui:inputTextArea aura:id="text-input-id-1" value="{!v.newTask.Description}" rows="3"/>
+                            </td>
+                            <td width="49%" style="padding-left:2%;">
+                                <ui:inputSelect label="{!$Label.c.CmpCreateTaskStatut}" class="dynamic" 
+                                                aura:id="InputSelectStatus" required="true" value="{!v.newTask.Status}"/>
+                            </td>
+                		</tr>
+                    </table>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.ExitCreateTask}">{!$Label.c.CmpCreateTaskCancel}</button>
+                    <ui:button aura:id="saveButton" class="slds-button slds-button_brand" 
+                            press="{!c.Save}" disabled="{!v.disbaleButton}">{!$Label.c.CmpCreateTaskSave}</ui:button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" ></div>
+    </div>
+</aura:component>

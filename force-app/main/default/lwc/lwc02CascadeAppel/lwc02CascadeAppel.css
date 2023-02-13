@@ -1,0 +1,25 @@
+.datatable {
+    padding: 20px;
+}
+
+.datatable-blur {
+    padding: 20px;
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+.fixedModalFooter {
+    display: flex;
+    justify-content: center;
+    padding: var(--lwc-spacingXSmall,0.5rem) 0;
+    position: fixed;
+    left: 0;
+    width: 100%;
+    background: var(--lwc-colorBackground,rgb(243, 243, 243));
+    box-shadow: 0 -2px 2px 0 rgb(0 0 0 / 16%);
+    z-index: 8000;
+}
+
+.slds-modal__container {
+    display: block !important;
+}

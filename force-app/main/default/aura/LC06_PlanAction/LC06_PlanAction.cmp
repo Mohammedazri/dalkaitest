@@ -1,0 +1,52 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC06_PlanAction_Controller">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="listWrapper" type="WrapperPlan_d_actions[]" default="null"/>
+    <aura:attribute name="SatisfactionClient" type="boolean" default="true"/>
+    <aura:attribute name="EnjeuxContractuels" type="boolean" default="true"/>
+    <aura:attribute name="RelationnelClient" type="boolean" default="true"/>
+    <aura:attribute name="IfCreateTask" type="boolean" default="false"/>
+    <aura:attribute name="IfCreateEvent" type="boolean" default="false"/>
+    <aura:attribute name="IfRefreshEvent" type="boolean" default="false"/>
+    <aura:attribute name="IfRefreshTask" type="boolean" default="false"/>
+    <ltng:require styles="{!$Resource.viscss}"/>
+    <ltng:require scripts="{!$Resource.jq224}"/>
+    <ltng:require scripts="{!$Resource.visjs}" afterScriptsLoaded="{!c.viscssLoaded}"/>
+    <aura:handler name="change" value="{!v.IfRefreshEvent}" action="{!c.GetDatas}"/>
+    <aura:handler name="change" value="{!v.IfRefreshTask}" action="{!c.GetDatas}"/>
+    
+    <div style="width:100%">
+        <div style="float:left; width:15%;margin-left: 2%;">
+            <div style="float:left; width:80%" class="Sat">Satisfaction Client</div>
+            <div style="float:left; width:20%; margin-top: 1%;">
+                <ui:inputCheckbox change="{!c.GetDatas}" value="{!v.SatisfactionClient}"/>
+            </div>
+        </div>
+        <div style="float:left; width:18%; padding-left: 2%;">
+            <div style="float:left; width:80%"  class="Enj">Enjeux contractuels</div>
+            <div style="float:left; width:20%; margin-top: 1%;">
+                <ui:inputCheckbox change="{!c.GetDatas}" value="{!v.EnjeuxContractuels}"/>
+            </div> 
+        </div>
+        <div style="float:left; width:18%; padding-left: 2%;">
+            <div class="Rel" style="float:left; width:80%">Relationnel Client</div>
+            <div style="float:left; width:20%; margin-top: 1%;">
+                <ui:inputCheckbox change="{!c.GetDatas}" value="{!v.RelationnelClient}"/>
+            </div>
+            <div style="clear:both;">
+            </div>
+        </div> 
+        <div style="float:right">
+            <button class="slds-button slds-button--neutral" onclick="{!c.CreateEvent}">Nouvel événement</button>
+            <button class="slds-button slds-button--neutral" onclick="{!c.CreateTask}">Nouvelle tâche</button>
+        </div>
+    </div><br/><br/><br/>
+    <div style="/*width:100%; float: left;*/" id="visualization"></div>
+    <aura:if isTrue="{!v.IfCreateEvent}">
+        <c:LC21_CreateEvent IfCreateEvent="{!v.IfCreateEvent}" IfRefreshEvent="{!v.IfRefreshEvent}"
+                            recordId="{!v.recordId}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.IfCreateTask}">
+        <c:LC22_CreateTask IfCreateTask="{!v.IfCreateTask}" IfRefreshTask="{!v.IfRefreshTask}"
+                           recordId="{!v.recordId}"/>
+    </aura:if>
+</aura:component>

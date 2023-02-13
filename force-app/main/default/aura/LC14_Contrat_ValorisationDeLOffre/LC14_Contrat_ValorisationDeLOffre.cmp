@@ -1,0 +1,403 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC14_ContratValorisationOffre_Controller">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="IfExpand" type="boolean" default="True"/>
+    <aura:attribute name="Currentrecord" type="Contrat__c" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2>
+                        <aura:if isTrue="{!v.IfExpand}">
+                            <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small" aria-controls="tree0-node1" title="Toggle" onclick="{!c.ExpandBelow}">
+                                <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#chevrondown'}"
+                                           name="chevronright"
+                                           class="slds-button__icon slds-button__icon--small"
+                                           containerClass=""
+                                           category="utility"
+                                           size="small"
+                                           assistiveText="Toggle"/>
+                            </button>
+                            <aura:set attribute="else">
+                                <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small" aria-controls="tree0-node1" title="Toggle" onclick="{!c.ExpandBelow}">
+                                    <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#chevronright'}"
+                                               name="chevronright"
+                                               class="slds-button__icon slds-button__icon--small"
+                                               containerClass=""
+                                               category="utility"
+                                               size="small"
+                                               assistiveText="Toggle"/>
+                                </button>
+                            </aura:set>
+                        </aura:if>
+                        <span class="slds-text-heading--small">Valorisation de l'offre</span>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <aura:if isTrue="{!v.IfExpand}">
+            <div class="slds-card__body" style="padding-left: 1%;">
+                <table class="slds-table slds-table--bordered slds-no-row--hover slds-table_cell--buffer myTable">
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col">
+                                <div class="slds-truncate">Résultat commercial</div>
+                            </th>
+                            <th colspan="3" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">Conditions normatives de l'offre</div>
+                            </th>
+                            <th colspan="3" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">Conditions normatives de référence</div>
+                            </th>
+                            <th colspan="3" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">Ecarts Offre vs Référence</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr class="slds-hint--parent" style="font-weight: bold">
+                        <th scope="row">
+                            <div class="slds-truncate" style="font-weight: bold">Montants</div>
+                        </th>
+                        <td>
+                            <div class="slds-truncate">CA annuel</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">Marge brute</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">%Marge/CA</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">CA annuel</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">Marge brute</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">%Marge/CA</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">CA annuel</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">Marge brute</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">%Marge/CA</div>
+                        </td>
+                    </tr>
+                    <tbody>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">P1 (Energie)</div>
+                            </th>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">P2 (Services)</div>
+                            </th>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">P3 (Garantie totale)</div>
+                            </th>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">P4 (Financement)</div>
+                            </th>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">P6 (Travaux)</div>
+                            </th>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">SOUS-TOTAL P1+P2+P3+P4</div>
+                            </th>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">BACKLOG HORS P6</div>
+                            </th>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">BACKLOG AVEC P6</div>
+                            </th>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>                   
+                        <tr class="slds-text-title_caps">
+                            <td colspan="5" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">Commentaires sur la valorisation de l'offre</div>
+                            </td>
+                            <td colspan="5" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">Eléments d'évaluation économique</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <td colspan="5" rowspan="5" scope="col">
+                                <div class="slds-truncate">{!v.Currentrecord.Commentaire__c}</div>
+                            </td>
+                            <td colspan="2" scope="col">
+                                <div class="slds-truncate" style="font-weight: bold">Conditions de référence</div>
+                            </td>
+                            <td colspan="3" scope="col">
+                                <div class="slds-truncate">{!v.Currentrecord.CDR}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <td colspan="2" scope="col">
+                                <div class="slds-truncate" style="font-weight: bold">Valorisation main d'oeuvre</div>
+                            </td>
+                            <td colspan="3" scope="col">
+                                <div class="slds-truncate">{!v.Currentrecord.VMO}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <td colspan="2" scope="col">
+                                <div class="slds-truncate" style="font-weight: bold">Investissements</div>
+                            </td>
+                            <td colspan="3" scope="col">
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <td colspan="2" scope="col">
+                                <div class="slds-truncate" style="font-weight: bold">dont investissements P4</div>
+                            </td>
+                            <td colspan="3" scope="col" >
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <td colspan="2" scope="col">
+                                <div class="slds-truncate" style="font-weight: bold">dont invest. 1ière année</div>
+                            </td>
+                            <td colspan="3" scope="col">
+                                <div class="slds-truncate">{!v.Currentrecord.unknown_custom_field}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </aura:if>
+    </article>
+</aura:component>

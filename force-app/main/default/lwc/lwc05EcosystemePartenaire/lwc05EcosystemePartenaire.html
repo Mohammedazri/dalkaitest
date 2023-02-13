@@ -1,0 +1,85 @@
+<template>
+  <article class="slds-card">
+    <template if:true={isLoading}>
+      <div class="slds-align_absolute-center">
+        <div class="slds-spinner_container">
+          <div
+            role="status"
+            class="slds-spinner slds-spinner_medium slds-spinner_brand"
+          >
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <div class="slds-card__header slds-grid">
+      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+        <div class="slds-media__figure">
+          <div
+            class="extraSmall forceEntityIcon"
+            style="background-color: #bf5a88"
+          >
+            <span class="slds-icon_container" title={label.lwc05_Header}>
+              <img
+                src="/img/icon/t4v35/custom/custom6_120.png"
+                alt={label.lwc05_Header}
+                title={label.lwc05_Header}
+              />
+              <span class="slds-assistive-text"> {label.lwc05_Header} </span>
+            </span>
+          </div>
+        </div>
+        <div class="slds-media__body">
+          <h2 class="slds-card__header-title">
+            <span>{label.lwc05_Header}</span>
+          </h2>
+        </div>
+      </header>
+    </div>
+    <template if:true={showTable}>
+      <div class="slds-m-bottom_small">
+        <lightning-datatable
+          data-id="table"
+          key-field="PartenaireLieName"
+          data={relatedEcosysteme}
+          columns={columns}
+          hide-checkbox-column
+          onsort={sortColumns}
+          sorted-by={sortedBy}
+          sorted-direction={sortedDirection}
+        >
+        </lightning-datatable>
+      </div>
+      <lightning-layout class="slds-m-bottom_xx-small" horizontal-align="space">
+        <lightning-layout-item flexibility="auto">
+          <lightning-button
+            icon-name="utility:chevronleft"
+            onclick={previousHandler}
+            label="Précédent"
+            disabled={isFirstPage}
+          >
+          </lightning-button>
+        </lightning-layout-item>
+        <lightning-layout-item flexibility="auto">
+          <p class="slds-p-top_xx-small">Page {page} de {totalPage}</p>
+        </lightning-layout-item>
+        <lightning-layout-item flexibility="auto">
+          <lightning-button
+            icon-name="utility:chevronright"
+            icon-position="right"
+            onclick={nextHandler}
+            label="Suivant"
+            disabled={isLastPage}
+          ></lightning-button>
+        </lightning-layout-item>
+      </lightning-layout>
+    </template>
+    <template if:false={showTable}>
+      <p class="slds-p-left_small slds-m-bottom_small">
+        {label.lwc05_MessageNoRecords}
+      </p>
+    </template>
+  </article>
+</template>

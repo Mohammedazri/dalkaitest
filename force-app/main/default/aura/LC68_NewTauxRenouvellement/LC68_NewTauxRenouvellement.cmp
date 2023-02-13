@@ -1,0 +1,43 @@
+<!--c:LC68_NewTauxRenouvellement-->
+<!--** 
+* @author Alain Ghoussoub
+* @date 17/6/2020 
+* @description Composant qui montre le taux de renouvellement de l'utilisateur pour l'annee actuelle et qui a un lien vers le rapport de ses contrats actifs.
+*-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction" controller="LC68_NewTauxRenouvellement"  access="global">
+    <aura:attribute  name="TauxRenouvellement" type="Decimal"/>
+    <aura:attribute  name="idRapport" type="String"/>
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="custom-background" >
+        <!--loading spinner start-->
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.TauxRenouvellement == -1}">
+            <br/>
+            <p  class="erreurTaux">{!$Label.c.LC68_PasDeTaux}</p>
+            <aura:set attribute="else">
+                <div class="colonneNomTaux">
+                    <div class="slds-truncate">{!$Label.c.LC61_Taux_Renouv}</div>
+                </div>
+                <div>
+                    <center>
+                        <p class ="colonneTaux">{!v.TauxRenouvellement}%</p>
+                    </center>
+                </div>
+                <div class="paddingLien">
+                    <p class ="lienRapport"><a href="{!'/one/one.app?#/sObject/'+ v.idRapport + '/view'}" target="_blank">{!$Label.c.LC68_Rapport1}</a></p>               
+                </div>
+            </aura:set>
+        </aura:if>
+        <br/>
+    </div>
+</aura:component>

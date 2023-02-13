@@ -1,0 +1,43 @@
+<!--c:LC40_OppContratsOnAccount-->
+<!--** 
+* @author Jacques Akiki
+* @description Composant qui montre le tableau 
+*-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,lightning:actionOverride,force:hasSObjectName,force:lightningQuickAction" controller="LC40_OppContratAccount" access="global"  >
+    <aura:attribute name="recordId" type="Id" />
+    
+    <div style="padding:0.5rem;background:#16325c">
+  <div class="slds-text-color_inverse">{!$Label.c.LC40_Explication}</div>
+</div>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-table--fixed-layout">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th scope="col">
+                    <div class="slds-size_1-of-7 thStyle">{!$Label.c.LC40_Num}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-size_1-of-7 thStyle">{!$Label.c.LC40_Nom}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-size_1-of-7 thStyle">{!$Label.c.LC40_Nature}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-size_1-of-7 thStyle">{!$Label.c.LC40_NatureStatut}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-size_1-of-7 thStyle">{!$Label.c.LC40_Pilote}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-size_1-of-7 thStyle">{!$Label.c.LC40_Agence}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-size_1-of-7 thStyle">{!$Label.c.LC40_Region}</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:LC40_GridView recordId ="{!v.recordId}"/>
+            
+        </tbody>
+    </table>
+</aura:component>

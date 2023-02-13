@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexTestSuite xmlns="http://soap.sforce.com/2006/04/metadata">
+    <testClassName>AP101_DocumentContractuel_Test</testClassName>
+    <testClassName>AP102_UpdateCommentaireDocCont_Test</testClassName>
+    <testClassName>AP25_OpportunityAvntRealise_Test</testClassName>
+    <testClassName>AP88_DocUniqueEvolution_TEST</testClassName>
+    <testClassName>AP89_BlockOppEvolChanges_test</testClassName>
+    <testClassName>AP93_DocumentDateEffet_TEST</testClassName>
+    <testClassName>AP98_DocumentContractuel_Test</testClassName>
+    <testClassName>Batch99_DocDatePriseEffet_TEST</testClassName>
+    <testClassName>LC28_OpportunityPath_controller_Test</testClassName>
+    <testClassName>LC80_DateEffetDocument_TEST</testClassName>
+    <testClassName>wwwDalkiaFrReferentielContratWebErrTest</testClassName>
+    <testClassName>wwwDalkiaFrReferentielContratWebSvcTest</testClassName>
+</ApexTestSuite>

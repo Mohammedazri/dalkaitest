@@ -1,0 +1,94 @@
+<!--c:LC67_EditContractTeamMember-->
+<!--** 
+* @author Dona Kfoury
+* @date 21/1/2020 
+* @description Composant permettant d'ajouter un nouvel utilisateur(active non active) comme membre d'équipe du contrat courant
+*-->
+<aura:component implements="force:lightningQuickActionwithoutheader,force:hasRecordId,lightning:actionOverride" controller="LC65_NewContractTeamMember_Controller">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="picklistValues" type="LC65_NewContractTeamMember_Controller.userWrapper[]" />
+    <aura:attribute name="memberName" type="String" />
+    <aura:attribute name="idChosen" type="String" />
+    <aura:attribute name="nameChosen" type="String" />
+    <aura:attribute name="error" type="String" />
+    <aura:attribute name="ifErrorExists" type="boolean" default="false" />
+    <aura:attribute name="membre" type="IntervenantSurContrat__c" default="{ 'sobjectType': 'IntervenantSurContrat__c' }"/>
+    <aura:attribute name="loaded" type="Boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        
+        .uiModal--medium .modal-container {
+        width: fit-content;
+        }
+        
+    </aura:html>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <div  onclick="{!c.closeMenu}">
+                <header class="slds-modal__header" style="text-transform: capitalize;">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!$Label.c.LC67_Edit_membre_de_l_equipe_contrat}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div style="padding: 15px;">
+                        <div class="exampleHolder">
+                            <aura:if isTrue="{! v.loaded }">
+                                <lightning:spinner alternativeText="Loading" />
+                            </aura:if>
+                        </div>
+                        <aura:if isTrue="{!v.ifErrorExists}">
+                            <center>
+                                <div class="error"> 
+                                    {!v.error}
+                                </div>
+                            </center>
+                            <br/>
+                        </aura:if>
+                        {!$Label.c.LC66_Role}<span class="required">*</span>
+                        <force:inputfield value="{!v.membre.Role__c}" /><br/>
+                        {!$Label.c.LC66_Contrat}<span class="required">*</span><br/>
+                        {!v.membre.Contrat__r.Name}<br/>
+                        <br/>
+                        <!--force:inputfield value="{!v.membre.Nom_de_utilisateur_std__c}" required="true" /-->
+                        <label> {!$Label.c.LC66_Nom_de_l_utilisateur}</label> <span class="required">*</span> 
+                        <div  onclick ='{! c.displayUserOptions }'>
+                            <ui:inputText aura:id="aboAssocie" label="" updateOn="keyup" keyup="{!c.displayUserOptions}" placeholder = "Renseigner un Utilisateur" 
+                                          class="slds-input slds-select" value="{!v.memberName}"  disabled = 'false' /> 
+                        </div>
+                        <aura:if isTrue="{!not(empty(v.picklistValues))}"> 
+                            <div class="slds-form-element slds-is-required map-dropdown">
+                                <div class="slds-form-element__control">
+                                    <div class="selectBox" style= "z-index:4000" >
+                                        <aura:iteration items="{!v.picklistValues}" var="index">
+                                            <span class="custom-select selectBox-select" data-myid ="{!index.Id}" data-myvalue ="{!index.Name}" onclick="{!c.selectMembre}"   >
+                                                <c:LC66_UserWrapperItem name="{!index.Name}" DKCode="{!index.DKCode}" />
+                                            </span>
+                                        </aura:iteration>
+                                    </div>
+                                </div>
+                            </div> 
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+            <footer class="slds-modal__footer">
+                <div  onclick="{!c.closeMenu}">
+                    <lightning:button  aura:id="disablebuttonid" label="{!$Label.c.LC67_Modifier}" onclick="{!c.Soumettre}" class="slds-button slds-button_neutral"  />
+                    <lightning:button label="{!$Label.c.Cancel}" onclick="{!c.Cancel}" class="slds-button slds-button_neutral"  />
+                </div>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:component>

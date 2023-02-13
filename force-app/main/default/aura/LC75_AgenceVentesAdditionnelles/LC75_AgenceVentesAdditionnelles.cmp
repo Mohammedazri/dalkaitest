@@ -1,0 +1,39 @@
+<!--cLC75_AgenceVentesAdditionnelles-->
+<!--** 
+* @author Dona Kfoury
+* @date 03/09/2020 
+* @description Composant qui montre le taux de"Ventes Additionnelles" de l'agence pour le DAC one connecté pour l'annee actuelle.
+*-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction" controller="LC75_AgenceVA_Controller"  access="global">
+    <aura:attribute  name="TauxVentesAgence" type="Decimal"/>
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="custom-background" >
+        <!--loading spinner start-->
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.TauxVentesAgence == -1}">
+            <br/>
+            <p  class="erreurTaux">{!$Label.c.LC75_PasDeTaux}</p>
+            <aura:set attribute="else">
+                <div class="colonneNomTaux">
+                    <div class="slds-truncate">{!$Label.c.LC75_TauxAgenceVA}</div>
+                </div>
+                <div>
+                    <center>
+                        <p class ="colonneTaux">{!v.TauxVentesAgence}</p>
+                    </center>
+                </div>
+            </aura:set>
+        </aura:if>
+        <br/>
+    </div>
+</aura:component>

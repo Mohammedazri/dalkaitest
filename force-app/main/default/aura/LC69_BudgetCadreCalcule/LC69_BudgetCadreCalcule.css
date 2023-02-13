@@ -1,0 +1,15 @@
+.THIS {
+}
+
+.THIS .myValue{
+    padding-bottom: .25rem;
+    min-height: calc(1.875rem + 2px);
+    font-size: .875rem;
+    font-weight: 400;
+    color: rgb(43, 40, 38);
+}
+
+.THIS .myError{
+    font-weight: 600;
+    color: rgb(255, 0, 0);
+}

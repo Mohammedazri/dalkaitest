@@ -1,0 +1,27 @@
+.THIS .boldClass{
+     font-weight: bold;
+}
+
+.THIS .sizeRecord{
+    width: 200%;
+}
+.THIS .CurrentClass{
+    padding: .35rem .2rem;
+    border-radius: 15rem;
+    font-size: .625rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: .0625em;
+    color: rgb(22 , 50 ,92);
+    vertical-align: middle;
+    white-space: nowrap;
+    color: rgb(255, 255, 255);
+    background-color: rgb(200 , 25 , 50);
+    height: 36%;
+    width: 12%;
+    text-align: center;
+}
+
+.THIS .ObjectIcon{
+    margin-bottom: 46%;
+}

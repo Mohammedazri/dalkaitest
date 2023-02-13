@@ -1,0 +1,14 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC10_Hierarchy_Controller">
+    <aura:attribute name="IfExpand" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="listWrapper" type="WrapperHierarchyRow[]" default="null" />
+    <aura:attribute name="AriaLevel" type="Integer" default="1"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div class="slds-tree_container myContainer" role="application">
+        <ul class="slds-tree" role="tree" aria-labelledby="treeheading">
+            <aura:iteration items="{!v.listWrapper}" var="RowWrapper"> 
+            	<c:LC11_HierarchyRow HierarchyWrapper="{!RowWrapper}" AriaLevel="1" color="blue"/>
+            </aura:iteration>
+        </ul>
+    </div>	
+</aura:component>

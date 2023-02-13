@@ -1,0 +1,38 @@
+<!--
+  @description       : 
+  @author            : Othmane Choulli
+  @group             : 
+  @last modified on  : 07-12-2022
+  @last modified by  : Othmane Choulli
+-->
+<template>
+    <!-- PAGE HEADER -->
+  <div class="slds-page-header">
+      <div class="slds-grid">
+        <div class="slds-col slds-has-flexi-truncate">
+          <p class="slds-text-title_caps slds-line-height_reset">Emplacements</p>
+          <h1 class="slds-page-header__title slds-m-right_small slds-align-middle slds-truncate"  title="My Contacts"> Votre liste d'emplacements séléctionnés </h1>
+        </div>
+      </div>
+    </div>
+    <!-- / PAGE HEADER -->
+  
+    <lightning-datatable  key-field="Id"
+                          data={emplacementList} 
+                          columns={columns}
+                          show-row-number-column="true"
+                          sorted-direction={sortDirection}
+                          sorted-by={sortedBy}
+                          onsort={onHandleSort}
+                          onrowaction={handleRowAction}
+                          onrowselection={getSelectedEmplacement}
+                          checked>
+    </lightning-datatable>
+
+    <footer class="slds-modal__footer" style="background-color: rgb(255, 255, 255); border-style: none;">
+      <lightning-button class="slds-m-top_small" onclick={handleBack} name="Back" label="Précedent">
+      </lightning-button>
+      <lightning-button class="slds-m-top_small" style="margin: 0px 0px 0px 10 px;" onclick={handleNext} variant="brand" name="Next" label="Suivant">
+      </lightning-button>
+    </footer>
+</template>

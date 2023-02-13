@@ -1,0 +1,287 @@
+<aura:component implements="lightning:actionOverride,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction" access="global" controller="LC13_CreationPartenaire_Controller">
+    <aura:attribute name="ChooseRT" type="boolean" default="true"/>
+    <aura:attribute name="segmentExists" type="boolean" default="false"/>
+    <aura:attribute name="sousSegmentExists" type="boolean" default="false"/>
+    <aura:attribute name="selectRT" type="String" />
+    <aura:attribute name="SiretEntered" type="String" default=""/>
+    <aura:attribute name="ErrorMsg" type="String" default=""/>
+    <aura:attribute name="canCreateAcc" type="Boolean" />
+    <aura:attribute name="IFsociete" type="Boolean" default="false"/>
+    <aura:attribute name="IsSiretValid" type="Boolean" default="true"/>
+    <aura:attribute name="IsSiretEmpty" type="Boolean" default="true"/>
+    <aura:attribute name="recordTypes" type="LC13_CreationPartenaire_Controller.RecordTypeObj[]"/>
+    <aura:attribute name="newAccountModal" type="boolean" default="false"/>
+    <aura:attribute name="errorModal" type="boolean" default="false"/>
+    <aura:attribute name="errorSaveMsg" type="String" />
+    <aura:attribute name="segmentValues" type="String[]" />
+    <aura:attribute name="emptySegment" type="boolean" default="false"/>
+    <aura:attribute name="emptySousSegment" type="boolean" default="false"/>
+
+    <aura:attribute name="accountToInsert" type="Account" default="{'sobjectType':'Account', 
+                                                                   'Name':'',
+                                                                   'BillingPostalCode':'',
+                                                                   'LibelleEtablissement__c':'',
+                                                                   'FormeJuridique__c':'',
+                                                                   'SIRET__c':'',
+                                                                   'BillingState':'',
+                                                                   'BillingCity':'',
+                                                                   'BillingStreet':'',
+                                                                   'BillingCountry':'',
+                                                                   'ComplementAdresse__c':'',
+                                                                   'PresicionIdentificationAdresse__c':'',
+                                                                   'Identification_externe__c':'',
+                                                                   'Code_NAF__c':'',
+                                                                   'Sigle__c':'',
+                                                                   'Effectif__c':'',
+                                                                   'Enseigne__c':'',
+                                                                   'Site':'',
+                                                                   'ComplementLibelle__c':'',
+                                                                   'Siege_social_partenaire__c':'true',
+                                                                   'DkCodeSociete__c':'',
+                                                                   'Segment_client__c':'Habitat',
+                                                                   'Identification_externe__c':'',
+                                                                   'Sous_segment_client__c':'Administration de biens'}"/>
+    <aura:attribute name="SegmentPicklist" type="String[]" /> 
+    <aura:attribute name="SousSegmentPicklist" type="String[]" />
+    <aura:attribute name="EffectifPicklist" type="String[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.errorModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open"  style="background-color: rgba(0, 0, 0, 0.5);height:100%;z-index:10" >
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeErrorModel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Erreur</h2>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="text-align:center">
+                        {!v.errorSaveMsg}
+                    </div>
+                </header>
+            </div>
+        </section>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.newAccountModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open"  style="background-color: rgba(0, 0, 0, 0.5);height:100%;" >
+            <div class="slds-modal__container">
+                <lightning:spinner aura:id="mySpinnerTop" class="slds-hide"/>
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeAccountModel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!$Label.c.LC13_ChampsPartenaire}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <lightning:input name="inputSIRET__c" label="SIRET" disabled="true" value="{!v.accountToInsert.SIRET__c}"/>
+                        </div>
+                        <div class="slds-col">
+                            <lightning:input name="inputName" label="Libelle Etablissement" disabled="true" value="{!v.accountToInsert.Name}"/>
+                        </div>
+                    </div> 
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <lightning:input name="inputName" label="Nom" disabled="true" value="{!v.accountToInsert.Name}"/>
+                        </div>
+                        <div class="slds-col">
+                            <lightning:input name="inputEnseigne" label="Enseigne" disabled="true" value="{!v.accountToInsert.Enseigne__c}"/>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col" style="width:50%">
+                            <lightning:input name="inputBillingCountry" label="Pays" disabled="true" value="{!v.accountToInsert.BillingCountry}"/>
+                        </div>
+                        <div class="slds-col" style="width:50%">
+                            <lightning:select label="Effectif" value="{!v.accountToInsert.Effectif__c}" disabled="true">
+                                <option value=""></option>
+                                <aura:iteration items="{!v.EffectifPicklist}" var="eff">
+                                    <option value="{!eff.value}" text="{!eff.label}" selected="{!eff.selected}"> </option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <lightning:input name="inputCode_NAF__c" label="Code NAF" disabled="true" value="{!v.accountToInsert.Code_NAF__c}"/>
+                        </div>
+                        <div class="slds-col">
+                            <lightning:input name="inputPresicionIdentificationAdresse" label="Precision identification adresse" disabled="true" value="{!v.accountToInsert.PresicionIdentificationAdresse__c}"/>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <lightning:input name="inputBillingStreet" label="Voie" disabled="true" value="{!v.accountToInsert.BillingStreet}"/>
+                        </div>
+                        <div class="slds-col">
+                            <lightning:input name="inputComplementAdresse" label="Complement adressse" disabled="true" value="{!v.accountToInsert.ComplementAdresse__c}"/>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <lightning:input name="inputBillingCity" label="Ville" disabled="true" value="{!v.accountToInsert.BillingCity}"/>
+                        </div>
+                        <div class="slds-col">
+                            <lightning:input name="inputBillingPostalCode" label="Code Postal" disabled="true" value="{!v.accountToInsert.BillingPostalCode}"/>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters" >
+                        <div class="slds-col">
+                            <div class="slds-form-element" >
+                                <label class="slds-form-element__label">Siege social partenaire</label>
+                                <div class="slds-form-element__control">
+                                    <span class="slds-checkbox slds-checkbox_standalone">
+                                        <input type="checkbox"  name="inputSiege_social_partenaire__c" disabled="true" checked="{!v.accountToInsert.Siege_social_partenaire__c}"/>
+                                        <span class="slds-checkbox_faux"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col">
+                            <!--lightning:input type="number" name="numeroRegistreCopropriete" label="Numero Registre Copropriete" disabled="false" value="{!v.accountToInsert.Identification_externe__c}"/-->
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col" style="width:50%">
+                            <lightning:select label="Segment Client" value="{!v.accountToInsert.Segment_client__c}" disabled="{!v.segmentExists}">
+                                <option value=""></option>
+                                <aura:iteration items="{!v.segmentValues}" var="seg">
+                                    <option value="{!seg.segment}">{!seg.segment}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                            <aura:if isTrue="{!v.emptySegment}">
+                                <p style="color:red">Le champ segment est obligatoire.</p>
+                            </aura:if>
+                        </div>
+                        <div class="slds-col" style="width:50%">
+                            <lightning:select label="Sous Segment Client" value="{!v.accountToInsert.Sous_segment_client__c}" disabled="{!v.sousSegmentExists}">
+                                <option value=""></option>
+                                <aura:iteration items="{!v.segmentValues}" var="seg">
+                                    <aura:iteration items="{!seg.value}" var="sousSeg">
+                                        <aura:if isTrue="{!seg.segment == v.accountToInsert.Segment_client__c}">
+                                            <option value="{!sousSeg}">{!sousSeg}</option>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </aura:iteration>
+                            </lightning:select>
+                            <aura:if isTrue="{!v.emptySousSegment}">
+                                <p style="color:red">Le champ sous segment est obligatoire.</p>
+                            </aura:if>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <!--lightning:input name="utilisationDonnee" label="utilisationDonnee" disabled="false" value="{!v.accountToInsert.Name}"/-->
+                        </div>
+                        <div class="slds-col">
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="brand" 
+                                      label="{!$Label.c.Enregistrer}"
+                                      title="Save"
+                                      onclick="{!c.saveAccount}"/>
+                </footer>
+            </div>
+        </section>
+    </aura:if>
+    
+    <lightning:spinner aura:id="mySpinner" class="slds-hide"/>
+    <aura:if isTrue="{!v.ChooseRT || v.IsSiretValid==false}">
+        
+        <div  aura:id="ModeMaintenance" role="dialog" class="slds-modal slds-modal--large">
+            <div class="slds-modal__container" style="width: 50%;">
+                <div class="slds-modal__header" style="font-weight: 300;font-size: 1.25rem;line-height: 1.25;">
+                    <h2 id="header43" class="slds-text-heading--medium">{!$Label.c.LC13NouveauPartenaire}</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium setHeight">
+                    <center>
+                        <div class="slds-text-color_error">{!$Label.c.LC13_ModeMaintenance}</div>
+                    </center>
+                </div>
+                <div class="slds-modal__footer">
+                    <aura:if isTrue="{!v.canCreateAcc &amp;&amp; v.IsSiretValid}">
+                        <ui:button label="{!$Label.c.LC07_Annuler}" class="slds-button slds-button--brand"  press="{!c.Annuler}"/>
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div  aura:id="Modalbox" role="dialog" class="slds-modal slds-modal--large">
+            <div class="slds-modal__container" style="width: 50%;">
+                <div class="slds-modal__header" style="font-weight: 300;font-size: 1.25rem;line-height: 1.25;">
+                    <h2 id="header43" class="slds-text-heading--medium">{!$Label.c.LC13NouveauPartenaire}</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium setHeight">
+                    <center>
+                        <aura:if isTrue="{!v.IsSiretValid}">
+                            <div class="changeRecordTypeLeftColumn ">
+                                {!$Label.c.LC25_SelectionnerRT}
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.canCreateAcc}">
+                            <aura:if isTrue="{!v.IsSiretValid}">
+                                <div aura:id="main">
+                                    <aura:iteration items="{!v.recordTypes}" var="recordType">
+                                        <div class="uiInput uiInputRadio uiInput--default uiInput--radio myRT">
+                                            <label class="uiLabel-left form-element__label uiLabel ">
+                                                <div class="slds-grid">
+                                                    <div class="slds-form-element__label"> 
+                                                        <ui:inputRadio label="" change="{!c.onRadio}" text="{!recordType.RTId}" name="rtVal" value="false" aura:id="myRt" blur="{!c.clearSelection}"/>
+                                                    </div>
+                                                    <div class="slds-form-element__label">
+                                                        <span>{!recordType.RTName}</span>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                                <aura:set attribute="else">
+                                    {!v.ErrorMsg}
+                                </aura:set>
+                            </aura:if>
+                            <aura:set attribute="else">
+                                {!$Label.c.LC13_PasAutoriserDeCreerPartenaire}
+                            </aura:set>
+                        </aura:if>
+                    </center>
+                </div>
+                <div class="slds-modal__footer">
+                    <aura:if isTrue="{!v.canCreateAcc &amp;&amp; v.IsSiretValid}">
+                        <ui:button label="{!$Label.c.LC25_Continuer}" class="slds-button slds-button--brand" press="{!c.creationAcc}"/>                        
+                        <ui:button label="{!$Label.c.LC07_Annuler}" class="slds-button slds-button--brand"  press="{!c.Annuler}"/>
+                        <aura:set attribute="else">
+                            <ui:button label="{!$Label.c.LC03_OK}" class="slds-button slds-button--brand"  press="{!c.ClearSiret}"/>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+        <div aura:id="Modalbackdrop" class="slds-backdrop"></div>
+        <aura:set attribute="else">
+            <center>
+                <div class="slds-form slds-form_stacked" style="margin:10px;">
+                    <div class="slds-form-element">
+                        <!--<label class="slds-form-element__label" for="input-id-01">SIRET</label>-->
+                        <div class="slds-form-element__control" style="width:30%; margin-top: 7%;">
+                            <!--<ui:inputText aura:id="input-id-01" class="slds-input" placeholder="SIRET" value="{!v.SiretEntered}" keyup="{!c.SiretChanged}   .replaceAll( '\\s+', '');"/>-->
+                            <input type="text" id="input-id-01" class="form-control slds-input inputText" onkeyup="{!c.SiretChanged}" placeholder="SIRET" value="{!v.SiretEntered}"/>
+                        </div>
+                    </div>	    
+                    <div class="slds-form-element">
+                        <ui:button label="{!$Label.c.LC13_Creer}" aura:id="newbtn"  class="slds-button slds-button--brand" press="{!c.newAccount}" disabled="{!v.IsSiretEmpty}"/><!--  <lightning:button  class="newbtn right"  onclick/ no variant variant="brand"-->
+                    	<ui:button label="{!$Label.c.LC07_Annuler}" class="slds-button slds-button--brand"  press="{!c.Annuler}"/>
+                    </div>
+                </div>
+            </center>
+        </aura:set>
+    </aura:if>
+</aura:component>

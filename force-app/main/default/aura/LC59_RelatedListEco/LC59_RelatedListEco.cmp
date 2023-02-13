@@ -1,0 +1,98 @@
+<!--
+    Author: Rita Bejjani
+    Company: Ei-Technologies Lebanon
+    Description: Lightning component used to display related list of EcoSystem on account when "afficher tout" button is clicked
+    History
+    <Date>      <Authors Name>   <Brief Description of Change>
+    04/07/2019   Rita Bejjani	  Creation
+    -->
+<aura:component  implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome,force:appHostable"  controller="LC59_RelatedListEco_Controller" >
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="listforItteration" type="EcosystemePartenaire__c[]"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="recordToDelete" type="String" />
+    <aura:attribute name="viewModal" type="Boolean" default ="false"/>
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    <aura:attribute name="Titre" type="String" default ="false"/>
+    <aura:attribute name="ShowSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="numb" type="Integer"/>
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <article class="slds-card slds-card_boundary forceRelatedListCardDesktop" >  
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media--center slds-has-flexi-truncate" >
+                <div class="slds-media__figure" >
+                    <div class="extraSmall forceEntityIcon" style="background-color: #bf5a88" >
+                        <span  class="uiImage" data-aura-class="uiImage">
+                            <img  src="/img/icon/t4v35/custom/custom6_120.png" class="icon " alt="Écosystème du partenaire" title="Écosystème du partenaire">
+                            </img>
+                        </span>
+                    </div>
+                </div>
+                <div class="slds-media__body" >
+                    <h2>
+                        <b>
+                            <span class="slds-text-heading--small slds-truncate slds-m-right--xx-small" title="{!v.Titre}" >{!v.Titre}</span>
+                            <span class="slds-text-heading--small slds-shrink-none slds-m-right--xx-small" title="{!v.numb}">({!v.numb})</span>
+                        </b>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body" >
+            <lightning:datatable
+                                 keyField="id"
+                                 data="{! v.listforItteration }"
+                                 columns="{! v.columns }"
+                                 hideCheckboxColumn="true"
+                                 onrowaction="{! c.handleDelete }"/>
+        </div>
+    </article>
+    
+    <aura:if isTrue="{!v.viewModal}">           
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.handleCancel}">
+                        <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg?cache=9.8.0#close'}"
+                                   name="chevronDown"
+                                   class="slds-button__icon slds-button__icon--large"
+                                   containerClass=""
+                                   category="utility"
+                                   size="large"
+                                   assistiveText="Toggle"/>
+                        <span class="slds-assistive-text">{!$Label.c.LC33_close}</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!$Label.c.LC33_titreModal}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <aura:if isTrue="{! !empty(v.error)}">
+                        <div class="slds-notify_container slds-is-relative">
+                            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>  
+                    {!$Label.c.LC33_ModalContent}
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.handleCancel}"> {!$Label.c.LC33_Annuler}</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.handleRecordDelete}"> {!$Label.c.LC33_Supprimer}</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.ShowSpinner}">
+    <div class="SpinCss">
+        <lightning:spinner alternativeText="Loading" size="Large" />
+    </div>
+    </aura:if>
+    
+</aura:component>

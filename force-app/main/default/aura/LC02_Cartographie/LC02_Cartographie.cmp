@@ -1,0 +1,3 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+	<img src="{!$Resource.ImagesTemp + '/Cartographie.png'}" />
+</aura:component>

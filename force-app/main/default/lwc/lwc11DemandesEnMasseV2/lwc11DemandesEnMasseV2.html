@@ -1,0 +1,140 @@
+<!--
+  @description       : 
+  @author            : Othmane Choulli
+  @group             : 
+  @last modified on  : 07-12-2022
+  @last modified by  : Othmane Choulli
+-->
+<template>
+    <!-- Champs de recherche -->
+    <lightning-card title="Rechercher un emplacement par un des champs ci-dessous.">
+        
+            <div class="slds-p-horizontal_small">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <div style="font-weight:bold">
+                            <lightning-input type="text" label="Contrat" value="" placeholder="Numéro de contrat"
+                                onchange={handleChange} name="Contract" disabled={isContractDisabled} autocomplete="false" minlength="3" message-when-too-short="Minimum 3 caractère pour effectuer la recherche" class="fieldvalidate"></lightning-input>
+                        </div>
+                    </lightning-layout-item>    
+                    <lightning-layout-item size="3" padding="around-small">
+                        <div style="font-weight:bold">
+                            <lightning-input type="text" label="Groupe Client" value="" placeholder="Groupe client"
+                                onchange={handleChange} name="ClientGroup" disabled={isClientGroupDisabled} autocomplete="false" minlength="3" message-when-too-short="Minimum 3 caractère pour effectuer la recherche" class="fieldvalidate"></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <div style="font-weight:bold">
+                            <lightning-input type="text" label="Code Postal" value="" placeholder="Code Postal"
+                                onchange={handleChange} name="ZipCode" disabled={isZipCodeDisabled} autocomplete="false" minlength="3" message-when-too-short="Minimum 3 caractère pour effectuer la recherche" class="fieldvalidate"></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <div style="font-weight:bold">
+                            <lightning-input type="text" label="Libellé voie" value="" placeholder="Libellé voie"
+                                onchange={handleChange} name="Adress" disabled={isAdressDisabled} autocomplete="false" minlength="3" message-when-too-short="Minimum 3 caractère pour effectuer la recherche" class="fieldvalidate"></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <div style="font-weight:bold">
+                            <lightning-input type="text" label="DK Code" value="" placeholder="DK Code"
+                                onchange={handleChange} name="DKCode" disabled={isDKCodeDisabled} autocomplete="false" minlength="3" message-when-too-short="Minimum 3 caractère pour effectuer la recherche" class="fieldvalidate"></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <div style="font-weight:bold">
+                            <lightning-input type="text" label="Ville" value="" placeholder="Ville"
+                                onchange={handleChange} name="City" disabled={isCityDisabled} autocomplete="false" minlength="3" message-when-too-short="Minimum 3 caractère pour effectuer la recherche" class="fieldvalidate"></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <div style="font-weight:bold">
+                            <lightning-input type="text" label="Entité" value="" placeholder="Entité d'exploitation / organisation"
+                                onchange={handleChange} name="Entity" disabled={isEntityDisabled} autocomplete="false" minlength="3" message-when-too-short="Minimum 3 caractère pour effectuer la recherche" class="fieldvalidate"></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" padding="around-small">
+                        <div style="font-weight:bold">
+                            <lightning-input type="text" label="Partenaire" value="" placeholder="Partenaire"
+                                onchange={handleChange} name="Partner" disabled={isPartnerDisabled} autocomplete="false" minlength="3" message-when-too-short="Minimum 3 caractère pour effectuer la recherche" class="fieldvalidate"></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    
+                    <lightning-layout-item size="3" padding="around-small" class="slds-m-top_large slds-align_absolute-center">
+                        <lightning-button variant="brand" label="Rechercher" title="Search" icon-name="utility:search"
+                            class="slds-m-left_x-small" onclick={searchEmplacement}></lightning-button>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+        <template if:true={data}>
+            <!-- Datatable avec Pagination  -->
+            <div class="slds-m-around_medium">
+                <div class="slds-page-header">
+                    <div class="slds-page-header__row">
+                        <div class="slds-page-header__col-title">
+                            <div class="slds-media">
+                                <div class="slds-media__body">
+                                    <div class="slds-page-header__name">
+                                        <div class="slds-page-header__name-title">
+                                            <h1>
+                                                <span class="slds-page-header__title slds-truncate" title="Emplacements">Emplacements</span>
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="height: 180px;">
+                    <lightning-datatable key-field="Id"
+                                         data={data} 
+                                         columns={columns}
+                                         show-row-number-column="true"
+                                         sorted-direction={sortDirection}
+                                         sorted-by={sortedBy}
+                                         onsort={onHandleSort}
+                                         onrowaction={handleRowAction}
+                                         onrowselection={getSelectedName}
+                                         hide-checkbox-column="true">
+                    </lightning-datatable>
+                </div>
+            </div>
+ 
+            <!--  Boutton de Pagination -->
+            <div class="slds-align_absolute-center">
+                <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}
+                    disabled={isPreviousDisable}>
+                </lightning-button>
+ 
+                <span class="slds-badge slds-badge_lightest"
+                            style="margin-right: 10px;margin-left: 10px;">
+                            Page {page} sur {totalPage}
+                        </span>
+ 
+                <lightning-button label="Next" icon-name="utility:chevronright" icon-position="right" onclick={nextHandler}
+                    disabled={isNextDisable}>
+                </lightning-button>
+            </div>
+            <!--  Pagination Buttons End -->
+            <!-- Datatable with Pagination End -->
+        </template>
+    </lightning-card>
+    <!-- Search Fields Card End -->
+    <!-- Show Spinner when data load -->
+    <div if:true={isLoading}>
+        <lightning-spinner
+            alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    <!-- End Spinner Loading -->
+    <!-- Footer -->
+    <footer class="slds-modal__footer" style="background-color: rgb(255, 255, 255); border-style: none;">
+        <lightning-button class="slds-m-top_small" onclick={handleBack} name="Back" label="Précedent">
+        </lightning-button>
+        <lightning-button class="slds-m-top_small" style="margin: 0px 0px 0px 10 px;" onclick={handleNext} variant="brand" name="Next" label="Récap">
+        </lightning-button>
+    </footer>
+    <!-- End Footer -->
+ 
+</template>

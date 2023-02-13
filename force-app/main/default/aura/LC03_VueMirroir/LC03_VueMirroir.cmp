@@ -1,0 +1,200 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC03_VueMirroir_Controller">
+    <aura:attribute name="AccoundId" type="string" required="true" default="null" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="MessageForModal" type="string" default=""/>
+    <aura:attribute name="ModalTitle" type="string" default=""/>
+    <aura:attribute name="errorMessage" type="string" default=""/>
+    <aura:attribute name="IfErrorExists" type="boolean" default="false"/>
+    <aura:attribute name="ColorOfSearched" type="string" default=""/>
+    <aura:attribute name="SearchVar" type="string" default=""/>
+    <aura:attribute name="Commerce" type="boolean" default="true"/>
+    <aura:attribute name="Direction" type="boolean" default="true"/>
+    <aura:attribute name="Operation" type="boolean" default="true"/>
+    <aura:attribute name="Autre" type="boolean" default="true"/>
+    <aura:attribute name="listWrapper" type="wrapperVueMirroirRow[]" default="null" />
+    <aura:attribute name="IfModalRC" type="boolean" default="false"/>
+    <aura:attribute name="IfRefreshRC" type="boolean" default="false"/>
+    <aura:attribute name="IfInitEnded" type="boolean" default="false"/>
+    <aura:attribute name="IfCreateMode" type="boolean" default="false"/>
+    <aura:attribute name="disableButton" type="boolean" default="false"/>
+    <aura:attribute name="RelationToEdit" type="Contact_User__c" default=""/>
+    
+    <aura:attribute name="EventsToUpdate" type="Map" default="{ '': '' }"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:LE01_ContactAction" action="{!c.handleComponentEvent}"/>
+    <aura:handler name="change" value="{!v.IfRefreshRC}" action="{!c.SearchData}"/>
+    <aura:handler name="change" value="{!v.IfErrorExists}" action="{!c.OpenErrorModel}"/>
+    
+    <!-- Modal of error-->
+    <div aura:id="ModalSectionError" role="dialog" class="slds-modal slds-modal--large">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <h2 id="header43" class="slds-text-heading--medium">{!$Label.c.LC03_Error}</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                <center>
+                    <p>{!$Label.c.LC03_ErrorInDelete}{!v.errorMessage}</p>
+                </center>
+            </div>
+            <div class="slds-modal__footer">
+                <button id="OKButton" class="slds-button slds-button--neutral" style="display: initial;" onclick="{!c.hideModalofError}">{!$Label.c.LC03_OK}</button>
+            </div>
+        </div>
+    </div>
+    <div aura:id="visibilityError" class="slds-backdrop"></div>
+    <!-- Modal of event list-->
+    <div aura:id="ModalSection" role="dialog" class="slds-modal slds-modal--large">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <h2 id="header43" class="slds-text-heading--medium">{!v.ModalTitle}</h2>
+            </div>
+            <aura:if isTrue="{!v.IfInitEnded}">
+                <aura:if isTrue="{!v.MessageForModal.length>=1}">
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <center>
+                            <table class="slds-table slds-table--bordered" role="treegrid" aria-readonly="true">
+                                <thead>
+                                    <tr class="slds-text-title--caps">
+                                        <th width="20%">
+                                            <div>{!$Label.c.LC03_SujetDeEvenement}</div>
+                                        </th>
+                                        <th width="10%">
+                                            <div>{!$Label.c.LC03_Date}</div>
+                                        </th>
+                                        <th width="10%">
+                                            <div>{!$Label.c.LC03_Duree}</div>
+                                        </th>
+                                        <th width="28%">
+                                            <div>{!$Label.c.LC03_Description}</div>
+                                        </th>
+                                        <th width="27%" style="padding-left: 3%;">
+                                            <div>{!$Label.c.LC03_PiecesJointes}</div>
+                                        </th>
+                                        <th width="5%" style="padding-left: 3%;">
+                                            <div>Rdv réalisé</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.MessageForModal}" var="ThisEvent">
+                                        <tr class="/*slds-text-title--caps*/">
+                                            <td width="20%" class="slds-text-title--caps">
+                                                <!--  <div class="slds-truncate"><a href="{!'/one/one.app?#/sObject/'+ ThisPlanAction.Id + '/view'}">{!ThisPlanAction.Name}</a></div>-->
+                                                <div><a href="{!'/one/one.app?#/sObject/'+ ThisEvent.theEventObj.Id + '/view'}">{!ThisEvent.theEventObj.Subject}</a></div>
+                                            </td>
+                                            <td width="10%">
+                                                <!--<div class="slds-truncate"><a href="{!'/one/one.app?#/sObject/'+ ThisPlanAction.Responsible__c + '/view'}">{!ThisPlanAction.Responsible__r.Name}</a></div>-->
+                                                <div>{!ThisEvent.theEventObj.ActivityDate}</div>
+                                            </td>
+                                            <td width="10%">
+                                                <div>{!ThisEvent.theEventObj.DurationInMinutes}</div>
+                                                <!--<div class="slds-truncate">{!ThisPlanAction.Date__c}</div>-->
+                                            </td>
+                                            <td width="28%" style="position: fixed; overflow: hidden;">
+                                                <div style="text-overflow: ellipsis; overflow: hidden;">{!ThisEvent.theEventObj.Description}</div>
+                                            </td>
+                                            <td width="27%" style="padding-left: 3%;">
+                                                <aura:iteration items="{!ThisEvent.AttachedFiles}" var="ThisFile">
+                                                    <div>{!ThisFile.ContentDocument.Title}</div>
+                                                </aura:iteration>
+                                            </td>
+                                            <td width="10%" style="position: fixed; overflow: hidden;">
+                                              <ui:inputCheckbox text="{!ThisEvent.theEventID}" value="{!ThisEvent.theEventObj.Rdvralise__c}" click="{!c.handleClick}"/> 
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </center>
+                    </div>
+                    <aura:set attribute="else">
+                        <div class="slds-modal__content slds-p-around--medium">
+                            <center>
+                                <p>{!$Label.c.LC03_PasDEvenementPourContact}</p>
+                            </center>
+                        </div>                  
+                    </aura:set>
+                </aura:if>
+            </aura:if>
+            <div class="slds-modal__footer">
+                <button id="OKButton" class="slds-button slds-button--neutral" style="display: initial;" onclick="{!c.hideModal}">{!$Label.c.LC03_OK}</button>
+            </div>
+        </div>
+    </div>
+    <!-- Vue Miroir Table -->
+    <div aura:id="visibility" class="slds-backdrop"></div>
+    <div>
+        <div style="float:left; width:20%;">
+            <ui:inputText class="slds-input" value="{!v.SearchVar}" aura:id="SearchBar" placeholder="{!$Label.c.LC03_TapezPourRechercher}" keyup="{!c.searchKeyChange}"/>
+        </div>
+        <div style="float:left; width:20%; padding-left: 1%;">
+            <button style= "line-height: 2.9;" id="OKButton" class="slds-button slds-button--neutral" onclick="{!c.SearchData}">{!$Label.c.LC03_Rechercher}</button>
+        </div>
+        <div style="float:left; width:12%;margin-left: 2%;">
+            <ui:inputCheckbox  value="{!v.Commerce}" label="{!$Label.c.LC03_Commerce}" labelClass="CommerceLabel"/>
+        </div>
+        <div style="float:left; width:12%;">
+            <ui:inputCheckbox  value="{!v.Direction}" label="{!$Label.c.LC03_Direction}" labelClass="DirectionLabel"/>
+        </div>
+        <div style="float:left; width:12%;">
+            <ui:inputCheckbox  value="{!v.Operation}" label="{!$Label.c.LC03_Operation}" labelClass="OperationLabel"/>   
+        </div>
+        <div style="float:left; width:9%;">
+            <ui:inputCheckbox value="{!v.Autre}" label="{!$Label.c.LC03_Autre}" labelClass="AutreLabel"/>
+            <div style="clear:both;">
+            </div>
+        </div>
+        <!--Create Relation Client-->
+        <div style="float:right">
+            <button style= "line-height: 2.9;" id="RCButton" class="slds-button slds-button--neutral" 
+                    onclick="{!c.CreateRC}">{!$Label.c.CmpCreateRCButton}</button>
+        </div>
+    </div>
+    <br/><br/><br/>
+    <table class="slds-table slds-table--bordered slds-tree slds-table--tree" role="treegrid" aria-owns="tree0-node0 tree0-node1 tree0-node2" aria-readonly="true">
+        <thead>
+            <tr class="slds-text-title--caps">
+                <th scope="col">
+                    <div class="slds-truncate">{!$Label.c.LC03_NOM_CONTACT_CLIENT}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate">{!$Label.c.LC03_NOM_CONTACT_INTERNE}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate">{!$Label.c.LC03_DateDerniereRencontre}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate">{!$Label.c.LC03_INDICATEUR_VISITE}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate">{!$Label.c.LC03_INFLUENCE}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate">{!$Label.c.LC03_SUPPORT}</div>
+                </th>
+                <th scope="col" style="width: 9%;">
+                    <div class="slds-truncate">{!$Label.c.LC03_Satisfaction}</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate">*{!$Label.c.LC03_Rencontres}</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.listWrapper}" var="contactWrapper">
+                <c:LC07_VueMirroirRow contactWrapper="{!contactWrapper}" AriaLevel="1" ColorOfSearched="{!v.ColorOfSearched}" 
+                                      Commerce="{!v.Commerce}" Direction="{!v.Direction}" IfModalRC="{!v.IfModalRC}"
+                                      Operation="{!v.Operation}" Autre="{!v.Autre}" IfRefreshRC="{!v.IfRefreshRC}" 
+                                      errorMessage="{!v.errorMessage}" IfErrorExists="{!v.IfErrorExists}"
+                                      RelationToEdit="{!v.RelationToEdit}" IfCreateMode="{!v.IfCreateMode}"
+                                      disableButton="{!v.disableButton}"/>
+            </aura:iteration>
+        </tbody>
+    </table>
+    <aura:if isTrue="{!v.IfModalRC}">
+        <c:LC24_createRelationClientEtInterne IfModalRC="{!v.IfModalRC}" recordId="{!v.recordId}"
+                                              IfRefreshRC="{!v.IfRefreshRC}" IfCreateMode="{!v.IfCreateMode}"
+                                              RelationToEdit="{!v.RelationToEdit}" disableButton="{!v.disableButton}"/>
+    </aura:if>
+</aura:component>

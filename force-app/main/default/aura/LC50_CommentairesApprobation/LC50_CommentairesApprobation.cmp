@@ -1,0 +1,15 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC50_CommentairesApprobation_Controller">
+    
+    
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="Currentrecord" type="Approbation__c"/>  
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    {!$Label.c.LC50_commentaire_em}
+    <lightning:textarea disabled="true" value="{!v.Currentrecord.CommentaireS__c}"></lightning:textarea>
+    <br/>
+    {!$Label.c.LC50_commentaire_app}
+    <lightning:textarea disabled="true" value="{!v.Currentrecord.CommentaireA__c}"></lightning:textarea>
+    
+    
+</aura:component>

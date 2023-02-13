@@ -1,0 +1,3 @@
+<design:component >
+	<design:attribute name="AllowEditMode" label="Enable Edit mode" description="If set to false, Edit button does not show up. Defaut is false."/>
+</design:component>

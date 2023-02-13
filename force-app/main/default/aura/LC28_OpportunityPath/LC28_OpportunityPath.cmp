@@ -1,0 +1,145 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="LC28_OpportunityPath_controller">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="currentstage" type="String" />
+    <aura:attribute name="variant" type="String" default="linear"/>
+    <aura:attribute name="title" type="String" />
+    <aura:attribute name="hideUpdateButton" type="Boolean" default="true"/>
+    <aura:attribute name="Closing" type="Boolean" default="false"/>
+    <aura:attribute name="StageNameDisable" type="Boolean" default="false"/>
+    
+    <aura:attribute name="BypassUser" type="Boolean" default="false"/>
+    
+    <aura:attribute name="Stagenames" type="List" />
+    <aura:attribute name="selectedStageName" type="String"/>
+    <aura:attribute name="Status" type="List" />
+    <aura:attribute name="selectedStatus" type="String"/>
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    <aura:attribute access="private" name="errorPop" type="String" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    <aura:attribute name="ShowPopUp" type="Boolean" default="false"/>
+    <aura:attribute name="ShowPopUpLWCEvol" type="Boolean" default="false"/>
+    <aura:attribute name="ShowPopUpLWCReouvContrat" type="Boolean" default="false"/>
+    <aura:attribute name="evolMSG" type="String" default=""/>
+    <aura:attribute name="ifnoErrorExists" type="Boolean" default="true"/>
+    <aura:attribute name="MotifsList" type="List" default="[]"/>
+    <aura:attribute name="ConditionsList" type="List" default="[]"/>
+    <aura:attribute name="myContrat" type="Contrat__c"/>
+    <aura:attribute name="disableCondition" type="Boolean" default="true"/> 
+    <aura:attribute name="disableDate" type="Boolean" default="false"/>
+    <aura:attribute name="disableStatus" type="Boolean" default="false"/>
+    <aura:attribute name="hideSpin" type="Boolean" default="true"/> 
+    <aura:attribute name="ifShowHelpText" type="Boolean" default="false"/> 
+    
+    <aura:attribute name="fieldMap" type="Map"/>
+    <aura:attribute name="opportunity" type="Opportunity" default="{'sobjectType':'Opportunity', 
+                                                                   'Motif__c': ''}"/>
+    <aura:attribute name="showMotifPerte" type="Boolean" default="false"/> 
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <lightning:path aura:id="path" recordId="{!v.recordId}"
+                    variant="{!v.variant}"
+                    hideUpdateButton="{!v.hideUpdateButton}"
+                    onselect="{!c.handleSelect}"
+                    />
+                   <aura:if isTrue="{!v.ShowPopUpLWCEvol}"> 
+                        <c:lwc01OppEvolDocSyncroPopup checkBool="true" evolMSG="{!v.evolMSG}" />
+                    </aura:if>
+    
+    				<aura:if isTrue="{!v.ShowPopUpLWCReouvContrat}"> 
+                        <c:lwc14ReouvOppRealiserContratSynchro checkBool="true" />
+                    </aura:if>
+    
+    <aura:if isTrue="{!v.Closing}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container"> 
+                <!--div class="slds-modal__header">
+                    <h2 id="header99" class="slds;text;heading;;medium">{!v.title}</h2>
+                    //avant de faire uncomment du titre remplacer le ";" par "-"
+                </div--> 
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <aura:if isTrue="{!v.hideSpin}">
+                        <!--div class="slds-modal__content slds-p-around;;medium"-->
+                        <aura:if isTrue="{! !empty(v.error)}">
+                            <div class="slds-notify_container slds-is-relative">
+                                <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                                    <div class="slds-notify__content">
+                                        <h2 class="slds-text-heading_small "><aura:unescapedHtml value="{!v.error}" /></h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.ifnoErrorExists}">
+                            <aura:if isTrue="{!v.ifShowHelpText}">
+                                <label style="color: darkgoldenrod;">{!$Label.c.LC28_ChampsOblRealise}:</label><br/><br/>
+                            </aura:if>
+                            <h3 class="slds-section-title--divider">{!$Label.c.LC28_opportuniteCourante}</h3>
+                            <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                                <lightning:select label="{!$Label.c.LC26_Statut}" aura:id="mySelect"   value="{!v.selectedStatus}" onchange="{!c.loadMotifvalues}">
+                                    <aura:iteration items="{!v.Status}" var="stat">
+                                        <option value="{!stat}"  >{!stat}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                                
+                                <aura:if isTrue="{!v.showMotifPerte}">
+                                    <lightning:select aura:id="motifPertePicklist" value="{!v.opportunity.Motif__c}" name="motifPertePicklist" label="Motif perte" required="true">
+                                        <option value=""></option>
+                                        <aura:iteration items="{!v.fieldMap}" var="i" indexVar="key">
+                                            <option text="{!i.value}" value="{!i.key}" selected="{!i.key==v.opportunity.Motif__c}" />
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </aura:if>
+                                
+                            </div>
+                        </aura:if>
+                        <!--/div-->
+                        
+                        <aura:if isTrue="{!v.ShowPopUp}"> 
+                            <aura:if isTrue="{!v.ifnoErrorExists}">
+                                <!--div class="slds-modal__content slds-p-around;;medium "-->
+                                <h3 class="slds-section-title--divider">{!$Label.c.LC28_ContratOrigine}</h3>
+                                <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                                    <ui:inputSelect aura:id="oppTrimestre" value="{!v.myContrat.Motif_fermeture_contrat__c}" label="{!$Label.c.LC35_Motif}" change="{!c.onSelectChange}" required="true">
+                                        <aura:iteration items="{!v.MotifsList}" var="motif">
+                                            <ui:inputSelectOption text="{!motif.value}" class="dynamic" label="{!motif.label}"/>
+                                        </aura:iteration>
+                                    </ui:inputSelect> 
+                                    <ui:inputSelect aura:id="oppTrimestre" value="{!v.myContrat.Condition_de_fermeture__c}" label="{!$Label.c.LC35_Condition}" disabled='{!v.disableCondition}' required="true" >
+                                        <aura:iteration items="{!v.ConditionsList}" var="cond">
+                                            <ui:inputSelectOption text="{!cond.value}" class="dynamic" label="{!cond.label}"/>
+                                        </aura:iteration>
+                                    </ui:inputSelect> 
+                                    <ui:inputDate label="Date de Fin" class="field" value="{!v.myContrat.DateFin__c}" displayDatePicker="true" required="True" disabled='{!v.disableDate}'  format="dd/MM/yyyy"/>
+                                    <!--/div-->
+                                </div>
+                            </aura:if>
+                        </aura:if>
+                        <aura:set attribute="else">
+                            <div class="demo-only" style="background-color:#ffffff;height:6rem">
+                                <div class="slds-spinner_container">
+                                    <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                        <span class="slds-assistive-text">Loading</span>
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </aura:set>
+                        
+                    </aura:if>
+                </div>
+                
+                <div class="slds-modal__footer">
+                    <lightning:button label="{!$Label.c.LC26_Annuler}" onclick="{!c.handleCancel}" class="slds-button_neutral "/>
+                    <aura:if isTrue="{!v.ifnoErrorExists}">
+                        <lightning:button label="{!$Label.c.LC26_Enregistrer}" onclick="{!c.handleSave}" class="slds-button_brand"/>
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div> 
+        
+    </aura:if>
+</aura:component>

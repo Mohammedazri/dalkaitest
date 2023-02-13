@@ -1,0 +1,160 @@
+[
+{
+"IDENTIFIANT":5592681,
+"IDENTIFIANT_EXPLORE":"MP#5592681",
+"CLE_MARCHE_PUBLIC_EXPLORE":"e740fe9d-29ae-40a9-b7e3-5e5baa7352f7",
+"OBJET":"Contrat multiservices d'entretien locatif en chauffage, plomberie, robinetterie, VMC, assainissement, menuiserie, électricité, couverture, toiture terrasses et hygiène (Lots 40, 43, 46, 47, 48, 49, 50 et 51)",
+"DATE_LIMITE_RECEPTION":"2017-03-13T00:00:00",
+"DATE_DETECTION":"2017-06-22T00:00:00",
+"DATE_PARUTION":"2017-04-11T00:00:00",
+"SOURCE":1188,
+"SOURCE_LIB":"JOUE",
+"TYPE_AVIS":"Avis d'attribution",
+"MPC_NATURE_CONTRAT":"",
+"MPC_NATURE_CONTRAT_LIB":"",
+"MPC_ALLOTISSEMENT":true,
+"MPC_MONTANT_REEL":0.0,
+"MPC_MONTANT_MIN":0.0,
+"MPC_MONTANT_MAX":0.0,
+"MPC_RENOUVELLEMENT":false,
+"MPC_DUREE":275,
+"MPC_DT_ECHEANCE":"2017-12-13T00:00:00",
+"MPC_DT_LIM_CANDIDAT":"0001-01-01T00:00:00",
+"MPC_DT_LIM_DEM_DOC":"0001-01-01T00:00:00",
+"MSG_CR":"",
+"MSG_CR_LIB":"",
+"URL_DETAIL":"http://extranet.explore.fr/dotnet/AccessByWebservice.aspx?page=AffichageMarchePublic.aspx&projet=5592681&CleClient=E4A3A4D8-3F95-4533-9C38-E0237B4AE63E",
+"URL_AVIS_ORIGINAL":"http://ted.europa.eu/udl?uri=TED:NOTICE:135113-2017:TEXT:FR:HTML",
+"TEXTE_ANNONCE":"\r\nAvis d’attribution de marché\r\n\r\nRésultats de la procédure de marché\r\n\r\nServices\r\nDirective 2014/24/UE\r\nSection I: Pouvoir adjudicateur\r\n\r\nI.1)Nom et adressesSIA Habitat\r\n67 avenue des Potiers, CS 80649\r\nDouai\r\n59506\r\nFrance\r\nTéléphone: +33 327954876\r\nCourriel: muriel.kalb@groupe-sia.com\r\nFax: +33 327946314\r\nCode NUTS: FR30\r\nAdresse(s) internet:\r\n\r\nAdresse principale: www.sia-habitat.com\r\n\r\nAdresse du profil d’acheteur: http://sia-habitat.e-marchespublics.com\r\n\r\nI.2)Procédure conjointe\r\nI.4)Type de pouvoir adjudicateurAutre type: SA d'HLM\r\nI.5)Activité principaleLogement et équipements collectifs\r\nSection II: Objet\r\n\r\nII.1)Étendue du marché\r\nII.1.1)Intitulé:\r\n\r\n\r\nAccord-cadre multiservices d'entretien locatif de Sia Habitat en menuiserie, électricité, couverture, toiture terasses et hygiène — 3ème consultation.\r\n\r\nNuméro de référence: SIADJUR2014133-3\r\nII.1.2)Code CPV principal50700000\r\nII.1.3)Type de marchéServices\r\nII.1.4)Description succincte:\r\n\r\n\r\nAccord-cadre Multiservices d'entretien locatif de Sia Habitat en menuiserie, électricité, couverture, toiture terasses et hygiène — 3ème consultation.\r\n\r\n\r\nII.1.6)Information sur les lotsCe marché est divisé en lots: oui\r\nII.1.7)Valeur totale du marché (hors TVA)Valeur hors TVA: 1 549 503.50 EUR\r\nII.2)Description\r\nII.2.1)Intitulé:\r\n\r\n\r\nSia Habitat — Hygiène Douai\r\n\r\nLot nº: 40\r\nII.2.2)Code(s) CPV additionnel(s)90910000\r\nII.2.3)Lieu d'exécutionCode NUTS: FR301Lieu principal d'exécution: \r\n\r\n\r\nDouai.\r\n\r\n\r\nII.2.4)Description des prestations:\r\n\r\n\r\nAccord-cadre multiservices d'entretien locatif de Sia Habitat en menuiserie, électricité, couverture, toiture-terrasse et hygiène — 3ème consultation.\r\n\r\n\r\nII.2.5)Critères d’attributionCritère de qualité - Nom: Valeur technique et environnementale / Pondération: 30Critère de qualité - Nom: Délai de réalisation des prestations aux BPU / Pondération: 10Coût - Nom: Prix des prestations aux BPU / Pondération: 60\r\nII.2.11)Information sur les optionsOptions: non\r\nII.2.13)Information sur les fonds de l'Union européenneLe contrat s'inscrit dans un projet/programme financé par des fonds de l'Union européenne: non\r\nII.2.14)Informations complémentaires\r\nII.2)Description\r\nII.2.1)Intitulé:\r\n\r\n\r\nSia Habitat — Hygiène Valenciennes\r\n\r\nLot nº: 43\r\nII.2.2)Code(s) CPV additionnel(s)90910000\r\nII.2.3)Lieu d'exécutionCode NUTS: FR301Lieu principal d'exécution: \r\n\r\n\r\nValenciennes.\r\n\r\n\r\nII.2.4)Description des prestations:\r\n\r\n\r\nAccord-cadre Multiservices d'entretien locatif de Sia Habitat en menuiserie, électricité, couverture, toiture-terrasse et hygiène — 3ème consultation.\r\n\r\n\r\nII.2.5)Critères d’attributionCritère de qualité - Nom: Valeur technique et environnementale / Pondération: 30Critère de qualité - Nom: Délai de réalisation des prestations aux BPU / Pondération: 10Coût - Nom: Prix des prestations aux BPU / Pondération: 60\r\nII.2.11)Information sur les optionsOptions: non\r\nII.2.13)Information sur les fonds de l'Union européenneLe contrat s'inscrit dans un projet/programme financé par des fonds de l'Union européenne: non\r\nII.2.14)Informations complémentaires\r\nII.2)Description\r\nII.2.1)Intitulé:\r\n\r\n\r\nSia Habitat — Hygiène Grande-Synthe\r\n\r\nLot nº: 46\r\nII.2.2)Code(s) CPV additionnel(s)90910000\r\nII.2.3)Lieu d'exécutionCode NUTS: FR301Lieu principal d'exécution: \r\n\r\n\r\nGrande-Synthe\r\n\r\n\r\nII.2.4)Description des prestations:\r\n\r\n\r\nAccord-cadre Multiservices d'entretien locatif de Sia Habitat en menuiserie, électricité, couverture, toiture-terrasse et hygiène — 3ème consultation.\r\n\r\n\r\nII.2.5)Critères d’attributionCritère de qualité - Nom: Valeur technique et environnementale / Pondération: 30Critère de qualité - Nom: Délai de réalisation des prestations aux BPU / Pondération: 10Coût - Nom: Prix des prestations aux BPU / Pondération: 60\r\nII.2.11)Information sur les optionsOptions: non\r\nII.2.13)Information sur les fonds de l'Union européenneLe contrat s'inscrit dans un projet/programme financé par des fonds de l'Union européenne: non\r\nII.2.14)Informations complémentaires\r\nII.2)Description\r\nII.2.1)Intitulé:\r\n\r\n\r\nSia Habitat — Hygiène Amiens\r\n\r\nLot nº: 47\r\nII.2.2)Code(s) CPV additionnel(s)90910000\r\nII.2.3)Lieu d'exécutionCode NUTS: FR22Lieu principal d'exécution: \r\n\r\n\r\nAmiens.\r\n\r\n\r\nII.2.4)Description des prestations:\r\n\r\n\r\nAccord-cadre Multiservices d'entretien locatif de Sia Habitat en menuiserie, électricité, couverture, toiture-terrasse et hygiène — 3ème consultation.\r\n\r\n\r\nII.2.5)Critères d’attributionCritère de qualité - Nom: Valeur technique et environnementale / Pondération: 30Critère de qualité - Nom: Délai de réalisation des prestations aux BPU / Pondération: 10Coût - Nom: Prix des prestations aux BPU / Pondération: 60\r\nII.2.11)Information sur les optionsOptions: non\r\nII.2.13)Information sur les fonds de l'Union européenneLe contrat s'inscrit dans un projet/programme financé par des fonds de l'Union européenne: non\r\nII.2.14)Informations complémentaires\r\nII.2)Description\r\nII.2.1)Intitulé:\r\n\r\n\r\nSia Habitat — Hygiène secteur LTO\r\n\r\nLot nº: 48\r\nII.2.2)Code(s) CPV additionnel(s)90910000\r\nII.2.3)Lieu d'exécutionCode NUTS: FR30\r\nII.2.4)Description des prestations:\r\n\r\n\r\nAccord-cadre Multiservices d'entretien locatif de Sia Habitat en menuiserie, électricité, couverture, toiture-terrasse et hygiène — 3ème consultation.\r\n\r\n\r\nII.2.5)Critères d’attributionCritère de qualité - Nom: Valeur technique et environnementale / Pondération: 30Critère de qualité - Nom: Délai de réalisation des prestations aux BPU / Pondération: 10Coût - Nom: Prix des prestations aux BPU / Pondération: 60\r\nII.2.11)Information sur les optionsOptions: non\r\nII.2.13)Information sur les fonds de l'Union européenneLe contrat s'inscrit dans un projet/programme financé par des fonds de l'Union européenne: non\r\nII.2.14)Informations complémentaires\r\nII.2)Description\r\nII.2.1)Intitulé:\r\n\r\n\r\nSia Habitat — Électricité secteur LTO\r\n\r\nLot nº: 49\r\nII.2.2)Code(s) CPV additionnel(s)50700000\r\nII.2.3)Lieu d'exécutionCode NUTS: FR30\r\nII.2.4)Description des prestations:\r\n\r\n\r\nAccord-cadre Multiservices d'entretien locatif de Sia Habitat en menuiserie, électricité, couverture, toiture-terrasse et hygiène — 3ème consultation.\r\n\r\n\r\nII.2.5)Critères d’attributionCritère de qualité - Nom: Valeur technique et environnementale / Pondération: 30Critère de qualité - Nom: Délai de réalisation des prestations aux BPU / Pondération: 10Coût - Nom: Prix des prestations aux BPU / Pondération: 20Coût - Nom: Prix des prestations forfaitaires / Pondération: 40\r\nII.2.11)Information sur les optionsOptions: non\r\nII.2.13)Information sur les fonds de l'Union européenneLe contrat s'inscrit dans un projet/programme financé par des fonds de l'Union européenne: non\r\nII.2.14)Informations complémentaires\r\nII.2)Description\r\nII.2.1)Intitulé:\r\n\r\n\r\nSIA Habitat — couverture — toitures terasses secteur LTO\r\n\r\nLot nº: 51\r\nII.2.2)Code(s) CPV additionnel(s)50700000\r\nII.2.3)Lieu d'exécutionCode NUTS: FR30\r\nII.2.4)Description des prestations:\r\n\r\n\r\nAccord-cadre Multiservices d'entretien locatif de Sia Habitat en menuiserie, électricité, couverture, toiture-terrasse et hygiène — 3ème consultation.\r\n\r\n\r\nII.2.5)Critères d’attributionCritère de qualité - Nom: Valeur technique et environnementale / Pondération: 30Critère de qualité - Nom: Délai de réalisation des prestations aux BPU / Pondération: 10Coût - Nom: Prix des prestations aux BPU / Pondération: 20Coût - Nom: Prix des prestations forfaitaires / Pondération: 40\r\nII.2.11)Information sur les optionsOptions: non\r\nII.2.13)Information sur les fonds de l'Union européenneLe contrat s'inscrit dans un projet/programme financé par des fonds de l'Union européenne: non\r\nII.2.14)Informations complémentaires\r\nSection IV: Procédure\r\n\r\nIV.1)Description\r\nIV.1.1)Type de procédureProcédure ouverte\r\nIV.1.3)Information sur l'accord-cadre ou le système d'acquisition dynamiqueLe marché implique la mise en place d'un accord-cadre\r\nIV.1.6)Enchère électronique\r\nIV.1.8)Information concernant l’accord sur les marchés publics (AMP)Le marché est couvert par l'accord ",
+"MPC_MISSION":[
+{
+"MPC_MISSION":"",
+"MPC_MISSION_LIB":""
+}
+],
+"MPC_PROCEDURE":[
+{
+"MPC_PROCEDURE":"AOO",
+"MPC_PROCEDURE_LIB":"Appel d'offre ouvert"
+}
+],
+"MPC_FORME_MARCHE":[
+{
+"MPC_FORME_MARCHE":"MSIMP",
+"MPC_FORME_MARCHE_LIB":"Marché simple"
+}
+],
+"MPC_TYPE_PRESTATION":[
+{
+"MPC_TYPE_PRESTATION":"PDSE",
+"MPC_TYPE_PRESTATION_LIB":"Service"
+},
+{
+"MPC_TYPE_PRESTATION":"PDTR",
+"MPC_TYPE_PRESTATION_LIB":"Travaux"
+}
+],
+"MPC_TYPE_CONTRAT":[
+{
+"MPC_TYPE_CONTRAT":"MAPU",
+"MPC_TYPE_CONTRAT_LIB":"Marché public"
+}
+],
+"SOCIETES":[
+{
+"ROLE":"DONNEUR ORDRE",
+"RAISON_SOCIALE":"SIA HABITAT",
+"SIRET":"04555025800029",
+"SIREN":"045550258",
+"IDENTIFIANT_SOCIETE_EXPLORE":130460,
+"ADRESSE_1":"67 avenue des Potiers",
+"ADRESSE_2":"",
+"CODE_POSTAL":"59500",
+"VILLE":"Douai",
+"CODE_NAF":"6820A",
+"NATURE_ETS":"EP",
+"TELEPHONE":"0327930707",
+"TEFEN":"32",
+"TEFEN_LIB":"250 à 499 salariés"
+},
+{
+"ROLE":"ATTRIBUTAIRE",
+"RAISON_SOCIALE":"GENTY COUVERTURE INDUSTRIELLE BARDAGE ETANCHEITE",
+"SIRET":"41420615100030",
+"SIREN":"414206151",
+"IDENTIFIANT_SOCIETE_EXPLORE":379728,
+"ADRESSE_1":"avenue D Immercourt",
+"ADRESSE_2":"",
+"CODE_POSTAL":"62223",
+"VILLE":"Saint Laurent Blangy",
+"CODE_NAF":"4391B",
+"NATURE_ETS":"EP",
+"TELEPHONE":"0321243100",
+"TEFEN":"21",
+"TEFEN_LIB":"50 à 99 salariés"
+},
+{
+"ROLE":"ATTRIBUTAIRE",
+"RAISON_SOCIALE":"EIFFAGE ENERGIE TERTIAIRE NORD",
+"SIRET":"38878492800102",
+"SIREN":"388784928",
+"IDENTIFIANT_SOCIETE_EXPLORE":5332680,
+"ADRESSE_1":"43 RUE HENRI MAILLY",
+"ADRESSE_2":"",
+"CODE_POSTAL":"62300",
+"VILLE":"LENS",
+"CODE_NAF":"4321A",
+"NATURE_ETS":"ES",
+"TELEPHONE":"0320223365",
+"TEFEN":"41",
+"TEFEN_LIB":"500 à 999 salariés"
+},
+{
+"ROLE":"ATTRIBUTAIRE",
+"RAISON_SOCIALE":"CLINITEX 62",
+"SIRET":"42267872200022",
+"SIREN":"422678722",
+"IDENTIFIANT_SOCIETE_EXPLORE":6228286,
+"ADRESSE_1":"AVENUE D IMMERCOURT",
+"ADRESSE_2":"ZONE INDUSTRIELLE EST",
+"CODE_POSTAL":"62217",
+"VILLE":"TILLOY LES MOFFLAINES",
+"CODE_NAF":"8121Z",
+"NATURE_ETS":"EP",
+"TELEPHONE":"0321598545",
+"TEFEN":"22",
+"TEFEN_LIB":"100 à 199 salariés"
+}
+],
+"LOCALISATIONS":[
+{
+"DEPARTEMENT":"59",
+"DEPARTEMENT_LIB":"Nord (59)",
+"CODE_COMMUNE":"",
+"ADRESSE1":"",
+"ADRESSE2":"",
+"CODE_POSTAL":"",
+"COMMUNE":""
+},
+{
+"DEPARTEMENT":"62",
+"DEPARTEMENT_LIB":"Pas-de-Calais (62)",
+"CODE_COMMUNE":"",
+"ADRESSE1":"",
+"ADRESSE2":"",
+"CODE_POSTAL":"",
+"COMMUNE":""
+},
+{
+"DEPARTEMENT":"80",
+"DEPARTEMENT_LIB":"Somme (80)",
+"CODE_COMMUNE":"",
+"ADRESSE1":"",
+"ADRESSE2":"",
+"CODE_POSTAL":"",
+"COMMUNE":""
+}
+],
+"DCES":[
+]
+}]

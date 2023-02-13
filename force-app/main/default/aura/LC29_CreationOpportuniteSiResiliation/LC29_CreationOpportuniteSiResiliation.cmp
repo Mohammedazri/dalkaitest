@@ -1,0 +1,37 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC29_CreationOpportunite_Controller">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="IsSave" type="boolean" default="false"/>
+    
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    
+    <aura:if isTrue="{!v.IsSave}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container"> 
+                <div class="slds-modal__header">
+                    <h2 id="header99" class="slds-text-heading--medium"> {!$Label.c.LC29_titre}</h2>
+                </div> 
+                <div class="slds-modal__content slds-p-around--medium">
+                    
+                    <aura:if isTrue="{! !empty(v.error)}">
+                        <div class="slds-notify_container slds-is-relative">
+                            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                    {!$Label.c.LC29_Demande}
+                </div> 
+                <div class="slds-modal__footer">
+                    <lightning:button label="{!$Label.c.LC29_Non}" onclick="{!c.handleCancel}" class="slds-button_neutral "/>
+                    <lightning:button label="{!$Label.c.LC29_Oui}" onclick="{!c.handleSave}" class="slds-button_brand"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div> 
+        
+    </aura:if>
+</aura:component>

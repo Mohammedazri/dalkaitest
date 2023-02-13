@@ -1,0 +1,120 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC38_OpportuniteFille_Controller">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="OppList" type="Opportunity[]" />
+    <aura:attribute name="lstWrap" type="Object[]" />
+    <aura:attribute name="errorMsg" type="String" />
+    <aura:attribute name="lstStages" type="LC38_OpportuniteFille_Controller.WrapperPickList[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div style="overflow-x: scroll;">
+        <div aura:id="errorDiv" class="slds-hide slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error custom-background" role="alert"> 
+            <h2>{!v.errorMsg}</h2>
+        </div>
+        <br></br>
+        <table class="slds-size_4-of-5 custom-background">
+            <thead>
+                <tr>
+                    <th class="slds-text-title_caps">
+                        {!$Label.c.LC38_Action}
+                    </th>
+                    <th class="slds-text-title_caps">
+                        {!$Label.c.LC38_Etape}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <lightning:button label="{!$Label.c.LC38_Modify}" onclick="{!c.modify}" class="slds-button slds-button_brand buttonStyle" />  
+                    </td>
+                    <td>
+                        <lightning:select aura:id="globalStage">
+                            <option value="">Sélectionner</option>
+                            <aura:iteration var="stage" items="{!v.lstStages}">
+                                <option value="{!stage.PLValue}">{!stage.PLLabel}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </td>
+                    
+                </tr>
+            </tbody>
+        </table>
+        
+        <br>
+        </br>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered" >
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th  scope="col">
+                        <div class="slds-truncate" title="">Sélectionner</div>
+                    </th>
+                    <th  scope="col">
+                        <div class="slds-truncate">Numéro de l'opportunité</div>
+                    </th>
+                    <th  scope="col">
+                        <div class="slds-truncate">{!$Label.c.LC38_Name}</div>
+                    </th>
+                    <th  scope="col">
+                        <div class="slds-truncate">{!$Label.c.LC38_StageName}</div>
+                    </th>
+                    <th  scope="col">
+                        <div class="slds-truncate" title="Statut">Statut</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration var="wrap" items="{!v.lstWrap}" >
+                    <tr class="slds-hint-parent">
+                        <td>
+                            <ui:inputCheckbox aura:id="isSelected" value="{!wrap.isSelected}"/>
+                        </td>
+                        <td>
+                            <lightning:input aura:id="numeroContrat"
+                                             name="numeroContrat"
+                                             value="{!wrap.numeroContrat}"
+                                             disabled="true"/>
+                        </td>
+                        <td>
+                            <lightning:input aura:id="name"
+                                             name="name"
+                                             value="{!wrap.opp.Name}"
+                                             disabled="true"/>
+                        </td>
+                        <td>
+                            <lightning:select value="{!wrap.opp.StageName}" aura:id="oppStageName">
+                                <aura:iteration var="stage" items="{!v.lstStages}">
+                                    <option selected="{!stage.PLValue == wrap.opp.StageName}" value="{!stage.PLValue}">{!stage.PLLabel}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </td>
+                        <td >
+                            <aura:if isTrue="{!(wrap.errorMsg!=null)}">
+                                <aura:if isTrue="{!(wrap.errorMsg=='Success')}">
+                                    <div aura:id="mapSuccessDiv" class="slds-show slds-box slds-theme--success" style="height: 50px;width: 70%;font-size:90%">
+                                        <h6 class="test">{!wrap.errorMsg}</h6>
+                                    </div>
+                                    <aura:set attribute="else">
+                                        <div aura:id="mapErrorDiv" class="slds-show slds-box slds-theme--error" style="height: 80px;width: 100%;font-size:90%">
+                                            <h6 class="test">{!wrap.errorMsg}</h6>
+                                        </div>
+                                    </aura:set>
+                                    
+                                    
+                                </aura:if>
+                            </aura:if>
+                        </td>
+                    </tr>
+                </aura:iteration>
+                <br></br>
+            </tbody>
+            <footer>
+                
+            </footer>
+            <br></br>
+        </table>
+        <lightning:button label="{!$Label.c.Save}" onclick="{!c.save}" class="slds-button slds-button_brand buttonStyle" />
+        <div class="slds-float--right">
+            <lightning:button label="{!$Label.c.LC38_Reset}" onclick="{!c.doInit}" class="slds-button slds-button_brand buttonStyle" />
+        </div>
+    </div>
+</aura:component>

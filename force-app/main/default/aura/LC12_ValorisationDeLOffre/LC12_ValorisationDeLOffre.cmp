@@ -1,0 +1,472 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC12_ValorisationDeLOffre_Controller">
+    
+    <aura:attribute name="AllowEditMode" type="Boolean" default="false" description="If set to false, Edit button does not show up"/>
+    <aura:attribute name="IfExpand" type="boolean" default="True"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="Currentrecord" type="Fiche_de_synthese__c" /> 
+    <aura:attribute name="wrapper" type="Wrapper_FDSValOffre"/>    
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    <aura:attribute name="listOfCdts" type="string[]" default=""/>   
+    <aura:attribute name="ConditionValue" type="string" default=""/>   
+    <aura:attribute name="CdtRefSelectionnee" type="string" default=""/>  
+    <aura:attribute name="IfNotSelectable" type="Boolean" default="false"/>  
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{! !empty(v.error)}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container"> 
+                <div class="slds-modal__header">
+                    <h2 id="header99" class="slds-text-heading--medium">{!v.title}</h2>
+                </div> 
+                <div class="slds-modal__content slds-p-around--medium">
+                    <div class="slds-notify_container slds-is-relative">
+                        <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                            <div class="slds-notify__content">
+                                <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="slds-modal__footer">
+                    <lightning:button label="{!$Label.c.LC12_OK}" onclick="{!c.doInit}" class="slds-button_brand"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div> 
+    </aura:if>
+    
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2>
+                        <aura:if isTrue="{!v.IfExpand}">
+                            <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small" aria-controls="tree0-node1" title="Toggle" onclick="{!c.ExpandBelow}">
+                                <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#chevrondown'}"
+                                           name="chevronright"
+                                           class="slds-button__icon slds-button__icon--small"
+                                           containerClass=""
+                                           category="utility"
+                                           size="small"
+                                           assistiveText="Toggle"/>
+                            </button>
+                            <aura:set attribute="else">
+                                <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small" aria-controls="tree0-node1" title="Toggle" onclick="{!c.ExpandBelow}">
+                                    <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#chevronright'}"
+                                               name="chevronright"
+                                               class="slds-button__icon slds-button__icon--small"
+                                               containerClass=""
+                                               category="utility"
+                                               size="small"
+                                               assistiveText="Toggle"/>
+                                </button>
+                            </aura:set>
+                        </aura:if>
+                        <span class="slds-text-heading--small"> {!$Label.c.LC12_Titre}</span>
+                    </h2>
+                </div>
+            </header>
+            
+        </div>
+        <aura:if isTrue="{!v.IfExpand}">
+            <div class="slds-card__body" style="padding-left: 1%;">
+                <table class="slds-table slds-table_col-bordered slds-table--bordered slds-no-row--hover slds-table_cell--buffer myTable">
+                    <thead>
+                        <tr class="slds-text-title--caps">
+                            <th scope="col">
+                                <div class="slds-truncate">{!$Label.c.LC12_ResultatCommercial}</div>
+                            </th>
+                            <th colspan="3" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">{!$Label.c.LC12_ConditionNormaivesOffre}</div>
+                            </th>
+                            <th colspan="3" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">{!$Label.c.LC12_ConditionNormaivesRef}</div>
+                            </th>
+                            <th colspan="3" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">{!$Label.c.LC12_EcartOffreRef}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr class="slds-hint--parent" style="font-weight: bold">
+                        <th scope="row">
+                            <div class="slds-truncate" style="font-weight: bold">{!$Label.c.LC12_Montants}</div>
+                        </th>
+                        <td>
+                            <div class="slds-truncate">{!$Label.c.LC12_CAannuel}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">{!$Label.c.LC12_MargeBrute}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">{!$Label.c.LC12_MargeCA}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">{!$Label.c.LC12_CAannuel}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">{!$Label.c.LC12_MargeBrute}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">{!$Label.c.LC12_MargeCA}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">{!$Label.c.LC12_CAannuel}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">{!$Label.c.LC12_MargeBrute}</div>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">{!$Label.c.LC12_MargeCA}</div>
+                        </td>
+                    </tr>
+                    <tbody>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">{!$Label.c.LC12_P1Energie}</div>
+                            </th>
+                            <td style="text-align: right; font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(v.wrapper.P1_Offre_CA), v.wrapper.P1_Offre_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right; font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(v.wrapper.P1_Offre_MB), v.wrapper.P1_Offre_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{! if(and(!empty(v.wrapper.P1_Offre_MBCA),(v.wrapper.P1_Offre_MBCA > 0)) , v.wrapper.P1_Offre_MBCA +' %' , 'ns')}" /></div>
+                            </td>
+                            
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(v.wrapper.P1_Ref_CA), v.wrapper.P1_Ref_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(v.wrapper.P1_Ref_MB), v.wrapper.P1_Ref_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P1_Ref_MBCA),(v.wrapper.P1_Ref_MBCA > 0)) , v.wrapper.P1_Ref_MBCA +' %' , 'ns')}" /></div>
+                            </td>
+                            
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P1_Ecart_CA), v.wrapper.P1_Ecart_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P1_Ecart_MB), v.wrapper.P1_Ecart_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P1_Ecart_MBCA),(v.wrapper.P1_Ecart_MBCA > 0)) , v.wrapper.P1_Ecart_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">{!$Label.c.LC12_P2Service}</div>
+                            </th>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(v.wrapper.P2_Offre_CA), v.wrapper.P2_Offre_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(v.wrapper.P2_Offre_MB), v.wrapper.P2_Offre_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputtext value="{! if(and(!empty(v.wrapper.P2_Offre_MBCA),(v.wrapper.P2_Offre_MBCA > 0)) , v.wrapper.P2_Offre_MBCA +' %' , 'ns')}" /></div>
+                            </td>
+                            
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(v.wrapper.P2_Ref_CA), v.wrapper.P2_Ref_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(v.wrapper.P2_Ref_MB), v.wrapper.P2_Ref_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P2_Ref_MBCA),(v.wrapper.P2_Ref_MBCA > 0)) , v.wrapper.P2_Ref_MBCA +' %' , 'ns') }"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P2_Ecart_CA), v.wrapper.P2_Ecart_CA , '0')  }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P2_Ecart_MB), v.wrapper.P2_Ecart_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P2_Ecart_MBCA),(v.wrapper.P2_Ecart_MBCA > 0)) , v.wrapper.P2_Ecart_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">{!$Label.c.LC12_P3Garantie}</div>
+                            </th>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P3_Offre_CA), v.wrapper.P3_Offre_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P3_Offre_MB), v.wrapper.P3_Offre_MB , '0')}" format="###,###,##0"/></div> 
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{! if(and(!empty(v.wrapper.P3_Offre_MBCA),(v.wrapper.P3_Offre_MBCA > 0)) , v.wrapper.P3_Offre_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P3_Ref_CA), v.wrapper.P3_Ref_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P3_Ref_MB), v.wrapper.P3_Ref_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P3_Ref_MBCA),(v.wrapper.P3_Ref_MBCA > 0)) , v.wrapper.P3_Ref_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P3_Ecart_CA), v.wrapper.P3_Ecart_CA , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P3_Ecart_MB), v.wrapper.P3_Ecart_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P3_Ecart_MBCA),(v.wrapper.P3_Ecart_MBCA > 0)) , v.wrapper.P3_Ecart_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">{!$Label.c.LC12_P4Finance}</div>
+                            </th>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P4_Offre_CA), v.wrapper.P4_Offre_CA , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P4_Offre_MB), v.wrapper.P4_Offre_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{! if(and(!empty(v.wrapper.P4_Offre_MBCA),(v.wrapper.P4_Offre_MBCA > 0)) , v.wrapper.P4_Offre_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P4_Ref_CA), v.wrapper.P4_Ref_CA , '0') }" format="###,###,##0"/></div>  
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P4_Ref_MB), v.wrapper.P4_Ref_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P4_Ref_MBCA),(v.wrapper.P4_Ref_MBCA > 0)) , v.wrapper.P4_Ref_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P4_Ecart_CA), v.wrapper.P4_Ecart_CA , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P4_Ecart_MB), v.wrapper.P4_Ecart_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P4_Ecart_MBCA),(v.wrapper.P4_Ecart_MBCA > 0)) , v.wrapper.P4_Ecart_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">{!$Label.c.LC12_P6Travaux}</div>
+                            </th>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P6_Offre_CA), v.wrapper.P6_Offre_CA , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P6_Offre_MB), v.wrapper.P6_Offre_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{! if(and(!empty(v.wrapper.P6_Offre_MBCA),(v.wrapper.P6_Offre_MBCA > 0)) , v.wrapper.P6_Offre_MBCA +' %' , 'ns')}" /></div>
+                            </td>
+                            
+                            <td style="text-align: right;"> 
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P6_Ref_CA), v.wrapper.P6_Ref_CA , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P6_Ref_MB), v.wrapper.P6_Ref_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P6_Ref_MBCA),(v.wrapper.P6_Ref_MBCA > 0)) , v.wrapper.P6_Ref_MBCA +' %' , 'ns')}" /></div>
+                            </td>
+                            
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P6_Ecart_CA), v.wrapper.P6_Ecart_CA , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;font-weight: bold;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.P6_Ecart_MB), v.wrapper.P6_Ecart_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.P6_Ecart_MBCA),(v.wrapper.P6_Ecart_MBCA > 0)) , v.wrapper.P6_Ecart_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row" class="TotalBack">
+                                <div class="slds-truncate">{!$Label.c.LC12_SousTotal}</div>
+                            </th>
+                            
+                            <td style="text-align: right; font-weight: bold;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_Offre_CA), v.wrapper.ST_Offre_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right; font-weight: bold;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_Offre_MB), v.wrapper.ST_Offre_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputText value="{! if(and(!empty(v.wrapper.ST_Offre_MBCA),(v.wrapper.ST_Offre_MBCA > 0)) , v.wrapper.ST_Offre_MBCA +' %' , 'ns')}" /></div>
+                            </td>
+                            
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_Ref_CA), v.wrapper.ST_Ref_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_Ref_MB), v.wrapper.ST_Ref_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.ST_Ref_MBCA),(v.wrapper.ST_Ref_MBCA > 0)) , v.wrapper.ST_Ref_MBCA +' %' , 'ns') }"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right; font-weight: bold;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_Ecart_CA), v.wrapper.ST_Ecart_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right; font-weight: bold;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_Ecart_MB), v.wrapper.ST_Ecart_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.ST_Ecart_MBCA),(v.wrapper.ST_Ecart_MBCA > 0)) , v.wrapper.ST_Ecart_MBCA +' %' , 'ns') }" /></div>
+                            </td>
+                        </tr>
+                        
+                        <tr class="slds-hint--parent">
+                            <th scope="row" class="TotalBack">
+                                <div class="slds-truncate">{!$Label.c.LC12_SousTotalP6}</div>
+                            </th>
+                            
+                            <td style="text-align: right; font-weight: bold;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_P6Offre_CA), v.wrapper.ST_P6Offre_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right; font-weight: bold;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_P6Offre_MB), v.wrapper.ST_P6Offre_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputText value="{! if(and(!empty(v.wrapper.ST_P6Offre_MBCA),(v.wrapper.ST_P6Offre_MBCA > 0)) , v.wrapper.ST_P6Offre_MBCA +' %' , 'ns')}" /></div>
+                            </td>
+                            
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_P6Ref_CA), v.wrapper.ST_P6Ref_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_P6Ref_MB), v.wrapper.ST_P6Ref_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.ST_P6Ref_MBCA),(v.wrapper.ST_P6Ref_MBCA > 0)) , v.wrapper.ST_P6Ref_MBCA +' %' , 'ns') }"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right; font-weight: bold;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_P6Ecart_CA), v.wrapper.ST_P6Ecart_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right; font-weight: bold;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.ST_P6Ecart_MB), v.wrapper.ST_P6Ecart_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;" class="TotalBack">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.ST_P6Ecart_MBCA),(v.wrapper.ST_P6Ecart_MBCA > 0)) , v.wrapper.ST_P6Ecart_MBCA +' %' , 'ns') }" /></div>
+                            </td>
+                        </tr>
+                        
+                        
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">{!$Label.c.LC12_BLogHorsP6}</div>
+                            </th>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgHorsP6_Offre_CA), v.wrapper.BklgHorsP6_Offre_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgHorsP6_Offre_MB), v.wrapper.BklgHorsP6_Offre_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{! if(and(!empty(v.wrapper.BklgHorsP6_Offre_MBCA),(v.wrapper.BklgHorsP6_Offre_MBCA > 0)) , v.wrapper.BklgHorsP6_Offre_MBCA +' %' , 'ns')}" /></div>
+                            </td>
+                            
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgHorsP6_Ref_CA), v.wrapper.BklgHorsP6_Ref_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgHorsP6_Ref_MB), v.wrapper.BklgHorsP6_Ref_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.BklgHorsP6_Ref_MBCA),(v.wrapper.BklgHorsP6_Ref_MBCA > 0)) , v.wrapper.BklgHorsP6_Ref_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgHorsP6_Ecart_CA), v.wrapper.BklgHorsP6_Ecart_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgHorsP6_Ecart_MB), v.wrapper.BklgHorsP6_Ecart_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.BklgHorsP6_Ecart_MBCA),(v.wrapper.BklgHorsP6_Ecart_MBCA > 0)) , v.wrapper.BklgHorsP6_Ecart_MBCA +' %' , 'ns') }"  /></div>
+                            </td>
+                            
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <th scope="row">
+                                <div class="slds-truncate">{!$Label.c.LC12_BLogAvecP6}</div>
+                            </th>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgAvecP6_Offre_CA), v.wrapper.BklgAvecP6_Offre_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgAvecP6_Offre_MB), v.wrapper.BklgAvecP6_Offre_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{! if(and(!empty(v.wrapper.BklgAvecP6_Offre_MBCA),(v.wrapper.BklgAvecP6_Offre_MBCA > 0)) , v.wrapper.BklgAvecP6_Offre_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgAvecP6_Ref_CA), v.wrapper.BklgAvecP6_Ref_CA , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgAvecP6_Ref_MB), v.wrapper.BklgAvecP6_Ref_MB , '0')}" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.BklgAvecP6_Ref_MBCA),(v.wrapper.BklgAvecP6_Ref_MBCA > 0)) , v.wrapper.BklgAvecP6_Ref_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgAvecP6_Ecart_CA), v.wrapper.BklgAvecP6_Ecart_CA , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputNumber value="{!if(! empty(v.wrapper.BklgAvecP6_Ecart_MB), v.wrapper.BklgAvecP6_Ecart_MB , '0') }" format="###,###,##0"/></div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="slds-truncate"><ui:outputText value="{!if(and(!empty(v.wrapper.BklgAvecP6_Ecart_MBCA),(v.wrapper.BklgAvecP6_Ecart_MBCA > 0)) , v.wrapper.BklgAvecP6_Ecart_MBCA +' %' , 'ns')}"  /></div>
+                            </td>
+                            
+                        </tr>                   
+                        <tr class="slds-text-title_caps">
+                            <td colspan="5" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">{!$Label.c.LC12_Commentaire}</div>
+                            </td>
+                            <td colspan="5" scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">{!$Label.c.LC12_EvaluationEco}</div>
+                            </td>
+                        </tr>
+                        <tr class="slds-hint--parent">
+                            <td colspan="5" rowspan="5" scope="col">
+                                <lightning:textarea disabled="true" value="{!v.Currentrecord.CommentairesValorisationOffre__c}"></lightning:textarea>
+                            </td>
+                            <td colspan="2" scope="col" style="padding-top: 35px;padding-bottom: 35px;">
+                                <div class="slds-truncate" style="font-weight: bold">{!$Label.c.LC12_ConditionRef}</div>
+                            </td>
+                            <td colspan="3" scope="col" style="padding-top: 35px;padding-bottom: 35px;">
+                                <ui:inputSelect aura:id="InputSelectCDR" change="{!c.onPicklistChange}" class="dynamic" value="{!v.ConditionValue}" disabled="{!v.IfNotSelectable}" > 
+                                    <aura:iteration items="{!v.listOfCdts}" var="level">
+                                        <ui:inputSelectOption text="{!level}" label="{!level}"  />
+                                    </aura:iteration> 
+                                </ui:inputSelect>
+                            </td>
+                        </tr>
+                       
+                    </tbody>
+                </table>
+            </div>
+        </aura:if>
+    </article>
+</aura:component>

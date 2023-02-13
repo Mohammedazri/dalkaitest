@@ -1,0 +1,17 @@
+.THIS {
+    color: rgb(84, 105, 141)!important;
+}
+
+.THIS .changeRecordTypeLeftColumn {
+    float: left;
+    text-align: right;
+    padding-right: 1.5rem;
+    width: 49%;
+    font-size: .8125rem;
+}
+
+.THIS .myRT{
+    float: right;
+    text-align: left;
+    width: 51%;
+}

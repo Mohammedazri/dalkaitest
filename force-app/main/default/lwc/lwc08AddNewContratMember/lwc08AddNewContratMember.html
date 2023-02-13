@@ -1,0 +1,54 @@
+<template>
+    <lightning-card>
+        <template for:each={itemList} for:item="item" for:index="index">
+            <table key ={item.id}>
+                <tr>
+                    <td class="slds-col slds-size_3-of-6 slds-wrap slds-p-left_small slds-p-bottom_small slds-p-bottom_small">
+                        <c-lwc09-custom-looup
+                        placeholder="Search" 
+                        objectconfig ={ObjectConfig}
+                        onlookup={handleAccountChange}
+                        oninputchange={handlesearchInputChange}
+                        label-name="Utilisateur">
+                    </c-lwc09-custom-looup>
+                    </td>
+                    <td class="slds-col slds-size_2-of-6 slds-wrap slds-p-left_small slds-p-bottom_small slds-p-bottom_small">
+                    <lightning-combobox
+                    name="Accès"
+                    label="Accès"
+                    value={value}
+                    placeholder="Choisir l'accès"
+                    options={options}
+                    onchange={handleChange} ></lightning-combobox>
+                    </td>
+                    <td class="slds-col slds-size_1-of-6 slds-wrap slds-p-left_small slds-p-bottom_small slds-p-bottom_small">
+                        <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="2"
+                        padding="around-small">
+                            <div class="slds-p-top_medium">
+                                <lightning-button-icon icon-name="utility:new" 
+                                                access-key={item.id} 
+                                                id={index}
+                                                alternative-text="Ajouter ligne" 
+                                                size="medium" 
+                                                title="Ajouter ligne" 
+                                                onclick={addRow}>
+                                </lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:delete" 
+                                             access-key={item.id} 
+                                             id={index}
+                                            alternative-text="Retirer ligne" 
+                                            size="medium" 
+                                            title="Retirer ligne" 
+                                            onclick={removeRow}>
+                                </lightning-button-icon>
+                            </div>
+                        </lightning-layout-item>
+                    </td>
+                </tr>
+            </table>
+        </template>
+    </lightning-card>
+    <footer class="slds-modal__footer">
+        <button class="slds-button slds-button_brand" onclick={handleSubmit} title="Sauvegarder">Sauvegarder</button>
+    </footer>
+</template>

@@ -1,0 +1,19 @@
+<!--c:LC66_UserWrapperItem-->
+<!--** 
+* @author Dona Kfoury
+* @date 21/1/2020 
+* @description Composant appeler dans LC65_NewContractTeamMember qui représente chaque élément de la liste des utilisateurs filtés
+*-->
+<aura:component >
+	<aura:attribute name="name" type="String" />
+    <aura:attribute name="DKCode" type="String" />
+    <div class="myDiv slds-grid slds-wrap slds-gutters">
+        <div Style = 'margin-right: -10px;' class="slds-col slds-small-size_3-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12" >
+            <lightning:icon iconName="standard:user" alternativeText="{!v.name}" size = "medium" />
+        </div>
+        <div class="slds-col slds-small-size_9-of-12 slds-medium-size_11-of-12 slds-large-size_11-of-12" style= "padding-left: 20px">
+            <p>{!v.name}</p>
+            <p>{!v.DKCode}</p>
+        </div>
+    </div>  
+</aura:component>

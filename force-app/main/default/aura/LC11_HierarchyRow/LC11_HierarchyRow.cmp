@@ -1,0 +1,47 @@
+<aura:component >
+    <aura:attribute name="AccoundId" type="string" required="true" default="null" />
+    <aura:attribute name="HierarchyWrapper" type="WrapperHierarchyRow" />
+    <aura:attribute name="IfExpand" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="color" type="string" default="gris"/>
+    <aura:attribute name="listWrapper" type="WrapperHierarchyRow[]" default="null" />
+    <aura:attribute name="AriaLevel" type="Integer" default="1"/>
+    <aura:attribute name="NumofOcc" type="Integer" default="1"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+	<li id="tree0-node1-0" role="treeitem" aria-level="{!v.AriaLevel}" aria-expanded="{!if(v.IfExpand ,true,false)}">
+                    <div class="slds-tree__item sizeRecord">
+                        <aura:if isTrue="{!v.HierarchyWrapper.listChildren.length>=1}">
+                            <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small" aria-controls="tree0-node1" onclick="{!c.ExpandBelow}">
+                                <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#chevronright'}"
+                                           name="chevronright"
+                                           class="slds-button__icon slds-button__icon--small"
+                                           containerClass=""
+                                           category="utility"
+                                           size="small"
+                                           assistiveText="Toggle"/>
+                            </button>
+                            <aura:set attribute="else">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </aura:set>
+                        </aura:if>
+                        <div style="width: 1.3rem; height: 1.3rem;">
+                            <aura:if isTrue="{!v.HierarchyWrapper.ObjectType=='account'}">
+                                <img src="/img/icon/t4v35/standard/account_120.png" class="icon ObjectIcon" alt="" title="" style="background-color: #7F8DE1;"/>
+                            </aura:if>
+                        </div>
+                        <aura:if isTrue="{!v.HierarchyWrapper.isCurrent}">
+                            <div class="{!if(v.HierarchyWrapper.listChildren.length>=1, 'slds-truncate boldClass', 'slds-truncate')}">&nbsp;&nbsp;<a class="" style="{!if(v.color=='blue', 'color:rgb(0, 112, 210);', '')}" href="{!'/one/one.app?#/sObject/'+ v.HierarchyWrapper.ObjectId + '/view'}">{!v.HierarchyWrapper.ObjectName}&nbsp;&nbsp;<i style= "color:rgb(150, 150, 150)">{!v.HierarchyWrapper.ExtraInfo}&nbsp;&nbsp;{!v.HierarchyWrapper.Level}</i></a></div>
+                            <div class="CurrentClass">Courant</div>
+                            <aura:set attribute="else">
+                                <div class="{!if(v.HierarchyWrapper.listChildren.length>=1, 'slds-truncate boldClass', 'slds-truncate')}"><a class="" style="{!if(v.color=='blue', 'color:rgb(0, 112, 210);', '')}" href="{!'/one/one.app?#/sObject/'+ v.HierarchyWrapper.ObjectId + '/view'}">&nbsp;&nbsp;{!v.HierarchyWrapper.ObjectName}&nbsp;&nbsp;<i style= "color:rgb(150, 150, 150)">{!v.HierarchyWrapper.ExtraInfo}&nbsp;&nbsp;{!v.HierarchyWrapper.Level}</i></a></div>
+                           </aura:set>
+                        </aura:if>
+        			</div>
+   			    </li> 
+                <aura:if isTrue="{!v.IfExpand}">
+                    <aura:iteration items="{!v.HierarchyWrapper.listChildren}" var="theChildWrapper">
+                        <c:LC11_HierarchyRow HierarchyWrapper="{!theChildWrapper}" AriaLevel="{!v.AriaLevel+1}" color="blanc"/>
+                    </aura:iteration>                    
+                </aura:if>
+</aura:component>

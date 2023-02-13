@@ -1,0 +1,62 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickAction" controller="LC83_FDSAttenteApprobationController"  access="global">
+    
+    <aura:attribute  name="appList" type="Approbation__c[]"/>
+    <aura:attribute name="PaginationappList" type="Approbation__c[]"/>
+    <aura:attribute name="columns" type="List"/>
+    
+    <aura:attribute name="startPage" type="Integer" />
+    <aura:attribute name="endPage" type="Integer"/>
+    <aura:attribute name="totalRecords" type="Integer"/>
+    <aura:attribute name="pageSize" type="Integer" default="4"/>
+    
+    <aura:attribute name="EmptyMessage" type="String" default=""/>
+    <aura:attribute name="noData" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.fetchApp}"/>
+    
+    
+    <div class="slds-box custom-background">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span class="slds-card__header-title slds-truncate">Fiches de Synthèse en attente d'approbation</span>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner" style="height: 10.5rem;">
+            <aura:if isTrue="{!v.noData}">
+                <div class="slds-p-around_large" style="padding-top: 4.5rem;">
+                    <p>
+                        {!v.EmptyMessage}
+                    </p>
+                </div>
+                <aura:set attribute="else">
+                    
+                    <lightning:datatable data="{! v.PaginationappList}"
+                                         columns="{! v.columns }"
+                                         keyField="id"
+                                         hideCheckboxColumn="true"
+                                         class="tabledt"/>
+                    
+                </aura:set>
+            </aura:if>
+        </div>
+        <aura:if isTrue="{!!v.noData}">
+            <footer class="slds-card__footer" style="border:0">
+                <lightning:buttonGroup>
+                    <lightning:button 
+                                      disabled="{!v.startPage == 0}"  
+                                      onclick="{!c.previous}" 
+                                      iconName='utility:chevronleft'/>
+                    <lightning:button
+                                      disabled="{!v.endPage + 1 >= v.totalRecords}" 
+                                      onclick="{!c.next}" 
+                                      iconName='utility:chevronright'/>
+                </lightning:buttonGroup>
+            </footer>
+        </aura:if>
+    </div>
+    
+</aura:component>

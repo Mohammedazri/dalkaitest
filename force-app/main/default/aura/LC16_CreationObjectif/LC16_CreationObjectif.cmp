@@ -1,0 +1,10 @@
+<aura:component implements="lightning:actionOverride,flexipage:availableForAllPageTypes,force:hasRecordId,lightning:hasPageReference" access="global" controller="LC16_CreationObjectif_Controller"> 
+
+    <aura:attribute name="ChooseRT" type="boolean" default="true"/>
+    <aura:attribute name="selectRT" type="String" />
+    <aura:attribute name="canCreateObjectif" type="Boolean" />
+    <aura:attribute name="pageReference" type="Object" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+</aura:component>

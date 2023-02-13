@@ -1,0 +1,14 @@
+.THIS .slds-textarea {
+    height:100px !important;
+}
+.THIS .SpinCss{
+    position: center;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    
+}
+
+.THIS .fixwidth{
+    width: 50%;
+}

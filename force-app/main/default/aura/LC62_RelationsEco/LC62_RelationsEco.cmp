@@ -1,0 +1,71 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome"  controller="LC62_RelationsEco_Controller">
+	<aura:attribute name="ecoSysWrappers" type="object"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="showTable" type="Boolean" default ="false"/>
+    <aura:attribute name="error" type="string"/>
+    <aura:attribute name="listforItteration" type="EcosystemePartenaire__c[]"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="viewAll" type="Boolean" default ="false"/>
+    <aura:attribute name="listofEco" type="EcosystemePartenaire__c[]"/>
+    <aura:attribute name="partofEco" type="EcosystemePartenaire__c[]"/>
+    <aura:attribute name="numb" type="Integer"/>
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    <article class="slds-card slds-card_boundary forceRelatedListCardDesktop" >
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media--center slds-has-flexi-truncate" >
+                <div class="slds-media__figure" >
+                    <div class="extraSmall forceEntityIcon" style="background-color: #bf5a88" >
+                        <span  class="uiImage" data-aura-class="uiImage">
+                            <img  src="/img/icon/t4v35/custom/custom6_120.png" class="icon " alt="Écosystème du partenaire" title="Écosystème du partenaire">
+                            </img>
+                        </span>
+                    </div>
+                </div>
+                <div class="slds-media__body" >
+                    <h2>
+                        <b>
+                            <span class="slds-text-heading--small slds-truncate slds-m-right--xx-small" title="Ecosystème des représentants" >Ecosystème des représentants</span>
+                            <span class="slds-text-heading--small slds-shrink-none slds-m-right--xx-small" title="{!v.numb}">({!v.numb})</span>
+                        </b>
+                    </h2>
+                </div>
+            </header>
+        </div>
+     <div class="slds-p-around_none slds-card__body">
+         <aura:if isTrue="{!v.showTable}">
+             
+             <div class="slds-card__body" >
+                <lightning:datatable
+                                     keyField="id"
+                                     data="{! v.listforItteration }"
+                                     columns="{! v.columns }"
+                                     hideCheckboxColumn="true"
+                                     onrowaction="{! c.handleDelete }"/>
+            </div>
+             <aura:set attribute="else">
+                 <div class="slds-truncate" style="color:#706E6B;">&nbsp;&nbsp;{!v.error}</div>
+             </aura:set>
+         </aura:if>
+         </div>
+        <aura:if isTrue="{!v.showTable}">
+         <aura:if isTrue="{!v.viewAll}">
+            <a onclick="{!c.handleViewLessClick}">
+                <div class="slds-card__footer">
+                    {!$Label.c.LC33_affichermoin}
+                </div>
+            </a>
+            <aura:set attribute="else">
+                <a onclick="{!c.handleViewAllClick}">
+                    <div class="slds-card__footer" >
+                        {!$Label.c.LC33_AfficherPlus}
+                    </div>
+                </a>
+             </aura:set>                       
+            </aura:if>
+        </aura:if>
+    </article>
+</aura:component>

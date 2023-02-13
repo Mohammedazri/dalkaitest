@@ -1,0 +1,111 @@
+<aura:component  implements="flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome"  controller="LC33_RelatedListEchoOnOpp_Controller" >
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="recordToDelete" type="String" />
+    <aura:attribute name="listforItteration" type="EcosystemePartenaire__c[]"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="listofEco" type="EcosystemePartenaire__c[]"/>
+    <aura:attribute name="partofEco" type="EcosystemePartenaire__c[]"/>
+    <aura:attribute name="numb" type="Integer"/>
+    <aura:attribute name="ifShowCreateCmp" type="Boolean" default ="false"/>
+    <aura:attribute name="viewAll" type="Boolean" default ="false"/>
+    <aura:attribute name="viewModal" type="Boolean" default ="false"/>
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    <aura:attribute name="Titre" type="String" default ="false"/>
+    <aura:attribute name="showTable" type="Boolean" default ="false"/>
+    <aura:attribute name="statutNotFer" type="Boolean" default ="true"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.ifShowCreateCmp}" action="{!c.ifShowCreateCmpChange}"/>
+    
+    <article class="slds-card slds-card_boundary forceRelatedListCardDesktop" >  
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media--center slds-has-flexi-truncate" >
+                <div class="slds-media__figure" >
+                    <div class="extraSmall forceEntityIcon" style="background-color: #bf5a88" >
+                        <span  class="uiImage" data-aura-class="uiImage">
+                            <img  src="/img/icon/t4v35/custom/custom6_120.png" class="icon " alt="Écosystème du partenaire" title="Écosystème du partenaire">
+                            </img>
+                        </span>
+                    </div>
+                </div>
+                <div class="slds-media__body" >
+                    <h2>
+                        <b>
+                            <span class="slds-text-heading--small slds-truncate slds-m-right--xx-small" title="{!v.Titre}" >{!v.Titre}</span>
+                            <span class="slds-text-heading--small slds-shrink-none slds-m-right--xx-small" title="{!v.numb}">({!v.numb})</span>
+                        </b>
+                    </h2>
+                </div>
+            </header>
+            <aura:if isTrue="{!v.statutNotFer}">
+            <button class="slds-button slds-button_neutral withBorder"   onclick="{!c.handleNewClick}">  {!$Label.c.LC33_nouveau} </button>  
+            </aura:if>
+                <div id="{!'showCreateCmp_' + v.recordId}" class="slds-modal slds-fade-in-open " style="display:none">
+                <c:LC36_CreateNewEcoSys recordId="{!v.recordId}" ifShowCreateCmp="{!v.ifShowCreateCmp}"/>
+            </div>
+            <div aura:id="visibility" class="slds-backdrop"></div>
+        </div>
+        <aura:if isTrue="{!v.showTable}">
+            <div class="slds-card__body" >
+                <lightning:datatable
+                                     keyField="id"
+                                     data="{! v.listforItteration }"
+                                     columns="{! v.columns }"
+                                     hideCheckboxColumn="true"
+                                     onrowaction="{! c.handleDelete }"/>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.viewAll}">
+            <a onclick="{!c.handleViewLessClick}">
+                <div class="slds-card__footer">
+                    {!$Label.c.LC33_affichermoin}
+                </div>
+            </a>
+            <aura:set attribute="else">
+                <a onclick="{!c.handleViewAllClick}">
+                    <div class="slds-card__footer" >
+                        {!$Label.c.LC33_AfficherPlus}
+                    </div>
+                </a>
+            </aura:set>                       
+        </aura:if>
+    </article>
+    <aura:if isTrue="{!v.viewModal}">           
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.handleCancel}">
+                        <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg?cache=9.8.0#close'}"
+                                   name="chevronDown"
+                                   class="slds-button__icon slds-button__icon--large"
+                                   containerClass=""
+                                   category="utility"
+                                   size="large"
+                                   assistiveText="Toggle"/>
+                        <span class="slds-assistive-text">{!$Label.c.LC33_close}</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!$Label.c.LC33_titreModal}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <aura:if isTrue="{! !empty(v.error)}">
+                        <div class="slds-notify_container slds-is-relative">
+                            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>  
+                    {!$Label.c.LC33_ModalContent}
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.handleCancel}"> {!$Label.c.LC33_Annuler}</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.handleRecordDelete}"> {!$Label.c.LC33_Supprimer}</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

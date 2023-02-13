@@ -1,0 +1,31 @@
+<apex:page controller="VFC01_MapFilter">
+    <link rel="stylesheet" href="{!URLFOR($Resource.jQueryUI, 'jquery-ui.css')}" />
+    <script type='text/javascript' src="{!$Resource.jQuery}"/>    
+    <script type='text/javascript' src="{!URLFOR($Resource.jQueryUI, 'jquery-ui.min.js')}" />
+    
+    <script type='text/javascript'>
+        jQuery( function() {
+            jQuery( "#tabs" ).tabs();
+          } );
+          
+          function toggleSelectedTab(tabelem){
+              jQuery("ul[role=tablist]>li").toggleClass("slds-tabs--scoped__item slds-active", false);
+              jQuery(tabelem).parent().addClass("slds-tabs--scoped__item slds-active");
+              
+              //jQuery("ul[role=tablist]>li").addClass("
+          }
+    </script>
+    
+    <apex:slds /> 
+    <button class="slds-button slds-button--neutral" onclick="jQuery('#mainFilterMenu').slideToggle();">Filtres</button>
+    <div id="mainFilterMenu" class="slds-grid" style="display:none;">        
+        <div style="position:absolute; left:0px; top:32px;">   
+            <apex:form >         
+                <c:C02_MapFilterComponent pageController="{!CurrentController}" />
+            </apex:form>
+        </div>
+    </div>
+    <div>
+        <c:C01_MapComponent listMarkers="{!listMarkers}" />
+    </div>
+</apex:page>

@@ -1,0 +1,92 @@
+/**
+ * @author: Jimmy Khalil -EI Technologies
+ * @date: 05/10/2022
+ * @description: Test Class for Class Batch131_AddContratShare
+ */
+@isTest
+public class Batch131_AddContratShare_Test {
+    @isTest
+    static void TestBatch131ContratGenere(){
+        Profile p = [SELECT Id FROM Profile WHERE id =:Label.AdminProfileId]; // admin profile
+        account myaccount = testUtils.createAccount('testAccount', 'Lebanon', 'Privé');
+        myaccount.StatutPartenaire__c  = Label.WS11_OUV;
+        insert myaccount; // insert new account
+
+        List<user> listUs = new List<User>();
+        User u1 = testUtils.CreateUser('standt18', 'standardusereee@testorg1.com', 'Testing', p.Id, 'standarduser1rrr@testorg.com'); // new user
+        listUs.add(u1);
+
+        User u2 = testUtils.CreateUser('standt12', 'standardusereee@testorg2.com', 'Testing', p.Id, 'standarduser2rrr@testorg.com'); // new user
+        listUs.add(u2);
+
+        insert listUs;
+
+        opportunity myOpp = testUtils.createOpportunity ('testOpp1', date.today(), Label.Opp_StatutEnCours, Label.Piste_PicklistValue); // new Opportunity
+        myOpp.AccountId = myaccount.Id;
+        myOpp.closeDate = Date.today();
+        myOpp.Type_pers__c = Label.LC28_TypeNouveau;
+        insert myOpp;
+
+        Contrat__c myCont = new Contrat__c(Name = 'TEST', Opportunitecommerciale__c = myOpp.id, NomPartenaire__c = myaccount.id);
+        insert myCont;
+
+        myOpp.Contrat_Genere_lookup__c = myCont.id;
+        update myOpp;
+
+        OpportunityTeamMember OppTeamMember =  new OpportunityTeamMember();
+        OppTeamMember.OpportunityId = myOpp.id;
+        OppTeamMember.UserId = u2.id;
+        OppTeamMember.OpportunityAccessLevel = 'Read';
+        insert OppTeamMember;
+
+        //To delete all contrat share that can be deleted
+        List<Contrat__Share> listContShare = [Select id from Contrat__Share where ParentId =:myCont.Id];
+        Database.delete(listContShare, false);
+
+        test.startTest();
+        Id batchJobId = Database.executeBatch(new Batch131_AddContratShare());
+        test.stopTest();
+    }
+    @isTest
+    static void TestBatch131ContratOrigine(){
+        Profile p = [SELECT Id FROM Profile WHERE id =:Label.AdminProfileId]; // admin profile
+        account myaccount = testUtils.createAccount('testAccount', 'Lebanon', 'Privé');
+        myaccount.StatutPartenaire__c  = Label.WS11_OUV;
+        insert myaccount; // insert new account
+
+        List<user> listUs = new List<User>();
+        User u1 = testUtils.CreateUser('standt18', 'standardusereee@testorg1.com', 'Testing', p.Id, 'standarduser1rrr@testorg.com'); // new user
+        listUs.add(u1);
+
+        User u2 = testUtils.CreateUser('standt12', 'standardusereee@testorg2.com', 'Testing', p.Id, 'standarduser2rrr@testorg.com'); // new user
+        listUs.add(u2);
+
+        insert listUs;
+
+        opportunity myOpp = testUtils.createOpportunity ('testOpp1', date.today(), Label.Opp_StatutEnCours, Label.Piste_PicklistValue); // new Opportunity
+        myOpp.AccountId = myaccount.Id;
+        myOpp.closeDate = Date.today();
+        myOpp.Type_pers__c = Label.LC28_TypeNouveau;
+        insert myOpp;
+
+        Contrat__c myCont = new Contrat__c(Name = 'TEST', NomPartenaire__c = myaccount.id);
+        insert myCont;
+
+        myOpp.ContratOrigine__c = myCont.id;
+        update myOpp;
+
+        OpportunityTeamMember OppTeamMember =  new OpportunityTeamMember();
+        OppTeamMember.OpportunityId = myOpp.id;
+        OppTeamMember.UserId = u2.id;
+        OppTeamMember.OpportunityAccessLevel = 'Read';
+        insert OppTeamMember;
+
+        //To delete all contrat share that can be deleted
+        List<Contrat__Share> listContShare = [Select id from Contrat__Share where ParentId =:myCont.Id];
+        Database.delete(listContShare, false);
+
+        test.startTest();
+        Id batchJobId = Database.executeBatch(new Batch131_AddContratShare());
+        test.stopTest();
+    }
+}

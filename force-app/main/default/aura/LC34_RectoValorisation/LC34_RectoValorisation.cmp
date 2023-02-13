@@ -1,0 +1,199 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC34_RectoValorisation_Controller">
+    
+    <aura:attribute name="IfEditMode" type="Boolean" default="false" />
+    <aura:attribute name="IfExpand" type="boolean" default="True"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="ListOFwrapper" type="Wrapper_RectoValorisation[]"/> 
+    <aura:attribute name="OffVide" type="Boolean" default="false"/> 
+    <aura:attribute name="ValuesToReturn" type="Wrapper_ApiToValue[]"/> 
+    <aura:attribute name="BudgetYear" type="String"/>
+    <aura:attribute name="RealiseYear" type="String"/>
+    <aura:attribute name="canEdit" type = "Boolean" default ="false"/>
+    <aura:attribute name="ConfirmEcart" type = "Boolean" default ="false"/>
+    <aura:attribute name="ConfirmOffre" type = "Boolean" default ="false"/>
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    <aura:attribute access="private" name="errorPopUp" type="String" default=""/>
+    <aura:attribute access="private" name="errorPopUpOffre" type="String" default=""/>
+    <aura:attribute name="hideSpinner" type="Boolean" default = "true" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.ConfirmEcart}">
+        
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container"> 
+                <div class="slds-modal__header">
+                    <h2 id="header99" class="slds-text-heading--medium">{!$Label.c.LC34_EcartAZero}</h2>
+                </div> 
+                <div class="slds-modal__content slds-p-around--medium ">
+                    <aura:if isTrue="{! !empty(v.errorPopUp)}">
+                        <div class="slds-notify_container slds-is-relative">
+                            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small ">{!v.errorPopUp}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{! v.hideSpinner }">
+                        {!$Label.c.LC34_Confirmation}
+                        <aura:set attribute="else">
+                            <lightning:spinner alternativeText="Loading" />
+                        </aura:set>
+                    </aura:if>
+                </div> 
+                <div class="slds-modal__footer"> 
+                    <lightning:button label="{!$Label.c.LC34_Oui}" onclick="{!c.HandleEcartZero}" class="slds-button_neutral slds-align_absolute-left slds-size_1-of-6"/>
+                    <lightning:button label="{!$Label.c.LC34_Non}" onclick="{!c.HandleNotEcartZero}" class="slds-button_brand slds-align_absolute-right slds-size_1-of-6"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>        
+    </aura:if>
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2>
+                        <aura:if isTrue="{!v.IfExpand}">
+                            <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small" aria-controls="tree0-node1" title="Toggle" onclick="{!c.ExpandBelow}">
+                                <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#chevrondown'}"
+                                           name="chevronright"
+                                           class="slds-button__icon slds-button__icon--small"
+                                           containerClass=""
+                                           category="utility"
+                                           size="small"
+                                           assistiveText="Toggle"/>
+                            </button>
+                            <aura:set attribute="else">
+                                <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small" aria-controls="tree0-node1" title="Toggle" onclick="{!c.ExpandBelow}">
+                                    <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#chevronright'}"
+                                               name="chevronright"
+                                               class="slds-button__icon slds-button__icon--small"
+                                               containerClass=""
+                                               category="utility"
+                                               size="small"
+                                               assistiveText="Toggle"/>
+                                </button>
+                            </aura:set>
+                        </aura:if>
+                        <span class="slds-text-heading--small">{!$Label.c.LC34_Titre}</span>
+                    </h2>
+                </div>
+            </header>
+            <aura:if isTrue="{!v.IfExpand}">
+                <aura:if isTrue="{!! v.hideSpinner }">
+                <lightning:spinner alternativeText="Loading" />
+                </aura:if>
+                <div class="slds-no-flex">
+                    <aura:if isTrue="{!v.IfEditMode}">
+                        <button class="slds-button slds-button--neutral" onclick="{!c.SaveFields}">{!$Label.c.LC34_Save}</button>
+                        <button class="slds-button slds-button--neutral" onclick="{!c.Cancel}">{!$Label.c.LC34_Cancel}</button>
+                        <aura:set attribute="else">
+                            <aura:if isTrue="{!v.canEdit}">
+                                <button class="slds-button slds-button--neutral" onclick="{!c.OffreVide}">{!$Label.c.LC34_OffeVide}</button>
+                                <button class="slds-button slds-button--neutral" onclick="{!c.EcartZero}">{!$Label.c.LC34_Ecart0}</button>
+                                <button class="slds-button slds-button--neutral" onclick="{!c.EditFields}">{!$Label.c.LC34_Modify}</button>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </aura:if>
+        </div>
+        
+        <aura:if isTrue="{! !empty(v.error)}">
+            <div class="slds-modal__content slds-p-around--medium">
+                <div class="slds-notify_container slds-is-relative">
+                    <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                        <div class="slds-notify__content">
+                            <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </aura:if>
+        
+        <aura:if isTrue="{!v.IfExpand}">
+            <div class="slds-card__body" style="padding-left: 1%;">
+                <table class="slds-table  slds-table_bordered slds-no-row-hover slds-table_col-bordered slds-table_striped myTable">
+                    <thead>
+                        <tr  class="slds-hint--parent" style="font-weight: bold">
+                            <th scope="col">
+                                <div class="slds-truncate"></div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate"></div>
+                            </th>
+                            <th  scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">{!$Label.c.LC34_Realise} &nbsp; {!v.RealiseYear}</div>
+                            </th>
+                            <th  scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">{!$Label.c.LC34_Budget} &nbsp; {!v.BudgetYear}</div>
+                            </th>
+                            <th  scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">{!$Label.c.LC34_Saisie}</div>
+                            </th>
+                            <th  scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">{!$Label.c.LC34_Offre }</div>
+                            </th>
+                            <th  scope="col"  style="text-align: center;">
+                                <div class="slds-truncate">Ecart</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <aura:iteration items="{!v.ListOFwrapper}" var="wrapper">
+                            
+                            <tr  class="slds-hint--parent" style="font-weight: bold">
+                                <aura:if isTrue="{! !empty(wrapper.Title1)}">
+                                    <td rowspan="{!wrapper.rowspan}"  scope="row">
+                                        <div class="slds-truncate">{!wrapper.Title1}</div>
+                                    </td>    
+                                </aura:if>
+                                
+                                <td scope="row">
+                                    <div class="slds-truncate">{!wrapper.Title}</div>
+                                </td>
+                                <td style="text-align: left; font-weight: bold;">
+                                    <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(wrapper.Realise) , if( wrapper.symbol1=='%' , wrapper.Realise/100 , wrapper.Realise), if( wrapper.Realise== null ,'' , '') )}" format="{!'#,###,##0.## '+ wrapper.symbol1}"/></div>
+                                </td>
+                                <td style="text-align: left; font-weight: bold;">
+                                    <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(wrapper.Budget) , if( wrapper.symbol2=='%' , wrapper.Budget/100 , wrapper.Budget), if( wrapper.Budget== null ,'' , '') )}" format="{!'#,###,##0.## '+ wrapper.symbol2}"/></div>
+                                </td>
+                                <td aura:id="changeIt" style="text-align: left;">
+                                    <aura:if isTrue="{! and(and(v.IfEditMode, wrapper.editable), wrapper.ApiNameSaisie!=null )}">
+                                        <input type="number" id="{!wrapper.ApiNameSaisie}" value ="{!wrapper.Saisie}" class="slds-input" onchange="{!c.inputChanged}" />
+                                        <aura:set attribute="else">
+                                            <div class="slds-truncate">
+                                                <!--<ui:outputNumber value="{! if(!and(empty(wrapper.Saisie), IsFieldValueEmpty) , wrapper.Saisie ,if(and(wrapper.ApiNameSaisie== null,IsFieldValueEmpty)  ,'' , '0'))}" format="{!'#,###,##0.## '+wrapper.symbol3}" />-->
+                                                <!--<ui:outputNumber value="{! if(!or(empty(wrapper.Saisie), v.IsFieldValueEmpty) , if( wrapper.symbol3=='%' , wrapper.Saisie/100 , wrapper.Saisie), if(and(wrapper.ApiNameSaisie== null,v.IsFieldValueEmpty)  ,'' , '0'))}" format="{!'#,###,##0.## '+ wrapper.symbol3}"/>-->
+                                                <ui:outputNumber value="{! if(!empty(wrapper.Saisie) , if( wrapper.symbol3=='%' , wrapper.Saisie/100 , wrapper.Saisie), '')}" format="{!'#,###,##0.## '+ wrapper.symbol3}"/>
+                                                
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>
+                                </td>
+                                <td  aura:id="changeOff" style="text-align: left;" >
+                                    <aura:if isTrue="{!and(and(v.IfEditMode, wrapper.editable),wrapper.ApiNameOffre!=null)}">
+                                        <input type="number" id="{!wrapper.ApiNameOffre}" value ="{! if(! empty(wrapper.Offre) , wrapper.Offre , '')}" class="slds-input" onchange="{!c.inputChanged}" /> 
+                                        <aura:set attribute="else">
+                                            <div class="slds-truncate">
+                                                <!--<ui:outputNumber value="{! if(!and(empty(wrapper.Offre), IsFieldValueEmpty) , wrapper.Offre ,if(and(wrapper.ApiNameOffre== null,IsFieldValueEmpty)  ,'' , '0'))}" format="{!'#,###,##0.## '+wrapper.symbol4}"/>-->
+                                                <ui:outputNumber value="{! if(!empty(wrapper.Offre) , if( wrapper.symbol4=='%' , wrapper.Offre/100 , wrapper.Offre), '' )}" format="{!'#,###,##0.## '+ wrapper.symbol4}"/> 
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate"><ui:outputNumber value="{! if(! empty(wrapper.Ecart) , if( wrapper.symbol1=='%' , wrapper.Ecart/100 , wrapper.Ecart), if( wrapper.Ecart== null ,'' , '') )}" format="{!'#,###,##0.## '+ wrapper.symbol1}"/></div>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+        </aura:if>
+    </article>
+</aura:component>

@@ -1,0 +1,116 @@
+<!--
+    Author: Rita Bejjani
+    Company: Ei-Technologies Lebanon
+    Description: Lightning component used to Create a new EcoSystem related to an account
+    History
+    <Date>      <Authors Name>   <Brief Description of Change>
+    10/06/2019   Rita Bejjani	  Creation
+    -->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" controller="LC57_CreateNewEcoSysPart_Controller" >
+    
+    <aura:attribute name="EcoSys" type="EcosystemePartenaire__c" default="{'sobjectType':'EcosystemePartenaire__c'}"  access="global"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="ifShowCreateCmp" type="Boolean"/>
+    <aura:attribute name="ifShowPart" type="Boolean"/>
+    <aura:attribute name="PartExistant" type="Boolean"/>
+    <aura:attribute name="error" type="string"/>
+    <aura:attribute name="ifContact" type="Boolean" default ="false"/>
+    <aura:attribute name="SearchKeyWordContactPartenaire" type="string"/>
+    <aura:attribute name="SearchKeyWordPartenaire" type="string"/>
+    <aura:attribute name="objectAPIName" type="string"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <div  style="height: 300px;" >
+        recordId: {!v.recordId}
+        <section class="slds-modal slds-fade-in-open" >
+            <div class="slds-modal__container" style="width: 100%;">
+                <!-- Header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.handleCancel}">
+                        <lightning:icon iconName="utility:close" size="medium" variant="bare"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h1 class="slds-text-heading_medium slds-hyphenate">{!$Label.c.LC36_titre}</h1>
+                </header>
+                <!-- Body -->
+                <div class=" slds-modal__content slds-p-around--medium">
+                    <lightning:layout horizontalAlign="spread" verticalAlign="stretch" multipleRows="true">
+                        <!--Error Handling -->
+                        <lightning:layoutItem flexibility="grow" size="12" padding="around-small" >
+                            <aura:if isTrue="{! !empty(v.error)}">
+                                <ui:message title="Erreur" severity="error" closable="true">
+                                    {!$Label.c.LC36_erreur}
+                                    {!v.error}
+                                </ui:message>
+                            </aura:if> 
+                        </lightning:layoutItem> 
+                        <!--Ligne1-->
+                        <lightning:layoutItem flexibility="grow" size="6" padding="horizontal-small"> 
+                            <div class="slds-box slds-theme_default" >
+                                <div class="slds-form-element slds-lookup slds-is-close" data-select="single">
+                                    <label class="slds-form-element__label" for="lookup-348">{!$Label.c.LC36_partenaire}</label>
+                                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+                                        
+                                        <aura:if isTrue="{!v.ifShowPart}">
+                                            <ui:inputText class="slds-lookup__search-input slds-input leftPaddingClass" value="{!v.SearchKeyWordPartenaire}" aura:id="MyInput" disabled='true' />
+                                            <aura:set attribute="else">
+                                                <force:inputField aura:id="PartenaireContact" value="{!v.EcoSys.Partenaire__c}" />
+                                            </aura:set>
+                                        </aura:if>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem flexibility="grow" size="6" padding="horizontal-small">
+                            <div class="slds-box slds-theme_default" >
+                                <div class="slds-form-element slds-lookup slds-is-close" data-select="single">
+                                    
+                                            <label class="slds-form-element__label" for="lookup-348">{!$Label.c.LC36_contrat}</label>
+                                        
+                                    <div class="slds-input-has-icon slds-input-has-icon--right slds-form-element__control">
+                                        <!--<lightning:icon class="slds-input__icon slds-show" iconName="utility:search" size="x-small" alternativeText="search"/> -->
+                                        <force:inputField class="slds-lookup__search-input slds-input leftPaddingClass" aura:id="Contrat" value="{!v.EcoSys.tech_ContratSansFiltre__c}" />
+                                    </div>   
+                                </div>
+                            </div>
+                        </lightning:layoutItem>
+                        <!-- Ligne2-->
+                        <lightning:layoutItem flexibility="grow" size="6" padding="around-small">
+                            <div class="slds-box slds-theme_default">
+                                {!$Label.c.LC36_Cont_Part}
+                                
+                                <aura:if isTrue="{!v.ifContact}">
+                                    <ui:inputText class="slds-lookup__search-input slds-input leftPaddingClass" value="{!v.SearchKeyWordContactPartenaire}" aura:id="PartenaireContact" disabled='true' />
+                                    <aura:set attribute="else">
+                                        <force:inputField aura:id="PartenaireContact" value="{!v.EcoSys.ContactDuPartenaire__c}" />
+                                    </aura:set>
+                                </aura:if>
+                                
+                            </div>
+                            <div class="slds-box slds-theme_default" style="margin-top:12px;" >
+                                {!$Label.c.LC36_Part_lie} <force:inputField aura:id="PartenaireLie" value="{!v.EcoSys.PartenaireLie__c}" />
+                            </div>
+                            <div class="slds-box slds-theme_default" style="margin-top:12px;">
+                               {!$Label.c.LC36_Cont_PartLie} <force:inputField aura:id="PartenaireLieContact" value="{!v.EcoSys.ContactDuPartenaireLie__c}"/>
+                            </div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem flexibility="grow" size="6" padding="horizontal-small">
+                            <div class="slds-box slds-theme_default" style="margin-top: 12px; height: 91px">
+                                {!$Label.c.LC36_type_rel} <force:inputField value="{!v.EcoSys.TypeRelation__c}"/>
+                            </div>
+                            <div class="slds-box slds-theme_default" style="margin-top: 12px; height: 90px">
+                                {!$Label.c.LC57_Opp} <force:inputField aura:id="Opportunite" value="{!v.EcoSys.tech_OpportuniteSansFiltre__c}"/>
+                            </div>
+                        </lightning:layoutItem>
+                    </lightning:layout>             
+                </div>
+                <!-- Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning:button class="slds-button slds-button_brand" label="{!$Label.c.LC36_Creer}" onclick="{!c.handleCreateEcoSys}"/>
+                    <lightning:button class="slds-button slds-button_neutral" label ="{!$Label.c.LC33_Annuler}" onclick="{!c.handleCancel}"/>
+                </footer>
+            </div>
+        </section>
+    </div>
+</aura:component>

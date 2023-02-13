@@ -1,0 +1,28 @@
+.THIS {
+}
+
+.THIS .redColor{
+    color:red !important;
+}
+
+.THIS .normal{
+}
+
+.THIS .CommerceLabel{
+    color:rgb(0, 112, 210) !important;
+}
+
+.THIS .DirectionLabel{
+    color:#ffbb99 !important;
+}
+
+.THIS .OperationLabel{
+    color:#00cc88 !important;
+}
+
+.THIS .AutreLabel{
+     color:#8A2BE2 !important;
+}
+.THIS .NoneOfTypes{
+    color: black !important;
+}

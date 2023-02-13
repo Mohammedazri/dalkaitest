@@ -1,0 +1,21 @@
+.THIS {
+    
+}
+.THIS button-cust { 
+    border: none; 
+    text-align: center;
+    opacity: 0;
+    width: 100%;
+}
+
+.THIS button-cust:hover {opacity: 0}
+
+.THIS .slds-grid_align-end { justify-content: center !important; }
+
+.THIS .slds-button_neutral{
+    border-color: white;
+}
+
+.THIS .withBorder{
+    border-color: rgb(221, 219, 218) !important;
+}

@@ -1,0 +1,68 @@
+<!--LC80_DateEffetDocument-->
+<!--** 
+* @author Alain Ghoussoub
+* @date 27/10/2020 
+* @description Composant qui affiche une alerte quand la date prise effet d'une opportunite d'evolution change et qu'elle ait des documents contractuels
+*-->
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="LC80_DateEffetDocument_Controller" access="global">
+    <aura:attribute name="showPopUp" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        
+        .uiModal--medium .modal-container {
+        width: 50%;
+        }
+    </aura:html>
+    <aura:if isTrue="{!v.showPopUp}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container"> 
+                <div class="slds-modal__content slds-p-around--medium" aura:id="modalbody" id="modalbody">
+                    <form class="slds-form--stacked">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <center>
+                                <!--div class="slds-notify_container slds-is-relative" style="height: 80px">
+                                    <div class="slds-notify slds-notify_toast slds-theme_error" role="alert" >
+                                        <div class="slds-notify__content">
+                                            <h2 class="slds-text-heading_small ">{!$Label.c.LC80_Message}</h2>
+                                        </div>
+                                    </div>
+                                </div-->
+                                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+                                    <span class="slds-assistive-text">warning</span>
+                                    <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small" title="">
+                                        <lightning:icon iconName="utility:warning" size="xx-small" />
+                                    </span>
+                                    <h2>
+                                        {!$Label.c.LC80_Message}
+                                    </h2>
+                                    <div class="slds-notify__close">
+                                        <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.Cancel }" />
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </form>
+                </div>
+                <!--div class="slds-modal__footer">
+                    <div class="forceChangeRecordTypeFooter">
+                        <ui:button class="slds-button slds-button_neutral" label="Fermer" press="{!c.Cancel}" disabled="{!v.Spinner}"/> 
+                    </div>
+                </div-->
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+</aura:component>

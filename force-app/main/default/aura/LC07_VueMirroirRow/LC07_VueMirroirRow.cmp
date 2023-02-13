@@ -1,0 +1,145 @@
+<aura:component controller="LC24_crteRelationClientInt_Controller">
+    <aura:attribute name="contactWrapper" type="wrapperVueMirroirRow" />
+    <aura:attribute name="AriaLevel" type="Integer"/>
+    <aura:attribute name="ColorOfSearched" type="string"/>
+    <aura:attribute name="errorMessage" type="string" default=""/>
+    <aura:attribute name="IdOfElementToDelete" type="string" default=""/>
+    <aura:attribute name="RelationToEdit" type="Contact_User__c" default=""/>
+    <aura:attribute name="IfErrorExists" type="boolean" default="false"/>
+    <aura:attribute name="IfCreateMode" type="boolean" default="false"/>
+    <aura:attribute name="IfshowElement" type="boolean" default="true"/>
+    <aura:attribute name="IfModalRC" type="boolean" default="false"/>
+    <aura:attribute name="Commerce" type="boolean" default="true"/>
+    <aura:attribute name="Direction" type="boolean" default="true"/>
+    <aura:attribute name="Operation" type="boolean" default="true"/>
+    <aura:attribute name="Autre" type="boolean" default="true"/>
+    <aura:attribute name="IfExpand" type="boolean" default="false"/>
+    <aura:attribute name="disableButton" type="boolean" default="false"/>
+    <aura:attribute name="IfRefreshRC" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:LE02_ContactSearch" action="{!c.INSearchResults}"/>
+    <!--<aura:registerEvent name="ContactButtonClicked" type="c:LE01_ContactAction"/>-->
+    
+    <!-- Modal of Delete-->
+    <div aura:id="ModalSectionDelete" role="dialog" class="slds-modal slds-modal--large">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <h2 id="header43" class="slds-text-heading--medium">{!$Label.c.LC07_Suppression}</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                <center>
+                    <p>{!$Label.c.LC07_etes_vous_sur}?</p>
+                </center>
+            </div>
+            <div class="slds-modal__footer">
+                <button id="OKButton" class="slds-button slds-button--neutral" style="display: initial;" onclick="{!c.hideModalofDelete}">{!$Label.c.LC07_Annuler}</button>
+                <button id="OKButton" class="slds-button slds-button--neutral" style="display: initial;" onclick="{!c.DeleteTheRecord}">{!$Label.c.LC03_OK}</button>
+            </div>
+        </div>
+    </div>
+    <div aura:id="visibilityDelete" class="slds-backdrop"></div>
+    
+    <aura:if isTrue="{!v.IfshowElement}">
+    <tr class="slds-hint-parent" id="tree0-node0" role="row" aria-level="{!v.AriaLevel}" aria-expanded="{!if(v.IfExpand,true,false)}">
+        <td scope="row" class="slds-tree__item myItem" style="display:table-cell;">
+            <div style="display:flex;">
+                <aura:if isTrue="{!v.contactWrapper.listChildren.length>=1}">
+                    <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small myIcon" aria-controls="tree0-node1" onclick="{!c.ExpandBelow}">
+                        <aura:if isTrue="{!v.IfExpand}">
+                            <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#chevronright'}"
+                                       name="chevronDown"
+                                       class="slds-button__icon slds-button__icon--small"
+                                       containerClass=""
+                                       category="utility"
+                                       size="small"
+                                       assistiveText="Toggle"/>
+                            <aura:set attribute="else">
+                                <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#chevronright'}"
+                                           name="chevronright"
+                                           class="slds-button__icon slds-button__icon--small"
+                                           containerClass=""
+                                           category="utility"
+                                           size="small"
+                                           assistiveText="Toggle"/>
+                            </aura:set>
+                        </aura:if>
+                    </button>
+                    <aura:set attribute="else">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </aura:set>
+                </aura:if>
+                <div><a class="{!if(v.contactWrapper.isSearched, v.ColorOfSearched + ' slds-truncate', 'slds-truncate')}" style="color:black;" href="{!'/one/one.app?#/sObject/'+ v.contactWrapper.theContact.Id + '/view'}">{!v.contactWrapper.theContact.Name}</a>
+                    <aura:if isTrue="{!v.contactWrapper.theContact.Type_de_fonction__c!=null}">
+                        <div class="slds-truncate" style="color:#999999;" ><br class="myBr"/>({!v.contactWrapper.theContact.Type_de_fonction__c})</div>
+                    </aura:if>
+                </div>
+            </div>
+        </td>
+        <td>
+            <aura:iteration items="{!v.contactWrapper.theContact.Relation_Clients_et_Internes__r}" var="Interne">
+                <div class="slds-truncate">
+                    <a class="{!if(v.Commerce &amp;&amp; Interne.Contact_Interne__r.CodeValeurFiliere__c=='COMM', 'CommerceLabel', if(v.Direction &amp;&amp; Interne.Contact_Interne__r.CodeValeurFiliere__c=='DRCT', 'DirectionLabel',if(v.Operation &amp;&amp; Interne.Contact_Interne__r.CodeValeurFiliere__c=='OPER', 'OperationLabel', if(v.Autre &amp;&amp; Interne.Contact_Interne__r.CodeValeurFiliere__c!='COMM' &amp;&amp; Interne.Contact_Interne__r.CodeValeurFiliere__c!='DRCT' &amp;&amp; Interne.Contact_Interne__r.CodeValeurFiliere__c!='OPER', 'AutreLabel' ,'NoneOfTypes'))))}" href="{!'/one/one.app?#/sObject/'+ Interne.Contact_Interne__c + '/view'}" style=""> 
+                        {!Interne.Contact_Interne__r.Name}
+                    </a>
+                    <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small editButtons" aria-controls="tree0-node1" onclick="{!c.EditContactInterne}" id="{!Interne.Id}" disabled="{!v.disableButton}" style="margin-left: 10px;">
+                        <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#edit'}"
+                                   name="EditRelation"
+                                   class="slds-button__icon slds-button__icon--small"
+                                   containerClass=""
+                                   category="utility"
+                                   size="small"
+                                   assistiveText="Toggle"/>
+                    </button>
+                    <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small editButtons" aria-controls="tree0-node1" onclick="{!c.DeleteContactInterne}" id="{!Interne.Id}" disabled="{!v.disableButton}">
+                        <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#close'}"
+                                   name="DeleteRelation"
+                                   class="slds-button__icon slds-button__icon--small"
+                                   containerClass=""
+                                   category="utility"
+                                   size="small"
+                                   assistiveText="Toggle"/>
+                    </button>
+                    <aura:if isTrue="{!Interne.Contact_Interne__r.Title!=null}">
+                        <div class="slds-truncate" style="color:#999999;" ><br class="myBr"/>({!Interne.Contact_Interne__r.Title})</div>
+                    </aura:if>
+                </div>
+            </aura:iteration>
+        </td>
+        <td>
+            <div class="slds-truncate" style="color:black;  text-align: center;">{!v.contactWrapper.DerniereRencontre}</div>
+        </td>
+        <td>
+            <div class="{!if(((v.contactWrapper.NbreEventRealise/v.contactWrapper.listEvents.length)*100)>=50,if(((v.contactWrapper.NbreEventRealise/v.contactWrapper.listEvents.length)*100)>=75,'slds-truncate greenDiv','slds-truncate orangeDiv'),'slds-truncate redDiv')}">{!v.contactWrapper.NbreEventRealise}/{!v.contactWrapper.listEvents.length}</div>
+        </td>
+        <td>
+            <div class="slds-truncate" style=" text-align: center;">{!v.contactWrapper.theContact.Influence__c}</div>
+        </td>
+        <td >
+            <div class="slds-truncate" style=" text-align: center;">{!v.contactWrapper.theContact.Supporteur__c}</div>
+        </td>
+        <td>            
+            <div class="slds-truncate" style=" text-align: center;"><img class="myImage" src="{!v.contactWrapper.SatisfactionyUrl}"/></div>
+        </td>
+        <td style=" text-align: center;">
+            <button class="slds-button slds-button--icon slds-button--icon-x-small slds-m-right--x-small" aria-controls="tree0-node1" onclick="{!c.ActionClicked}">
+                <c:svgIcon svgPath="{!$Resource.slds + '/assets/icons/utility-sprite/svg/symbols.svg#edit'}"
+                           name="chevronright"
+                           class="slds-button__icon slds-button__icon--small"
+                           containerClass=""
+                           category="utility"
+                           size="small"
+                           assistiveText="Toggle"/>
+            </button>
+        </td>
+    </tr>    
+    <aura:if isTrue="{!v.IfExpand}">
+        <aura:iteration items="{!v.contactWrapper.listChildren}" var="theChildWrapper">
+            <c:LC07_VueMirroirRow contactWrapper="{!theChildWrapper}" AriaLevel="{!v.AriaLevel+1}" ColorOfSearched="{!v.ColorOfSearched}" 
+                                  Commerce="{!v.Commerce}" Direction="{!v.Direction}" Operation="{!v.Operation}" Autre="{!v.Autre}"
+                                  IfModalRC="{!v.IfModalRC}" errorMessage="{!v.errorMessage}" IfErrorExists="{!v.IfErrorExists}"
+                                  RelationToEdit="{!v.RelationToEdit}" IfCreateMode="{!v.IfCreateMode}"
+                                  disableButton="{!v.disableButton}" IfRefreshRC="{!v.IfRefreshRC}"/>
+        </aura:iteration>
+    </aura:if> 
+        </aura:if>
+</aura:component>

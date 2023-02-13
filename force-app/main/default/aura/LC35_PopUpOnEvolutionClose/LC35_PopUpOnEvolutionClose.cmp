@@ -1,0 +1,92 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="LC35_PopUpOnEvolutionClose_Controller">
+    <aura:attribute name="recordId" type="String" />  
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    <aura:attribute name="ShowPopUp" type="Boolean" default="false"/>
+    <aura:attribute name="ShowConcurrente" type="Boolean" default="false"/>
+    <aura:attribute name="ShowConcurrenteGagne" type="Boolean" default="false"/>
+    <aura:attribute name="ShowConcurrentePerdu" type="Boolean" default="false"/>
+    <aura:attribute name="ShowSpinner" type="Boolean" default="false"/> 
+    <aura:attribute name="OppConc" type="Opportunity"/> 
+    <aura:attribute name="OppNow" type="Opportunity"/> 
+    <aura:attribute name = "newOpp" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    
+    <aura:if isTrue="{!v.ShowConcurrente}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container"> 
+                <div class="slds-modal__header">
+                    <aura:if isTrue="{!v.OppNow.Statut__c == 'Sans suite'}">
+                        <h2 id="header99" class="slds-text-heading--medium">{!$Label.c.LC35_CreationOppConcurrente}</h2>
+                        <aura:set attribute="else">
+                            <h2 id="header99" class="slds-text-heading--medium">{!$Label.c.LC35_CreationOppConcurrente}</h2>
+                        </aura:set>
+                    </aura:if>
+                </div> 
+                <div class="slds-modal__content slds-p-around--medium">
+                    <div class="slds-notify_container slds-is-relative">
+                        <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                            <div class="slds-notify__content">
+                                <aura:if isTrue="{!v.ShowConcurrentePerdu}">
+                                    <h2 class="slds-text-heading_small ">{!$Label.c.LC35_OppConcExiste}  
+                                        <a href="{!'/one/one.app?#/sObject/'+ v.OppConc.Id + '/view'}" target="_blank">({!v.OppConc.NumeroOpportunite__c})</a>
+                                        {!$Label.c.LC35_PasDeCreationDeConcurrente}
+                                    </h2>
+                                </aura:if>
+                                <aura:if isTrue="{!v.ShowConcurrenteGagne}">
+                                 <h2 class="slds-text-heading_small ">{!$Label.c.LC35_OppConcExiste}  
+                                        <a href="{!'/one/one.app?#/sObject/'+ v.OppConc.Id + '/view'}" target="_blank">({!v.OppConc.NumeroOpportunite__c})</a>
+                                    </h2>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning:button label="OK" onclick="{!c.handleConcurrente}" class="slds-button_neutral "/>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.ShowPopUp}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container"> 
+                <div class="slds-modal__header">
+                    <aura:if isTrue="{!v.OppNow.Statut__c == 'Sans suite'}">
+                        <h2 id="header99" class="slds-text-heading--medium">{!$Label.c.LC35_CreationOppConcurrente}</h2>
+                        <aura:set attribute="else">
+                            <h2 id="header99" class="slds-text-heading--medium">{!$Label.c.LC35_CreationOppConcurrente}</h2>
+                        </aura:set>
+                    </aura:if>
+                </div> 
+                <div class="slds-modal__content slds-p-around--medium ">
+                    <aura:if isTrue="{! !empty(v.error)}">
+                        <div class="slds-notify_container slds-is-relative">
+                            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                    {!$Label.c.LC35_MessageConcurente}
+                </div> 
+                <div class="slds-modal__footer"> 
+                    <lightning:button label="{!$Label.c.LC35_Oui}" onclick="{!c.Handle_ok}" class="slds-button_neutral slds-align_absolute-left slds-size_1-of-6"/>
+                    <lightning:button label="{!$Label.c.LC35_Non}" onclick="{!c.Handle_Annuler}" class="slds-button_brand slds-align_absolute-right slds-size_1-of-6"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.ShowSpinner}">
+        <div class="SpinCss">
+            <lightning:spinner class="slds-is-fixed" alternativeText="Loading" size="Large" />
+        </div>
+    </aura:if>
+    
+</aura:component>

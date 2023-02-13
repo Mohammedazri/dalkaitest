@@ -1,0 +1,19 @@
+<!--c:LC71_AlerteEvolution-->
+<!--** 
+* @author Jacques Akiki
+* @date 10/7/2020 
+* @description Composant Alerte qui s'affiche sur l'opportunité s'il existe des opp d'evolution en cours relié au contrat d'aorigine de l'opp de renouv
+*-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId" controller="LC71_AlerteEvolution_Controller"  access="global">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="shouldAppear" type="Boolean" default ="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+        <aura:if isTrue="{!v.shouldAppear}">
+            <div class="alertStyle">
+                {!$Label.c.LC71_MessageAlerte}
+            </div>
+            
+        </aura:if>
+</aura:component>

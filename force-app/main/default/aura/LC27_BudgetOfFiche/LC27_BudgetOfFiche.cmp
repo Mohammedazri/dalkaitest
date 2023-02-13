@@ -1,0 +1,266 @@
+<!--c:LC27_BudgetOfFiche-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" controller="LC27_BudgetOfFiche_Controller">
+    <aura:attribute name="Currentrecord" type="Object" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="onContrat" type="boolean" />
+    <aura:attribute name="onOpportunity" type="boolean" />
+    <!--aura:attribute name="showContrat" type="boolean"  default="false"/-->
+    <!--aura:attribute name="showNombreHeuresP2" type="boolean"  default="true"/-->
+    <aura:attribute name="BudgetIDFromCont" type="Id" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />    
+    <aura:if isTrue="{!v.onContrat}">
+        <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+            <div class="slds-size_1-of-1">
+                <div class="slds-form-element__label">{!$Label.c.LC27_Nom_Du_Budget}</div>
+                <div class="myValue"> <a href="{!'/'+ v.BudgetIDFromCont }" >{!v.Currentrecord.Name}</a></div>
+            </div>
+            <!--aura:if isTrue="{!v.showContrat}">
+                <div class="slds-size_1-of-2">
+                    <div class="slds-form-element__label">{!$Label.c.LC27_Nom_du_Contrat}</div>
+                    <div class="myValue"><a href="{!'/one/one.app?#/sObject/'+ v.Currentrecord.NomContrat__c + '/view'}" >{!v.Currentrecord.NomContrat__r.Name}</a></div>
+                </div>
+                <div class="slds-size_1-of-2">
+                    <div class="slds-form-element__label">{!$Label.c.LC27_Annee}</div>
+                    <div class="myValue">{!v.Currentrecord.AnneeBudget__c}</div>
+                </div>
+                <aura:set attribute="else"-->
+                    <div class="slds-size_1-of-1">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_Annee}</div>
+                        <div class="myValue">{!v.Currentrecord.AnneeBudget__c}</div>
+                    </div>
+                <!--/aura:set>
+            </aura:if-->
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P1}</div>
+                <div class="myValue">{!v.Currentrecord.CABudgetP1__c} {!if(v.Currentrecord.CABudgetP1__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P1}</div>
+                <div class="myValue">{!v.Currentrecord.MBBudgetP1__c} {!if(v.Currentrecord.MBBudgetP1__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_NbHeureP2}</div>
+                <div class="myValue">{!v.Currentrecord.BudgetNMainOeuvreDontNbHeureP2__c}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P2}</div>
+                <div class="myValue">{!v.Currentrecord.CABudgetP2__c} {!if(v.Currentrecord.CABudgetP2__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P2}</div>
+                <div class="myValue">{!v.Currentrecord.MBBudgetP2__c} {!if(v.Currentrecord.MBBudgetP2__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_NbHeureP3}</div>
+                <div class="myValue">{!v.Currentrecord.BudgetNMainOeuvreDontNbHeureP3__c}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P3}</div>
+                <div class="myValue">{!v.Currentrecord.CABudgetP3__c} {!if(v.Currentrecord.CABudgetP3__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P3}</div>
+                <div class="myValue">{!v.Currentrecord.MBBudgetP3__c} {!if(v.Currentrecord.MBBudgetP3__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_NbHeureP6}</div>
+                <div class="myValue">{!v.Currentrecord.BudgetNMainOeuvreDontNbHeureP6__c}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P4}</div>
+                <div class="myValue">{!v.Currentrecord.CABudgetP4__c} {!if(v.Currentrecord.CABudgetP4__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P4}</div>
+                <div class="myValue">{!v.Currentrecord.MBBudgetP4__c} {!if(v.Currentrecord.MBBudgetP4__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_NbHeureTotal}</div>
+                <div class="myValue">{!v.Currentrecord.BudgetNMainOeuvreNombreHeureTotal__c}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P6}</div>
+                <div class="myValue">{!v.Currentrecord.CABudgetP6__c} {!if(v.Currentrecord.CABudgetP6__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P6}</div>
+                <div class="myValue">{!v.Currentrecord.MBBudgetP6__c} {!if(v.Currentrecord.MBBudgetP6__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_THO}</div>
+                <div class="myValue">{!v.Currentrecord.BudgetNMainOeuvreValorisationTHO__c} {!if(v.Currentrecord.BudgetNMainOeuvreValorisationTHO__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_Total_CA_Budget}</div>
+                <div class="myValue">{!v.Currentrecord.TotalCABudgetP1P2P3P4__c} {!if(v.Currentrecord.TotalCABudgetP1P2P3P4__c!= null,' €', ' ')}</div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class="slds-form-element__label">{!$Label.c.LC27_Total_MB_Budget}</div>
+                <div class="myValue">{!v.Currentrecord.TotalMBBudgetP1P2P3P4__c} {!if(v.Currentrecord.TotalMBBudgetP1P2P3P4__c!= null,' €', ' ')}</div>
+            </div>
+        </div>
+        
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.onOpportunity}">
+                <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                    <div class="slds-size_1-of-1">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_Nom_Du_Budget}</div>
+                        <div class="myValue"> <a href="{!'/'+ v.BudgetIDFromCont }" >{!v.Currentrecord.Name}</a></div>
+                    </div>
+                    <!--aura:if isTrue="{!v.showContrat}"-->
+                    <div class="slds-size_1-of-1">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_Nom_du_Contrat}</div>
+                        <div class="myValue"><a href="{!'/one/one.app?#/sObject/'+ v.Currentrecord.NomContrat__c + '/view'}" >{!v.Currentrecord.NomContrat__r.Name}</a></div>
+                    </div>
+                    <div class="slds-size_1-of-1">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_Annee}</div>
+                        <div class="myValue">{!v.Currentrecord.AnneeBudget__c}</div>
+                    </div>
+                    <!--aura:set attribute="else">
+                        <div class="slds-size_1-of-1">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_Annee}</div>
+                            <div class="myValue">{!v.Currentrecord.AnneeBudget__c}</div>
+                        </div>
+                    </aura:set-->
+                    <!--/aura:if-->
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P1}</div>
+                        <div class="myValue">{!v.Currentrecord.CABudgetP1__c} {!if(v.Currentrecord.CABudgetP1__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P1}</div>
+                        <div class="myValue">{!v.Currentrecord.MBBudgetP1__c} {!if(v.Currentrecord.MBBudgetP1__c!= null,' €', ' ')}</div>
+                    </div>  
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P2}</div>
+                        <div class="myValue">{!v.Currentrecord.CABudgetP2__c} {!if(v.Currentrecord.CABudgetP2__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P2}</div>
+                        <div class="myValue">{!v.Currentrecord.MBBudgetP2__c} {!if(v.Currentrecord.MBBudgetP2__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P3}</div>
+                        <div class="myValue">{!v.Currentrecord.CABudgetP3__c} {!if(v.Currentrecord.CABudgetP3__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P3}</div>
+                        <div class="myValue">{!v.Currentrecord.MBBudgetP3__c} {!if(v.Currentrecord.MBBudgetP3__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P4}</div>
+                        <div class="myValue">{!v.Currentrecord.CABudgetP4__c} {!if(v.Currentrecord.CABudgetP4__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P4}</div>
+                        <div class="myValue">{!v.Currentrecord.MBBudgetP4__c} {!if(v.Currentrecord.MBBudgetP4__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P6}</div>
+                        <div class="myValue">{!v.Currentrecord.CABudgetP6__c} {!if(v.Currentrecord.CABudgetP6__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P6}</div>
+                        <div class="myValue">{!v.Currentrecord.MBBudgetP6__c} {!if(v.Currentrecord.MBBudgetP6__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_Total_CA_Budget}</div>
+                        <div class="myValue">{!v.Currentrecord.TotalCABudgetP1P2P3P4__c} {!if(v.Currentrecord.TotalCABudgetP1P2P3P4__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_Total_MB_Budget}</div>
+                        <div class="myValue">{!v.Currentrecord.TotalMBBudgetP1P2P3P4__c} {!if(v.Currentrecord.TotalMBBudgetP1P2P3P4__c!= null,' €', ' ')}</div>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        <div class="slds-form-element__label">{!$Label.c.LC27_THO}</div>
+                        <div class="myValue">{!v.Currentrecord.BudgetNMainOeuvreValorisationTHO__c} {!if(v.Currentrecord.BudgetNMainOeuvreValorisationTHO__c!= null,' €', ' ')}</div>
+                    </div>
+                </div>            
+                <aura:set attribute="else">
+                    <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                        <div class="slds-size_1-of-1">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_Nom_Du_Budget}</div>
+                            <div class="myValue"> <a href="{!'/one/one.app?#/sObject/'+ v.Currentrecord.Budget__c + '/view'}" >{!v.Currentrecord.Budget__r.Name}</a></div>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_Nom_du_Contrat}</div>
+                            <div class="myValue"><a href="{!'/one/one.app?#/sObject/'+ v.Currentrecord.Budget__r.NomContrat__c + '/view'}" >{!v.Currentrecord.Budget__r.NomContrat__r.Name}</a></div>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_Annee}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.AnneeBudget__c}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P1}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.CABudgetP1__c} {!if(v.Currentrecord.Budget__r.CABudgetP1__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P1}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.MBBudgetP1__c} {!if(v.Currentrecord.Budget__r.MBBudgetP1__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_NbHeureP2}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.BudgetNMainOeuvreDontNbHeureP2__c}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P2}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.CABudgetP2__c} {!if(v.Currentrecord.Budget__r.CABudgetP2__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P2}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.MBBudgetP2__c} {!if(v.Currentrecord.Budget__r.MBBudgetP2__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_NbHeureP3}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.BudgetNMainOeuvreDontNbHeureP3__c}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P3}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.CABudgetP3__c} {!if(v.Currentrecord.Budget__r.CABudgetP3__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P3}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.MBBudgetP3__c} {!if(v.Currentrecord.Budget__r.MBBudgetP3__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_NbHeureP6}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.BudgetNMainOeuvreDontNbHeureP6__c}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P4}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.CABudgetP4__c} {!if(v.Currentrecord.Budget__r.CABudgetP4__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P4}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.MBBudgetP4__c} {!if(v.Currentrecord.Budget__r.MBBudgetP4__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_NbHeureTotal}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.BudgetNMainOeuvreNombreHeureTotal__c}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_CA_Budget_P6}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.CABudgetP6__c} {!if(v.Currentrecord.Budget__r.CABudgetP6__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_MB_Budget_P6}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.MBBudgetP6__c} {!if(v.Currentrecord.Budget__r.MBBudgetP6__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label"></div>
+                            <div class="myValue"></div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_Total_CA_Budget}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.TotalCABudgetP1P2P3P4__c} {!if(v.Currentrecord.Budget__r.TotalCABudgetP1P2P3P4__c!= null,' €', ' ')}</div>
+                        </div>
+                        <div class="slds-size_1-of-3">
+                            <div class="slds-form-element__label">{!$Label.c.LC27_Total_MB_Budget}</div>
+                            <div class="myValue">{!v.Currentrecord.Budget__r.TotalMBBudgetP1P2P3P4__c} {!if(v.Currentrecord.Budget__r.TotalMBBudgetP1P2P3P4__c!= null,' €', ' ')}</div>
+                        </div>
+                    </div>
+                </aura:set></aura:if>
+        </aura:set>
+    </aura:if>    
+</aura:component>

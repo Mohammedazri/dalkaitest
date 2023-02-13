@@ -1,0 +1,46 @@
+<!--c:LC81_SuiviDActivites-->
+<!--** 
+* @author Jacques Akiki
+* @date 27/10/2020 
+* @description Composant qui affiche le suivi d'activité d'un contrat basé sur les profils.
+*-->
+<aura:component controller="LC81_SuiviDActivites_cont" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global">
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="hasAccessToFullView" type="boolean" default="false"/>
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{! !empty(v.error)}">
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <div class="slds-notify_container slds-is-relative">
+                <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.hasAccessToFullView}">
+                <lightning:tabset variant="scoped">
+                    <lightning:tab label="Récapitulatif">
+                        <c:LC82_RecapitulatifRegion recordId ="{!v.recordId}"/>
+                    </lightning:tab>
+                    <lightning:tab label="Détail" class="thStyle">
+                        <c:LC73_ActivitiesOnAccount recordId ="{!v.recordId}"/>
+                    </lightning:tab>
+                    
+                </lightning:tabset>
+                <aura:set attribute="else">
+                    <lightning:tabset variant="scoped">
+                        
+                        <lightning:tab label="Récapitulatif">
+                        <c:LC82_RecapitulatifRegion recordId ="{!v.recordId}"/>
+                        </lightning:tab>
+                    </lightning:tabset>
+                </aura:set>
+            </aura:if> 
+        </aura:set>
+    </aura:if>
+</aura:component>

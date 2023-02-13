@@ -1,0 +1,12 @@
+<apex:component controller="VFC03_AccountFilterComponent" >
+    <apex:attribute name="AccountMarkers" type="wrapperMarker[]" description="Account Markers" assignTo="{!listAccountMarkers}" />
+    <h1 class="slds-page-header__title slds-align-middle">Partenaires</h1>
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="text-input-01">Nom:</label>
+        <div class="slds-form-element__control">
+            <input type="text" id="text-input-01" class="slds-input" placeholder="Placeholder Text" />
+        </div>
+    </div>
+    <apex:actionFunction name="UpdateMarkers"  action="{!UpdateMarkers}"/>
+    <button class="slds-button" onclick="UpdateMarkers();">Filtrer</button>
+</apex:component>

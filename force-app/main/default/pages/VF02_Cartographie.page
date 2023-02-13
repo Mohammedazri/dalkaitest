@@ -1,0 +1,46 @@
+<apex:page controller="VFC02_Cartographie">
+    <link rel="stylesheet" href="{!URLFOR($Resource.jQueryUI, 'jquery-ui.css')}" />
+    <script type='text/javascript' src="{!$Resource.jQuery}"/>    
+    <script type='text/javascript' src="{!URLFOR($Resource.jQueryUI, 'jquery-ui.min.js')}" />
+    
+    <script type='text/javascript'>
+        jQuery( function() {
+            jQuery( "#tabs" ).tabs();
+          } );
+          
+          function toggleSelectedTab(tabelem){
+              jQuery("ul[role=tablist]>li").toggleClass("slds-tabs--scoped__item slds-active", false);
+              jQuery(tabelem).parent().addClass("slds-tabs--scoped__item slds-active");
+              
+          }
+    </script>
+    <apex:slds />
+    <div id="mainFilterMenu" class="slds-grid">     
+        <div style="position:inherit; left:0px; top:32px; font-family: 'Salesforce Sans',Arial,sans-serif; width:100%"> 
+            <apex:form >
+                <apex:map width="100%" height="400px" mapType="roadmap">
+                    <apex:repeat value="{!listMarkers}" var="myMarker" >
+                        <apex:mapMarker position="{!IF(myMarker.Street <> NULL, myMarker.Street, '')}{!IF(myMarker.City <> NULL, ','+myMarker.City, '')}{!IF(myMarker.State<> NULL, ','+myMarker.State, '')}{!IF(myMarker.Country <> NULL, ',' + myMarker.Country, '')}" title="{!myMarker.Name}" icon="{!IF(myMarker.isCurrent==true, URLFOR($Resource.GooglePLace),IF(myMarker.isRacine==true,URLFOR($Resource.GooglePLaceRacine) ,''))}">
+                            <apex:mapInfoWindow >
+                                <apex:outputPanel layout="block" style="font-weight: bold;">
+                                    <div onclick="window.open('{!myBasicUrl}#/sObject/{!myMarker.id}/view')" style="color:blue; cursor:pointer; text-decoration:underline;"> 
+                                        <center>                              
+                                            <apex:outputText value="{!myMarker.Name}"></apex:outputText>
+                                        </center>
+                                    </div>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="block">
+                                    <br/>
+                                    <div>{!myMarker.Street}</div>
+                                    <div>{!myMarker.City}</div>
+                                    <div>{!myMarker.State}</div>
+                                    <div>{!myMarker.Country}</div>
+                                </apex:outputPanel>             
+                            </apex:mapInfoWindow>
+                        </apex:mapMarker>
+                    </apex:repeat>
+                </apex:map> 
+            </apex:form>
+        </div>
+    </div>
+</apex:page>

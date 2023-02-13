@@ -1,0 +1,27 @@
+<aura:component >
+    <aura:attribute name="Racine" type="boolean" default="true"/>
+    <aura:attribute name="contactWrapper" type="WrapperOrganigrammeRow" />
+    
+    <ul class="{!if(v.Racine==true,'NoPadding','')}" >
+        <li>
+            <div class="Thisa">
+                <a href="{!'/one/one.app?#/sObject/'+ v.contactWrapper.theContact.Id + '/view'}">{!v.contactWrapper.theContact.Name}</a>
+                <br/>
+                <p style="text-align: center;">
+                    <!--&#8226;Titre:&nbsp;-->{!v.contactWrapper.theContact.Type_de_fonction__c}
+                    <!--<br/>
+                    &#8226;Propriétaire :&nbsp;<a href="{!'/one/one.app?#/sObject/'+ v.contactWrapper.theContact.OwnerId + '/view'}">{!v.contactWrapper.theContact.Owner.Name}</a>-->
+                </p>
+            </div>
+            <aura:if isTrue="{!v.contactWrapper.listChildren.length>=1}">
+                <ul>
+                    <aura:iteration items="{!v.contactWrapper.listChildren}" var="theChildWrapper">
+                        <li>
+                            <c:LC09_OrganigrammeRow contactWrapper="{!theChildWrapper}" Racine="false"/>
+                        </li>
+                    </aura:iteration> 
+                </ul>
+            </aura:if>
+        </li>
+    </ul>
+</aura:component>

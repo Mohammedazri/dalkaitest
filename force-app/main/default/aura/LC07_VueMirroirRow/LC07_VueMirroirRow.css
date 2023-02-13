@@ -1,0 +1,52 @@
+.THIS .myIcon{
+}
+
+.THIS .redDiv{
+    color: red;
+    text-align: center;
+
+}
+
+.THIS .greenDiv{
+	color: green;
+    text-align: center;
+
+}
+
+.THIS .orangeDiv{
+	color: orange;
+    text-align: center;
+
+}
+
+.THIS .myBr{
+    display: block; /* makes it have a width */
+    content: ""; /* clears default height */
+    margin-top: -5px;
+}
+
+.THIS .myImage{
+    max-width: 33%;
+}
+
+.THIS .editButtons{
+    margin-right: 0px;
+    margin-left: 0;
+}
+
+/*.THIS.CommerceRow{
+    background-color:#f2e6ff;
+}
+
+.THIS.OperationRow{
+    background-color:#e6ffe6;
+}
+
+.THIS.DirectionRow{
+    background-color:#e6faff;
+}*/
+
+/*.THIS .slds-tree__item:hover {
+    background: white;
+    cursor: nonecontext-menu;
+}*/

@@ -1,0 +1,51 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="LC53_MotifDeResiliation">
+    <aura:attribute name="recordId" type="String" />  
+    <aura:attribute access="private" name="error" type="String" default=""/>
+    <aura:attribute name="ShowPopUp" type="Boolean" default="false"/>  
+    <aura:attribute name="MotifsList" type="List" default="[]"/>
+    <aura:attribute name="ConditionsList" type="List" default="[]"/>
+    <aura:attribute name="myContrat" type="Contrat__c"/>
+    <aura:attribute name="disableCondition" type="Boolean" default="true"/>
+    <aura:attribute name="disableDate" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.ShowPopUp}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container"> 
+                <div class="slds-modal__header">
+                    <h2 id="header99" class="slds-text-heading--medium">{!$Label.c.LC53_titre}</h2>
+                </div> 
+                <div class="slds-modal__content slds-p-around--medium ">
+                    <aura:if isTrue="{! !empty(v.error)}">
+                        <div class="slds-notify_container slds-is-relative">
+                            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+                                <div class="slds-notify__content">
+                                    <h2 class="slds-text-heading_small ">{!v.error}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                    <label style="color: darkgoldenrod;">{!$Label.c.LC53_ChampsOblig}</label><br/><br/>
+                    <ui:inputSelect aura:id="mdf" value="{!v.myContrat.Motif_fermeture_contrat__c}" label="{!$Label.c.LC35_Motif}" change="{!c.onSelectChange}" required="true" >
+                        <aura:iteration items="{!v.MotifsList}" var="motif">
+                            <ui:inputSelectOption text="{!motif.value}" class="dynamic" label="{!motif.label}" />
+                        </aura:iteration>
+                    </ui:inputSelect> 
+                    <ui:inputSelect aura:id="cdf" value="{!v.myContrat.Condition_de_fermeture__c}" label="{!$Label.c.LC35_Condition}" disabled='{!v.disableCondition}' required="true" >
+                        <aura:iteration items="{!v.ConditionsList}" var="cond">
+                            <ui:inputSelectOption text="{!cond}" class="dynamic" label="{!cond}" />
+                        </aura:iteration>
+                    </ui:inputSelect> 
+                    <ui:inputDate label="Date de Fin" class="field" value="{!v.myContrat.DateFin__c}" displayDatePicker="true" required="True" disabled='{!v.disableDate}' format="dd/MM/yyyy"/>
+                </div> 
+                <div class="slds-modal__footer"> 
+                    <!--lightning:button label="{!$Label.c.LC35_Annuler}" onclick="{!c.Handle_Annuler}" class="slds-button_neutral slds-align_absolute-left slds-size_1-of-6"/-->
+                    <lightning:button label="{!$Label.c.LC35_modifier}" onclick="{!c.Handle_ok}" class="slds-button_brand slds-align_absolute-right slds-size_1-of-6"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+</aura:component>

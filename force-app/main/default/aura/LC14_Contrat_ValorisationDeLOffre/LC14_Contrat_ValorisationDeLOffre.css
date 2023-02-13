@@ -1,0 +1,13 @@
+.THIS .mytitle{
+    /*slds-text-title--caps*/
+    font-size: .75rem;
+    line-height: 1.25;
+    color: rgb(84, 105, 141);
+    text-transform: uppercase;
+    r-spacing: .04rem;
+}
+
+.THIS .myTable{
+    display: block;
+    overflow-x: auto;
+}

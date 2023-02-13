@@ -1,0 +1,56 @@
+/* CSS */
+
+.parent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #4472c4;
+}
+
+.child {
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.KO-Red {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #df0a0a;
+    height: 100%;
+}
+
+.KO-White {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #616161;
+    height: 100%;
+}
+
+.OK-Green {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #00b050;
+    height: 100%;
+}
+
+.OK-White {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #616161;
+    height: 100%;
+}
+
+.label {
+    font-weight: bold;
+    font-size: 12px;   
+}

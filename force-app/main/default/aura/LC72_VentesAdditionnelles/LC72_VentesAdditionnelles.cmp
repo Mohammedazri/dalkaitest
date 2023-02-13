@@ -1,0 +1,39 @@
+<!--c:LC72_VentesAdditionnelles-->
+<!--** 
+* @author Dona Kfoury
+* @date 16/7/2020 
+* @description Composant qui montre le taux "Ventes Additionnelles" de l'utilisateur pour l'annee actuelle.
+*-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction" controller="LC72_VentesAdditionnelles_Controller"  access="global">
+    <aura:attribute  name="TauxVentes" type="Decimal"/>
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="custom-background" >
+        <!--loading spinner start-->
+        <aura:if isTrue="{!v.spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading...</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.TauxVentes == -1}">
+            <br/>
+            <p  class="erreurTaux">{!$Label.c.LC72_PasDeTaux}</p>
+            <aura:set attribute="else">
+                <div class="colonneNomTaux">
+                    <div class="slds-truncate">{!$Label.c.LC72_TauxVA}</div>
+                </div>
+                <div>
+                    <center>
+                        <p class ="colonneTaux">{!v.TauxVentes}</p>
+                    </center>
+                </div>
+            </aura:set>
+        </aura:if>
+        <br/>
+    </div>
+</aura:component>

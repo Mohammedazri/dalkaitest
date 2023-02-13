@@ -1,0 +1,19 @@
+.THIS.SpinnerClass {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    bottom: 45px;
+    left: 0;
+    z-index: 9050;
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: opacity .2s ease,visibility 0s;
+    transition: opacity .2s ease,visibility 0s;
+    -webkit-transition-delay: 0s,.3s;
+    transition-delay: 0s,.3s;
+}
+
+.THIS .buttonStyle {
+    float: right; 
+    margin-right: 10px;
+}

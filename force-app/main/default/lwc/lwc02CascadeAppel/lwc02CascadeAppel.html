@@ -1,0 +1,175 @@
+<!--
+  @description       : 
+  @author            : Othmane Choulli
+  @group             : 
+  @last modified on  : 19-10-2022
+  @last modified by  : Othmane Choulli
+-->
+<template>
+    <lightning-card>
+        <div if:true={showSpinner}>
+            <lightning-spinner alternative-text="Chargement" size="medium"></lightning-spinner>
+        </div>
+        <div if:true={showAlert} class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+            <h2>{showAlertMessage}</h2>
+        </div>
+        <div if:true={error} class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+            <h2>{error}</h2>
+        </div>
+        <div class="slds-list_horizontal slds-wrap slds-m-bottom_medium">
+            <div class="slds-size_4-of-5">
+                <span
+                    class="slds-m-left_large slds-form-element__label slds-text-title_bold slds-var-p-top_small slds-var-p-bottom_small">Consignes
+                    d'appel</span>
+            </div>
+            <div class="slds-size_1-of-5">
+                <lightning-combobox disabled={isBlur} name="IdSIA" placeholder="Filtrer par IdSIA..." options={options}
+                    value={selectedOption} onchange={handleSelect} class="slds-m-right_large"></lightning-combobox>
+            </div>
+        </div>
+        <div if:true={isBlur} class="slds-align_absolute-center">
+            <lightning-button disabled={isReadOnly} variant="brand" label="Cliquez ici pour charger les consignes..."
+                title="Cliquez ici pour charger les consignes..." onclick={loadConsignes}></lightning-button>
+        </div>
+        <div if:false={isBlur} class="slds-align_absolute-center">
+            <lightning-button variant="brand" label="+ Nouvelle consigne" title="Créer une nouvelle consigne"
+                onclick={handleModal}></lightning-button>
+        </div>
+       
+        <div class={cssClass}>
+            <c-lwc04-custom-data-table key-field="Id" data={filteredData} hide-checkbox-column="true" columns={columns}
+                onpicklistchanged={pickliListChanged}>
+            </c-lwc04-custom-data-table>          
+           <div class="slds-m-top_small slds-m-bottom_medium slds-align_absolute-center">
+                <lightning-button variant="brand" label="Valider" title="Valider" onclick={saveConsignes}
+                    class="slds-m-left_x-small" disabled={recordsNotChanged}></lightning-button>
+                <lightning-button disabled={isReadOnly} variant="brand-outline" label="Récupérer les consignes"
+                    title="Recupérer les consignes" onclick={loadConsignes} class="slds-m-left_x-small">
+                </lightning-button>
+            </div>
+        </div>
+    
+       
+        <template if:true={isDifferer}>
+            <div>
+                <c-lwc10-differer-quick-action custom-form-modal=true record-id={recordId} updated-list-differer={updatedValues} show-spinner-cascade={showSpinner}></c-lwc10-differer-quick-action>
+            </div>
+        </template>
+    
+
+    <!--
+    <div class={cssClass}>
+        <c-lwc04-custom-data-table key-field="Id" data={filteredData} hide-checkbox-column="true" columns={columns}
+            onpicklistchanged={pickliListChanged}>
+        </c-lwc04-custom-data-table>  
+        
+     <template if:true={isDifferer}>
+
+       <div class="slds-m-top_small slds-m-bottom_medium slds-align_absolute-center">
+            <lightning-button variant="brand" label="Valider" title="Valider"
+                class="slds-m-left_x-small" disabled={recordsNotChanged}></lightning-button>
+            <lightning-button disabled={isReadOnly} variant="brand-outline" label="Récupérer les consignes"
+                title="Recupérer les consignes" onclick={loadConsignes} class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+
+        <div>
+            <c-lwc10-differer-quick-action custom-form-modal=true record-id={recordId} updated-list-differer={updatedValues} show-spinner-cascade={showSpinner}></c-lwc10-differer-quick-action>
+        </div>
+    </template>
+
+    <template if:false={isDifferer}>
+
+        <div class="slds-m-top_small slds-m-bottom_medium slds-align_absolute-center">
+             <lightning-button variant="brand" label="Valider" title="Valider" onclick={saveConsignes}
+                 class="slds-m-left_x-small" disabled={recordsNotChanged}></lightning-button>
+             <lightning-button disabled={isReadOnly} variant="brand-outline" label="Récupérer les consignes"
+                 title="Recupérer les consignes" onclick={loadConsignes} class="slds-m-left_x-small">
+             </lightning-button>
+        </div>
+     </template> 
+    </div> 
+    -->
+
+
+
+        
+        
+    
+    
+        <template if:true={isModalOpen}>
+            <div class="slds-modal slds-fade-in-open slds-backdrop">
+                <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                    class="slds-modal slds-fade-in-open slds-modal_large">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <h2 class="slds-text-heading_medium slds-hyphenate">Créer une nouvelle Consigne
+                            </h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <div>
+                                <lightning-record-edit-form object-api-name="Consigne__c" record-type-id={recordTypeId}
+                                    onsuccess={handleSuccess} onerror={handleError} onsubmit={handleSubmit}>
+                                    <div if:true={showSpinner} class="slds-spinner_container">
+                                        <div class="slds-spinner--brand slds-spinner slds-spinner--small slds-is-relative"
+                                            role="alert">
+                                            <span class="slds-assistive-text">Loading...</span>
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div>
+                                    </div>
+                                    <lightning-messages></lightning-messages>
+                                    <div>
+                                        <template if:true={uiRecordCreate}>
+                                            <lightning-accordion allow-multiple-sections-open="true"
+                                                active-section-name={activeSectionNamesEdit}>
+                                                <lightning-layout multiple-rows="true">
+                                                    <lightning-layout-item size="12">
+                                                        <template for:each={uiRecordCreate.layoutSections}
+                                                            for:item="section">
+                                                            <lightning-accordion-section if:true={section.editHeading}
+                                                                key={section.label} name={section.label}
+                                                                label={section.label}>
+                                                                <lightning-layout multiple-rows="true">
+                                                                    <template for:each={section.layoutColumns}
+                                                                        for:item="layoutRow">
+                                                                        <template for:each={layoutRow.layoutItems}
+                                                                            for:item="layoutItem">
+                                                                            <lightning-layout-item
+                                                                                key={layoutItem.field} size="6"
+                                                                                padding="horizontal-small">
+                                                                                <template if:false={editable}>
+                                                                                    <lightning-input-field
+                                                                                        field-name={layoutItem.field}
+                                                                                        value={layoutItem.value}
+                                                                                        required={layoutItem.isRequired}>
+                                                                                    </lightning-input-field>
+                                                                                </template>
+                                                                            </lightning-layout-item>
+                                                                        </template>
+                                                                    </template>
+                                                                </lightning-layout>
+                                                            </lightning-accordion-section>
+                                                        </template>
+                                                    </lightning-layout-item>
+                                                </lightning-layout>
+                                            </lightning-accordion>
+                                        </template>
+                                    </div>
+                                    <div class="fixedModalFooter">
+                                        <div class="center-align-buttons">
+                                            <lightning-button class="slds-m-right_small" label="Annuler"
+                                                variant="brand-outline" onclick={handleModal}></lightning-button>
+                                            <lightning-button variant="brand" type="submit" name="submit"
+                                                label="Sauvegarder"></lightning-button>
+                                        </div>
+                                    </div>
+                                </lightning-record-edit-form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </template>
+    </lightning-card>
+</template>

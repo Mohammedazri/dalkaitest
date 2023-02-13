@@ -1,0 +1,34 @@
+<!--c:LC40_GridView-->
+<!--** 
+* @author Jacques Akiki
+* @description Composant qui montre les données du tableau 
+*-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId,lightning:actionOverride,force:hasSObjectName,force:lightningQuickAction" controller="LC40_OppContratAccount" access="global"  >
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="ContOppWrapList" type="LC40_OppContratAccount.ListOppContWrapper" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	
+    <aura:iteration var="cont" items="{!v.ContOppWrapList.listCont}" >
+                <tr class="slds-hint-parent ">
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!cont.NumeroContrat__c}</div> </td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!cont.Name}</div> </td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!$Label.c.LC40_Cont}</div> </td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!cont.Statut__c}</div> </td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!cont.techOwner__c}</div> </td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!cont.Nom_d_Agence__c}</div> </td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!cont.LibelleRegion__c}</div> </td>
+                </tr>
+            </aura:iteration>
+            
+            <aura:iteration var="opp" items="{!v.ContOppWrapList.listOpp}" >
+                <tr class="slds-hint-parent">
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!opp.NumeroOpportunite__c}</div> </td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!opp.Name}</div> </td>
+                    <td class="slds-cell-wrap">  <div class="slds-line-clamp">{!$Label.c.LC40_Opp}</div> </td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!opp.StageName}</div></td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!opp.techOwner__c}</div></td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!opp.techagenceName__c}</div></td>
+                    <td class="slds-cell-wrap"> <div class="slds-line-clamp">{!opp.Libelle_Region__c}</div></td>
+                </tr>
+            </aura:iteration>
+</aura:component>

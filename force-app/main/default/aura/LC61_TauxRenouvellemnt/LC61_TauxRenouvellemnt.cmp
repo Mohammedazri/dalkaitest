@@ -1,0 +1,109 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction" controller="LC61_TauxRenouvellement_Cont"  access="global">
+    
+    <aura:attribute  name="TauxGlobal" type="Decimal"/>
+    <aura:attribute  name="TauxRegion" type="Decimal"/>
+    <aura:attribute  name="TauxAgence" type="Decimal"/>
+    <aura:attribute  name="TauxUtilisateur" type="Decimal"/>
+    <aura:attribute  name="GlobalValueG" type="String"/>
+    <aura:attribute  name="GlobalValueR" type="String"/>
+    <aura:attribute  name="GlobalValueA" type="String"/>
+    <aura:attribute  name="GlobalValueU" type="String"/>
+    <aura:attribute name="listOfSegments" type="string[]" default=""/>   
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="custom-background" >
+        <table class="slds-table slds-table_striped">
+            <tr>
+                <th  scope="col"  style="font-weight: bold;padding: 10px;font-size: 11pt">
+                    <div class="slds-truncate">{!$Label.c.LC61_Taux_Renouv}</div>
+                </th>
+                <th  scope="col"  style="font-weight: bold;padding: 10px;text-align: center;font-size: 11pt">
+                    <div class="slds-truncate">{!$Label.c.LC61_Segment}</div>
+                </th>
+            </tr>
+            <tr class="slds-hint--parent" >
+                <td>
+                    <table>
+                    <tr>
+                        <td width="50%">
+                            {!$Label.c.LC61_Global}
+                        </td>
+                        <td>
+                            <b>{!v.TauxGlobal} %</b>
+                        </td>
+                        </tr>
+                    </table>
+                       
+                </td>
+                <td>
+                    <ui:inputSelect aura:id="InputSelectGlobal" change="{!c.onPicklistChangeG}" class="dynamic" value="{!v.GlobalValueG}" > 
+                        <aura:iteration items="{!v.listOfSegments}" var="level">
+                            <ui:inputSelectOption text="{!level}" label="{!level}"  />
+                        </aura:iteration> 
+                    </ui:inputSelect>
+                </td>
+            </tr>
+            <tr class="slds-hint--parent" >
+                <td>
+                    <table>
+                    <tr>
+                    <td width="50%">
+                        {!$Label.c.LC61_Region}
+                        </td>
+                        <td>
+                            <b>{!v.TauxRegion} %</b>
+                        </td>
+                    </tr>
+                    </table>
+                     
+                </td>
+                <td>
+                    <ui:inputSelect aura:id="InputSelectRegion" change="{!c.onPicklistChangeR}" class="dynamic" value="{!v.GlobalValueR}" > 
+                        <aura:iteration items="{!v.listOfSegments}" var="level">
+                            <ui:inputSelectOption text="{!level}" label="{!level}"  />
+                        </aura:iteration> 
+                    </ui:inputSelect>
+                </td>
+            </tr>
+            <tr class="slds-hint--parent">
+                <td>
+                    <table>
+                    <tr>
+                        <td width="50%">
+                            {!$Label.c.LC61_Agence}
+                        </td>
+                        <td >
+                            <b>{!v.TauxAgence} %</b>
+                        </td></tr>
+                    </table>  
+                </td>
+                <td>
+                    <ui:inputSelect aura:id="InputSelectAgence" change="{!c.onPicklistChangeA}" class="dynamic" value="{!v.GlobalValueA}" > 
+                        <aura:iteration items="{!v.listOfSegments}" var="level">
+                            <ui:inputSelectOption text="{!level}" label="{!level}"  />
+                        </aura:iteration> 
+                    </ui:inputSelect>
+                </td>
+            </tr>
+            <tr class="slds-hint--parent" >
+                <td>
+                    <table>
+                    <tr>
+                        <td width="50%">{!$Label.c.LC61_Utilisateur}</td>
+                        <td ><b>{!v.TauxUtilisateur} %</b></td>
+                        </tr>
+                    </table> 
+                </td>
+                <td>
+                    <ui:inputSelect aura:id="InputSelectUti" change="{!c.onPicklistChangeU}" class="dynamic" value="{!v.GlobalValueU}" > 
+                        <aura:iteration items="{!v.listOfSegments}" var="level">
+                            <ui:inputSelectOption text="{!level}" label="{!level}"  />
+                        </aura:iteration> 
+                    </ui:inputSelect>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+</aura:component>
