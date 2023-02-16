@@ -69,8 +69,7 @@ List<LienConventionEmplacement__c> emplacementListSup0ASupprimer = new List<Lien
 List<LienConventionEmplacement__c> emplacementListEgal0 = new List<LienConventionEmplacement__c>();
 List<String> contratCodes = new List<String>();
 contratCodes.add(lcvsw.contrat.dk_code_contrat);
-list<Contrat__c> listContract;
-listContract =[select id,Contact__c,DKCodeSurContrat__c from Contrat__c where DKCodeSurContrat__c in :contratCodes];
+list<Contrat__c> listContract =[select id,Contact__c,DKCodeSurContrat__c from Contrat__c where DKCodeSurContrat__c in :contratCodes];
 Contrat__c ctrt =new Contrat__c();
 ctrt.DKCodeSurContrat__c=lcvsw.contrat.dk_code_contrat;
 for(Contrat__c crtList:listContract){
