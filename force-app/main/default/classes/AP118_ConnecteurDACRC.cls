@@ -652,6 +652,7 @@ public class Demande_OrdreTravailWrapper {
                
                 wsLog.Response__c = responseForDemande.getBody();
                 wsLog.CodeRetour__c = '' + responseForDemande.getStatusCode();
+                wsLog.Objectid__c = demande.CaseNumberMSAD__c;
                 demande.StatutRetourWebServiceMSAD__c = 'OK'; 
                 demande.MessageRetourWebServiceMSAD__c = /*demandeWRA.message*/ responseForDemande.getBody();
                 demande.MessageRetourWebServiceMSAD__c = demande.MessageRetourWebServiceMSAD__c + ' au Statut : ' +demande.Status;
@@ -663,11 +664,13 @@ public class Demande_OrdreTravailWrapper {
                 wsLog.StatusCode__c = 'KO';
                 wsLog.Response__c = responseForDemande.getBody();
                 wsLog.CodeRetour__c = '' + responseForDemande.getStatusCode();
+                wsLog.Objectid__c = demande.CaseNumberMSAD__c;
                 demande.StatutRetourWebServiceMSAD__c = 'KO'; 
                 demande.MessageRetourWebServiceMSAD__c = /*demandeWRA.message*/ responseForDemande.getBody();
                 demande.MessageRetourWebServiceMSAD__c = demande.MessageRetourWebServiceMSAD__c + ' au Statut : ' +demande.Status;
                 System.debug('demande.MessageRetourWebServiceMSAD__c : '  + demande.MessageRetourWebServiceMSAD__c);
             }
+           update demande;
         }
         catch(exception e) {
 
@@ -688,7 +691,7 @@ public class Demande_OrdreTravailWrapper {
         }
 
         //return demandeWrapper;
-        update demande;
+        //update demande;
     }
     
     @TestVisible
@@ -899,200 +902,7 @@ public class Demande_OrdreTravailWrapper {
             }
          genForOrdreTravail.writeEndObject();
          
-         //genForOrdreTravail.writeStringField('Origine', ordreTravail.Origine__c);
-        
-           
-           
-                
-          /*  
-          if (String.isEmpty(ordreTravail.IdOT__c)) {
-            genForOrdreTravail.writeNullField('IDOT');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('IDOT', ordreTravail.IdOT__c);
-            }
-            
-         
-
-           if (ordreTravail.Priorite__c == Null) {
-            genForOrdreTravail.writeNullField('PRIORITE');
-            } 
-            else {
-            genForOrdreTravail.writeNumberField('PRIORITE', ordreTravail.Priorite__c);
-            }
-            
-           if (ordreTravail.DateSouhaiteeFinIntervention__c == Null) {
-            genForOrdreTravail.writeNullField('DATEFINSOUHAITEE');
-           }
-          else {  
-            genForOrdreTravail.writeDateTimeField('DATEFINSOUHAITEE', ordreTravail.DateSouhaiteeFinIntervention__c);
-           }
-           
-           if (ordreTravail.DateAffectationOT__c == Null) {
-            genForOrdreTravail.writeNullField('DATEAFFECOT');
-           }
-          else {  
-            genForOrdreTravail.writeDateTimeField('DATEAFFECOT', ordreTravail.DateAffectationOT__c);
-           }
-           
-           if (ordreTravail.DateDebutIntervention__c == Null) {
-            genForOrdreTravail.writeNullField('RENDEZVOUSREQUIS');
-           }
-           else {  
-            genForOrdreTravail.writeDateTimeField('RENDEZVOUSREQUIS', ordreTravail.DateDebutIntervention__c);
-           }
-                    
-           if (ordreTravail.DateFinIntervention__c == Null) {
-            genForOrdreTravail.writeNullField('DATEFININT');
-           }
-           else {  
-            genForOrdreTravail.writeDateTimeField('DATEFININT', ordreTravail.DateFinIntervention__c);
-           }
-              
-            if (ordreTravail.DureeIntervention__c == Null) {
-            genForOrdreTravail.writeNullField('DUREEINT');
-            } 
-            else {
-            genForOrdreTravail.writeNumberField('DUREEINT', ordreTravail.DureeIntervention__c);
-            }
-           
-            if (ordreTravail.DureeDeplacement__c == Null) {
-            genForOrdreTravail.writeNullField('DUREEDEP');
-            } 
-            else {
-            genForOrdreTravail.writeNumberField('DUREEDEP', ordreTravail.DureeDeplacement__c);
-            }
-            
-            if (ordreTravail.DureeGlobale__c == Null) {
-            genForOrdreTravail.writeNullField('DUREEGLO');
-            } 
-            else {
-            genForOrdreTravail.writeNumberField('DUREEGLO', ordreTravail.DureeGlobale__c);
-            }
-            
-            if (ordreTravail.DateValidationMop__c == Null) {
-            genForOrdreTravail.writeNullField('DATEVALIMOP');
-           }
-           else {  
-            genForOrdreTravail.writeDateTimeField('DATEVALIMOP', ordreTravail.DateValidationMop__c);
-           }
-           
-           if (ordreTravail.DateCloture__c == Null) {
-            genForOrdreTravail.writeNullField('DATECLO');
-           }
-           else {  
-            genForOrdreTravail.writeDateTimeField('DATECLO', ordreTravail.DateCloture__c);
-           }
-           
-            if (String.isEmpty(ordreTravail.EnvoiCRClient__c)) {
-            genForOrdreTravail.writeNullField('CRCLI');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('CRCLI', ordreTravail.EnvoiCRClient__c);
-            }  
-            
-            if (String.isEmpty(ordreTravail.ProblemeRegle__c)) {
-            genForOrdreTravail.writeNullField('PRO');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('PRO', ordreTravail.ProblemeRegle__c);
-            }  
-                       
-            if (String.isEmpty(ordreTravail.CausePanne__c)) {
-            genForOrdreTravail.writeNullField('PANNE');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('PANNE', ordreTravail.CausePanne__c);
-            } 
-                
-            
-            genForOrdreTravail.writeBooleanField('MULTI', ordreTravail.MultiIntervenant__c);   
-            
-            if (String.isEmpty(ordreTravail.LocalisationTechnique__c)) {
-            genForOrdreTravail.writeNullField('LOC');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('LOC', ordreTravail.LocalisationTechnique__c);
-            } 
-            
-            if (String.isEmpty(ordreTravail.RdvClient__c)) {
-            genForOrdreTravail.writeNullField('RDVCLI');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('RDVCLI', ordreTravail.RdvClient__c);
-            } 
-            
-            if (String.isEmpty(ordreTravail.SousTraitant__c)) {
-            genForOrdreTravail.writeNullField('SOUSTRA');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('SOUSTRA', ordreTravail.SousTraitant__c);
-            } 
-            
-            if (String.isEmpty(ordreTravail.Materiel__c)) {
-            genForOrdreTravail.writeNullField('MAT');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('MAT', ordreTravail.Materiel__c);
-            } 
-            
-            if (String.isEmpty(ordreTravail.CommentaireManager__c)) {
-            genForOrdreTravail.writeNullField('COMMAN');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('COMMAN', ordreTravail.CommentaireManager__c);
-            } 
-            
-            if (String.isEmpty(ordreTravail.CommentaireClient__c)) {
-            genForOrdreTravail.writeNullField('COMCLI');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('COMCLI', ordreTravail.CommentaireClient__c);
-            } 
-            
-            if (String.isEmpty(ordreTravail.CommentaireInterne__c)) {
-            genForOrdreTravail.writeNullField('COMINT');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('COMINT', ordreTravail.CommentaireInterne__c);
-            } 
-            
-            if (String.isEmpty(ordreTravail.Observation__c)) {
-            genForOrdreTravail.writeNullField('OBSE');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('OBSE', ordreTravail.Observation__c);
-            } 
-            
-            if (String.isEmpty(ordreTravail.MotifProbleme__c)) {
-            genForOrdreTravail.writeNullField('MOPRO');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('MOPRO', ordreTravail.MotifProbleme__c);
-            } 
-
-            
-            if (String.isEmpty(ordreTravail.GMAO__c)) {
-            genForOrdreTravail.writeNullField('GMAO');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('GMAO', ordreTravail.GMAO__c);
-            }
-            
-            if (String.isEmpty(ordreTravail.NumeroOTGmao__c)) {
-            genForOrdreTravail.writeNullField('NUMOTGMAO');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('NUMOTGMAO', ordreTravail.NumeroOTGmao__c);
-            }
-            
-            if (String.isEmpty(ordreTravail.NumeroOTParent__c)) {
-            genForOrdreTravail.writeNullField('NUMOTPAR');
-            } 
-            else {
-            genForOrdreTravail.writeStringField('NUMOTPAR', ordreTravail.NumeroOTParent__c);
-            }
-         */   
+         //genForOrdreTravail.writeStringField('Origine', ordreTravail.Origine__c); 
                                             
        genForOrdreTravail.writeEndObject();
        jsonSForOrdreTravail = genForOrdreTravail.getAsString();
@@ -1134,7 +944,8 @@ public class Demande_OrdreTravailWrapper {
                System.debug('ordreTravailWrapper : '  + ordreTravailWrapper);
                 wsLog.Response__c = responseForOrdreTravail.getBody();
                 wsLog.CodeRetour__c = '' + responseForOrdreTravail.getStatusCode();
-                ordreTravail.StatutRetourWebServiceMSAD__c = 'OK'; 
+                wsLog.Objectid__c = ordreTravail.InterventionNumberMSAD__c;
+                ordreTravail.StatutRetourWebServiceMSAD__c = 'OK';
                 ordreTravail.MessageRetourWebServiceMSAD__c = responseForOrdreTravail.getBody();
                 ordreTravail.MessageRetourWebServiceMSAD__c = ordreTravail.MessageRetourWebServiceMSAD__c + ' au Statut : ' +ordreTravail.Statut__c;
                 System.debug('ordreTravail.MessageRetourWebServiceMSAD__c : '  + ordreTravail.MessageRetourWebServiceMSAD__c);
@@ -1145,12 +956,14 @@ public class Demande_OrdreTravailWrapper {
                 wsLog.StatusCode__c = 'KO';
                 wsLog.Response__c = responseForOrdreTravail.getBody();
                 wsLog.CodeRetour__c = '' + responseForOrdreTravail.getStatusCode();
+                wsLog.Objectid__c = ordreTravail.InterventionNumberMSAD__c;
                 ordreTravail.StatutRetourWebServiceMSAD__c = 'KO'; 
                 ordreTravail.MessageRetourWebServiceMSAD__c = responseForOrdreTravail.getBody();
                 ordreTravail.MessageRetourWebServiceMSAD__c = ordreTravail.MessageRetourWebServiceMSAD__c + ' au Statut : ' +ordreTravail.Statut__c;
                 System.debug('ordreTravail.MessageRetourWebServiceMSAD__c : '  + ordreTravail.MessageRetourWebServiceMSAD__c);
 
             }
+           update ordreTravail;
         }
         catch(exception e) {
             ordreTravail.StatutRetourWebServiceMSAD__c = 'KO'; 
@@ -1169,7 +982,7 @@ public class Demande_OrdreTravailWrapper {
         }
 
         //return ordreTravailWrapper ;
-        update ordreTravail;
+        //update ordreTravail;
     }
     
     @future(callout=true)

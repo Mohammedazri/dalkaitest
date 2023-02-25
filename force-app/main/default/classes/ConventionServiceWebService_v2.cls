@@ -1,5 +1,8 @@
-@RestResource(urlMapping='/ConventionService/*')
-global with sharing class ConventionServiceWebService{
+@RestResource(urlMapping='/ConventionService_v2/*')
+global with sharing class ConventionServiceWebService_v2{
+
+
+//Wrapper defined Class
 global class CVSWrapper{
     global String dk_code_cvs;
     global String libelle;
@@ -10,57 +13,88 @@ global class CVSWrapper{
     public List<Service> service;
     public Metadonnee metadonnee;
  }
+
    global class Emplacement{
     public String dk_code_emplacement;
     public Boolean statut_lien;
 
    }
+   
     global class Contrat{
     public String dk_code_contrat;
     public Boolean statut_lien;
+
    }
+   
     global class Service{
     public String code_service;
     public Boolean statut_lien;
+    //public List<Remuneration> remuneration;
+    
    }
+   
     global class Metadonnee{
     public DateTime date_modification;
     public String effectue_par;
 
    }
+   
  public static CVSWrapper parse(String json){
         return (CVSWrapper) System.JSON.deserialize(json, CVSWrapper.class);
    }
+
 @HttpPut
 global static /*List<ConventionService__c>*/ void UpsertConventionService() {   
 String requestBodyCVS = RestContext.request.requestBody.toString();
+
+ 
  CVSWrapper lcvsw = (CVSWrapper) JSON.deserialize(requestBodyCVS, CVSWrapper.class);
+ 
+
 system.debug('lcvsw :'+lcvsw);
 system.debug('lcvsw.dk_code_cvs :'+lcvsw.dk_code_cvs);
 system.debug('lcvsw.emplacement :'+lcvsw.emplacement);
 system.debug('lcvsw.service :'+lcvsw.service);
+
+
+
  ConventionServiceWebService.emplacement lcew = (ConventionServiceWebService.emplacement) JSON.deserialize(requestBodyCVS, ConventionServiceWebService.emplacement.class);
+ //ConventionServiceWebService.service lcsw = (ConventionServiceWebService.service) JSON.deserialize(requestBodyCVS, ConventionServiceWebService.service.class);
+
+
 system.debug('lcew :'+lcew);
+//system.debug('lcsw :'+lcsw);
+
 List<String> cvsCodes = new List<String>();
 List<String> empsCodes = new List<String>();
 List<String> servsCodes = new List<String>();
 Map<String, CVSWrapper> cvsMap = new Map<String, CVSWrapper>();
+   
+
+
 List<String> emplacementCodes = new List<String>();
 List<String> serviceCodes = new List<String>();
+
     cvsCodes.add(lcvsw.dk_code_cvs); 
     cvsMap.put(lcvsw.dk_code_cvs, lcvsw);
 
-List<ConventionService__c> Listconventionservice = [SELECT Id,DKCodeEmplacement__c,DKCodeCVS__c, Name, Statut__c, DateDebut__c, DKCodeContrat__c/*, DKCodeEmplacement__c*/ FROM ConventionService__c WHERE DKCodeCVS__c in : cvsCodes];
+List<ConventionService__c> Listconventionservice = [SELECT Id,  DKCodeCVS__c, Name, Statut__c, DateDebut__c, DKCodeContrat__c/*, DKCodeEmplacement__c*/ FROM ConventionService__c WHERE DKCodeCVS__c in : cvsCodes];
 List<ConventionService__c> ListConventionServiceUpdate = new List<ConventionService__c>();
 
 List<LienConventionEmplacement__c> emplacementListSup0 = new List<LienConventionEmplacement__c>();
 List<LienConventionEmplacement__c> emplacementListSup0ASupprimer = new List<LienConventionEmplacement__c>();
 List<LienConventionEmplacement__c> emplacementListEgal0 = new List<LienConventionEmplacement__c>();
+//List<LienConventionEmplacement__c> emplacementList = new List<LienConventionEmplacement__c>();
 List<LienConventionService__c> serviceListSup0 = new List<LienConventionService__c>();
 List<LienConventionService__c> serviceListSup0ASupprimer = new List<LienConventionService__c>();
 List<LienConventionService__c> serviceListEgal0 = new List<LienConventionService__c>();
+
+  //System.debug('emplacementList => '+emplacementList);
+
 List<String> contratCodes = new List<String>();
 contratCodes.add(lcvsw.contrat.dk_code_contrat);
+
+
 list<Contrat__c> listContract =[select id/*,Contact__c*/,DKCodeSurContrat__c from Contrat__c where DKCodeSurContrat__c in :contratCodes LIMIT 1];
 Contrat__c ctrt =new Contrat__c();
 ctrt.DKCodeSurContrat__c=lcvsw.contrat.dk_code_contrat;
@@ -73,9 +107,12 @@ for(Contrat__c crtList:listContract){
   ctrt.id=null;
   }
 }
+
+
 if(Listconventionservice.size() > 0){
+ 
+
     for(ConventionService__c cvs: Listconventionservice){
-      system.debug('lock here');
         CVSWrapper cvsw = cvsMap.get(cvs.DKCodeCVS__c);
         cvs.DKCodeCVS__c = cvsw.dk_code_cvs;
         cvs.Name = cvsw.libelle;
@@ -85,10 +122,15 @@ if(Listconventionservice.size() > 0){
         cvs.DKCodeContrat__c = ctrt.DKCodeSurContrat__c /*listContract[0].DKCodeSurContrat__c*/ ;
         cvs.Contrat__c=ctrt.id;
         ListConventionServiceUpdate.add(cvs);
+
     }
-   }else {
-    system.debug('lock here');
+  
+   }
+   
+        else {
         ConventionService__c cvs = new ConventionService__c();
+
+        
         cvs.DKCodeCVS__c = lcvsw.dk_code_cvs;
         cvs.Name = lcvsw.libelle;
         cvs.Statut__c = lcvsw.statut;
@@ -112,6 +154,9 @@ if(Listconventionservice.size() > 0){
      } 
 
     emplacementCodes.add(lcew.dk_code_emplacement);
+    //serviceCodes.add(lcsw.code_service);
+
+
 system.debug('emplacementCodes :'+emplacementCodes);
 
 Set<String> cvsIds = new Set<String>();
@@ -142,58 +187,132 @@ servsCodes.add(s.code_service);
 
 system.debug('empsCodes :'+empsCodes);
 system.debug('servCodes :'+servsCodes);
+
  Map<String, Emplacement__c> mapemplacementsIds  = new Map<String, Emplacement__c>
  ([SELECT Id, DKCode_Emplacement__c FROM Emplacement__c WHERE DKCode_Emplacement__c in : empsCodes]);
+ 
  Map<String, Service__c> mapservicesIds  = new Map<String, Service__c>
  ([SELECT Id, CodeService__c FROM Service__c WHERE CodeService__c in : servsCodes]);
+ 
  system.debug('mapemplacementsIds :'+mapemplacementsIds);
  system.debug('mapservicesIds :'+mapservicesIds);
+
+boolean AjoutEmplacementInitial = true;
+boolean AjoutEmplacementTraitement = true;
+
 list<Emplacement__c> listEmplacement =[select id, DKCode_Emplacement__c from Emplacement__c where DKCode_Emplacement__c in :empsCodes];
-Emplacement__c emplist = new Emplacement__c();
-list<Service__c> listService =[select id, CodeService__c from Service__c where CodeService__c in :servsCodes];
+ Emplacement__c emplist = new Emplacement__c();
+ 
+ list<Service__c> listService =[select id, CodeService__c from Service__c where CodeService__c in :servsCodes];
  Service__c servlist = new Service__c();
 
-
-system.debug('lcvsw.emplacement >>> '+lcvsw.emplacement+' <<< ');
-if(false/*falseListconventionemplacement.size() > 0 && Listconventionemplacement.size() == lcvsw.emplacement.size()*/){
+/*
+for(Emplacement__c emp : listEmplacement){
+ for (Emplacement e : lcvsw.emplacement) {
+  if(emp.DKCode_Emplacement__c == e.dk_code_emplacement)
+  {
+    emplist.id=emp.id;
+  }
+  else{
+  emplist.id=null;
+  }
+ }
+}
+*/
+/*
+for(Service__c serv : listService){
+ for (Service s : lcvsw.service) {
+  if(serv.CodeService__c == s.code_service)
+  {
+    servlist.id=serv.id;
+  }
+  else{
+  servlist.id=null;
+  }
+ }
+}
+*/
+if(Listconventionemplacement.size() > 0 && Listconventionemplacement.size() == lcvsw.emplacement.size()){
     system.debug('lcvsw.emplacement taille :'+lcvsw.emplacement.size());
  
   for(LienConventionEmplacement__c lceSup0 : Listconventionemplacement){
     for ( Emplacement e : lcvsw.emplacement) {
-   
+     //if (Listconventionemplacement.size() == lcvsw.emplacement.size()) {  
         if (lceSup0.DKCodeEmplacement__c == e.dk_code_emplacement) { 
-          system.debug('lock here');
          if (e.statut_lien == false) {    
          lceSup0.StatutLien__c = e.statut_lien;
          //break;
-         
+   
          ListconventionemplacementExistUpdate.add(lceSup0);
           }
         }
+       /*else {
+         system.debug('emplacement nouveau :'+e);
+         lceSup0.StatutLien__c = e.statut_lien;
+   
+        //ListconventionemplacementExistUpdate.add(lceSup0);
+        //emplacementListSup0.add(lceSup0);
+
+          }*/
+        //ListconventionemplacementExistUpdate.add(lceSup0);
+         //}
+
+       //emplacementListSup0.add(lceSup0);
+       //ListconventionemplacementExistUpdate.add(lceSup0);
      }
     }
+  
+
    if (ListconventionemplacementExistUpdate.size()>0) {  
-    system.debug('lock here');
     try{
-        upsert ListconventionemplacementExistUpdate; 
+        upsert ListconventionemplacementExistUpdate;  
+        //upsert Listconventionemplacement;  
     }
     catch(DMLException e) {
         system.debug('***************************************** ' + e.getMessage()); 
         system.debug('***************************************** ' + e.getStackTraceString());
        
      }
-  } 
   }
-else{
-  system.debug('lock here');
-      system.debug('Listconventionemplacement.size'+Listconventionemplacement.size());
-      system.debug('lcvsw.emplacement.size'+lcvsw.emplacement.size());
-      system.debug('lcvsw.emplacement :'+lcvsw.emplacement);
+
+  /*
+  for(LienConventionEmplacement__c lceSup0 : Listconventionemplacement){
+    for ( Emplacement e : lcvsw.emplacement) {
+
+        if (lceSup0.DKCodeEmplacement__c != e.dk_code_emplacement) { 
+         if (e.statut_lien == true) {    
+         lceSup0.StatutLien__c = e.statut_lien;
+   
+        //emplacementListSup0.add(lceSup0);
+          }
+          emplacementListSup0.add(lceSup0);
+        }
+
+       }
+
+     }
+   if (emplacementListSup0.size()>0) {  
+    try{
+        insert emplacementListSup0;  
+        //upsert Listconventionemplacement;  
+    }
+    catch(DMLException e) {
+        system.debug('***************************************** ' + e.getMessage()); 
+        system.debug('***************************************** ' + e.getStackTraceString());
+       
+     }
+  }
+
+  */
+ 
+   }
+    else {
+    system.debug('lcvsw.emplacement :'+lcvsw.emplacement);
      if (Listconventionemplacement.size() == 0) {
         for ( Emplacement e : lcvsw.emplacement) {
           if (e.statut_lien == true) {
             LienConventionEmplacement__c lceEgla0 = new LienConventionEmplacement__c();
-            system.debug('ListConventionServiceUpdate[0].id :'+ListConventionServiceUpdate[0].id);
+            system.debug('ListConventionServiceUpdate[0] :'+ListConventionServiceUpdate[0]);
             lceEgla0.ConventionService__c = ListConventionServiceUpdate[0].Id;
             lceEgla0.StatutLien__c = e.statut_lien;
             lceEgla0.DKCodeEmplacement__c  = e.dk_code_emplacement;
@@ -202,11 +321,19 @@ else{
             lceEgla0.Emplacement__c = emp.id;
             }
           }
-
+    //system.debug('mapemplacementsIds.get(e.dk_code_emplacement) :'+mapemplacementsIds.get(e.dk_code_emplacement));
+    //lce.Emplacement__c = mapemplacementsIds.get(/*e.dk_code_emplacement*/'S00011915K').Id;
+    //emp.StatutService__c = e.statut_lien;
+    //if (emp.DKCode_Emplacement__c == lce.DKCodeEmplacement__c) {
+     //lce.Emplacement__c = emp.Id;
+     //break;
+     //}
     emplacementListEgal0.add(lceEgla0);
     system.debug('emplacementListEgal0:'+emplacementListEgal0);
       }
-     } 
+     }
+   
+   
    try{
         upsert emplacementListEgal0;  
     }
@@ -214,75 +341,84 @@ else{
         system.debug('***************************************** ' + ep.getMessage()); 
         system.debug('***************************************** ' + ep.getStackTraceString());
      }  
+   
     }
-else if (Listconventionemplacement.size() > 0 && Listconventionemplacement.size() <= lcvsw.emplacement.size()) {
-   // else if (Listconventionemplacement.size() > 0 && Listconventionemplacement.size() < lcvsw.emplacement.size()) {
-    List<LienConventionEmplacement__c> listLienConvEmpletotrait = new List<LienConventionEmplacement__c>();
-  List<LienConventionEmplacement__c> listLienConvEmpletoupsert = new List<LienConventionEmplacement__c>();
-  List<LienConventionEmplacement__c> listLienConvEmpletodelete = new List<LienConventionEmplacement__c>();    
-  for(ConventionService__c cv:Listconventionservice){
-    if(cv.DKCodeCVS__c==lcvsw.dk_code_cvs){
-          for(LienConventionEmplacement__c lce:Listconventionemplacement){
-            if(cv.id==lce.ConventionService__c){
-              listLienConvEmpletotrait.add(lce);
+  /*
+  A optimiser si possible 
+  */
+  
+  else if (Listconventionemplacement.size() != lcvsw.emplacement.size()) {
+
+     try{
+        delete Listconventionemplacement;  
+    }
+    catch(DMLException ep) {
+        system.debug('***************************************** ' + ep.getMessage()); 
+        system.debug('***************************************** ' + ep.getStackTraceString());
+      }
+      
+    for ( Emplacement e : lcvsw.emplacement) { 
+     if (e.statut_lien == true) {
+      LienConventionEmplacement__c lceEgla0 = new LienConventionEmplacement__c();
+      lceEgla0.ConventionService__c = ListConventionServiceUpdate[0].Id;
+      lceEgla0.DKCodeEmplacement__c  = e.dk_code_emplacement;
+      lceEgla0.StatutLien__c = e.statut_lien;
+      for(Emplacement__c emp : listEmplacement){
+            if(emp.DKCode_Emplacement__c == e.dk_code_emplacement) {
+            lceEgla0.Emplacement__c = emp.id;
+            }
+         }
+      emplacementListEgal0.add(lceEgla0);
+      system.debug('emplacementListEgal0:'+emplacementListEgal0);
+        
+      }
+     }  
+    /*for ( Emplacement e : lcvsw.emplacement) { 
+      for(LienConventionEmplacement__c lceSup0 : Listconventionemplacement){
+        if (e.dk_code_emplacement == lceSup0.DKCodeEmplacement__c) {
+         AjoutEmplacementTraitement = false;
+         //break;
             } 
-        }
-      }
+           }      
+         system.debug('AjoutEmplacementTraitement :'+AjoutEmplacementTraitement);
+         if (AjoutEmplacementInitial == true && AjoutEmplacementTraitement == true) {
+         system.debug('Je suis dans AjoutEmplacement :');
+         LienConventionEmplacement__c lceEgla0 = new LienConventionEmplacement__c();
+         lceEgla0.ConventionService__c = ListConventionServiceUpdate[0].Id;
+         lceEgla0.DKCodeEmplacement__c  = e.dk_code_emplacement;    
+         lceEgla0.StatutLien__c = e.statut_lien;
+         //break;
+   
+         ListconventionemplacementExistUpdate.add(lceEgla0);
+           }
+          
+         }
+      */ 
+     
+   
+   if (emplacementListEgal0.size()>0) { 
+   try{
+        insert emplacementListEgal0;  
     }
-
-for (emplacement  el : lcvsw.emplacement) { 
-for(LienConventionEmplacement__c lcve:listLienConvEmpletotrait){
-if(el.statut_lien==false && lcve.DKCodeEmplacement__c==el.dk_code_emplacement && lcve.StatutLien__c==true){
-//lcve.StatutLien__c=false;
-listLienConvEmpletodelete.add(lcve);
-System.debug('listLienConvEmpletodelete => '+listLienConvEmpletodelete);
-}
-
-  else if(el.statut_lien=true  && lcve.DKCodeEmplacement__c!=el.dk_code_emplacement){
-    //system.debug('el.statut_lien  >>>> '+el.statut_lien+'lcve.DKCodeEmplacement__c  >>>> '+lcveI.DKCodeEmplacement__c+'el.dk_code_emplacement   >>>> '+elI.dk_code_emplacement+'');
-    LienConventionEmplacement__c lceEgla0 = new LienConventionEmplacement__c();
-    lceEgla0.ConventionService__c = ListConventionServiceUpdate[0].Id;
-    lceEgla0.DKCodeEmplacement__c  = el.dk_code_emplacement;
-    lceEgla0.StatutLien__c = el.statut_lien;
-    for(Emplacement__c emp : listEmplacement){
-          if(emp.DKCode_Emplacement__c == el.dk_code_emplacement) {
-          lceEgla0.Emplacement__c = emp.id;
-          }
-       }
-       listLienConvEmpletoupsert.add(lceEgla0);
-       System.debug('listLienConvEmpletoupsert'+listLienConvEmpletoupsert);
+    catch(DMLException ep) {
+        system.debug('***************************************** ' + ep.getMessage()); 
+        system.debug('***************************************** ' + ep.getStackTraceString());
       }
-      } }
-    
-    
-    
-    
-if(listLienConvEmpletodelete.size()>0 || listLienConvEmpletoupsert.size()>0){
-try{
-  insert listLienConvEmpletoupsert;
-  delete  listLienConvEmpletodelete;
-  System.debug('listLienConvEmpletodelete'+listLienConvEmpletodelete);
-}
-catch(DMLException ep) {
-  system.debug('***************************************** ' + ep.getMessage()); 
-  system.debug('***************************************** ' + ep.getStackTraceString());
-
-}
-}
-}
-}
-
-  if(false/*Listlienconventionservice.size() > 0 && Listlienconventionservice.size() == lcvsw.service.size()*/){
-    //if(Listlienconventionservice.size() > 0 && Listlienconventionservice.size() == lcvsw.service.size()){
+     }  
+    }
+   }
+  
+  if(Listlienconventionservice.size() > 0 && Listlienconventionservice.size() == lcvsw.service.size()){
     system.debug('lcvsw.service taille :'+lcvsw.service.size());
  
   for(LienConventionService__c lcsSup0 : Listlienconventionservice){
     for ( Service s : lcvsw.service) { 
         if (lcsSup0.CodeService__c == s.code_service) { 
-          system.debug('lock here');
          if (s.statut_lien == false) {    
          lcsSup0.StatutLien__c = s.statut_lien;
-        ListlienconventionserviceExistUpdate.add(lcsSup0);
+         //break;
+   
+         ListlienconventionserviceExistUpdate.add(lcsSup0);
           }
         }
      }
@@ -290,9 +426,9 @@ catch(DMLException ep) {
   
 
    if (ListlienconventionserviceExistUpdate.size()>0) {  
-    system.debug('lock here');
     try{
-        upsert ListlienconventionserviceExistUpdate;   
+        upsert ListlienconventionserviceExistUpdate;  
+        //upsert Listconventionemplacement;  
     }
     catch(DMLException e) {
         system.debug('***************************************** ' + e.getMessage()); 
@@ -303,13 +439,10 @@ catch(DMLException ep) {
     }
   
     else {
-      system.debug('lock here');
     system.debug('lcvsw.service :'+lcvsw.service);
      if (Listlienconventionservice.size() == 0) {
-      system.debug('lock here');
         for ( Service s : lcvsw.service) { 
           if (s.statut_lien == true) {
-            system.debug('lock here');
              LienConventionService__c lcsEgla0 = new LienConventionService__c ();
              lcsEgla0.ConventionService__c = ListConventionServiceUpdate[0].Id;
              lcsEgla0.CodeService__c  = s.code_service;
@@ -324,6 +457,8 @@ catch(DMLException ep) {
      
       }
      }
+   
+   
    try{
         upsert serviceListEgal0;  
     }
@@ -333,5 +468,46 @@ catch(DMLException ep) {
      }  
    
     }
+  /*
+  A optimiser si possible 
+  */
+  
+  else if (Listlienconventionservice.size() != lcvsw.service.size()) {
+
+     try{
+        delete Listlienconventionservice;  
+    }
+    catch(DMLException ep) {
+        system.debug('***************************************** ' + ep.getMessage()); 
+        system.debug('***************************************** ' + ep.getStackTraceString());
+      }
+      
+    for (Service s : lcvsw.service) { 
+     if (s.statut_lien == true) {
+      LienConventionService__c lcsEgla0 = new LienConventionService__c();
+      lcsEgla0.ConventionService__c = ListConventionServiceUpdate[0].Id;
+      lcsEgla0.CodeService__c  = s.code_service;
+      lcsEgla0.StatutLien__c = s.statut_lien;
+      for(Service__c ser : listService){
+            if(ser.CodeService__c == s.code_service) {
+            lcsEgla0.Service__c = ser.id;
+          }
+       }
+      serviceListEgal0.add(lcsEgla0);
+      system.debug('serviceListEgal0:'+serviceListEgal0);
+       }
+     }  
+   
+   if (serviceListEgal0.size()>0) { 
+   try{
+        insert serviceListEgal0;  
+    }
+    catch(DMLException ep) {
+        system.debug('***************************************** ' + ep.getMessage()); 
+        system.debug('***************************************** ' + ep.getStackTraceString());
+      }
+     }  
+    }
   }
-}}
+ }
+}

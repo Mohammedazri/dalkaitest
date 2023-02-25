@@ -4,11 +4,13 @@ import getData from '@salesforce/apex/LWC02_CascadeAppel_CTRL.getData';
 import saveConsignes from '@salesforce/apex/LWC02_CascadeAppel_CTRL.saveConsignes';
 import calloutCascadeAppel from '@salesforce/apex/LWC02_CascadeAppel_CTRL.callWebServiceCascadeAppel';
 import getLayoutMetadata from '@salesforce/apex/LWC02_CascadeAppel_CTRL.getLayoutMetadata';
+import { updateRecord } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { subscribe, unsubscribe, onError } from 'lightning/empApi';
 
 const reponses = ['Refusé', 'Attribué', 'Différé', 'Messagerie', 'Non contacté'];
+const dureeGlobal = ['00:30', '00:35', '00:40', '00:45', '00:50', '00:55', '01:00', '01:05', '01:10', '01:15', '01:20', '01:25', '01:30', '01:35', '01:40', '01:45', '01:50', '01:55', '02:00'];
 
 export default class Lwc02CascadeAppel extends LightningElement {
     channelNameConsigne = '/data/Consigne__ChangeEvent';
@@ -256,7 +258,7 @@ export default class Lwc02CascadeAppel extends LightningElement {
             { label: 'Ordre', fieldName: 'N_ordre__c', type: 'numeric' },
             { label: 'Matricule', fieldName: 'Matricule__c' },
             { label: 'Nom', fieldName: 'Nom_du_technicien__c' },
-            { label: 'Numéro de téléphone', fieldName: 'Numero_de_telephone__c', type: 'text' },
+            { label: 'Numéro de téléphone', fieldName: 'Numero_de_telephone__c', type: 'phone' },
             { label: 'Type de ressource', fieldName: 'TypeRessource__c' },
             { label: 'Id SIA', fieldName: 'IdSIA__c', type: 'text' },
             { label: 'Délai', fieldName: 'Delai__c', type: 'text' },
@@ -267,6 +269,15 @@ export default class Lwc02CascadeAppel extends LightningElement {
                     value: { fieldName: 'Reponse__c' },
                     context: { fieldName: 'Id' },
                     fieldApiName: 'Reponse__c'
+                }
+            },
+            {
+                label: 'Durée globale', fieldName: 'Duree_globale__c', type: 'normalpicklist',
+                typeAttributes: {
+                    picklistOptions: generateObjValPair(dureeGlobal),
+                    value: { fieldName: 'Duree_globale__c' },
+                    context: { fieldName: 'Id' },
+                    fieldApiName: 'Duree_globale__c'
                 }
             },
         ];
@@ -289,7 +300,6 @@ export default class Lwc02CascadeAppel extends LightningElement {
         if (this.isSubscribedConsigne) {
             this.unsubscribeConsigne();
         }
-
         this.unsubscribeDemande();
     }
 
@@ -299,12 +309,15 @@ export default class Lwc02CascadeAppel extends LightningElement {
             this.updatedValues.forEach(updatedValue => {
                 let matricule;
                 let reponse;
+                let dureeGlobal;
                 this.filteredData.forEach(value => {
+                    console.log("le delai " + value.Delai__c);
                     if (updatedValue.Id === value.Id && (updatedValue.Reponse__c === 'Refusé')) {
                         matricule = value.Matricule__c;
                         console.log("le matricule: " + matricule);
                         reponse = updatedValue.Reponse__c;
                         console.log("la reponse: " + reponse);
+                        dureeGlobal = updatedValue.Reponse__c;
                     } else if (updatedValue.Reponse__c === 'Différé') {
                         this.isDifferer = true;
                     }
@@ -313,15 +326,15 @@ export default class Lwc02CascadeAppel extends LightningElement {
                 this.filteredData.forEach(value => {
                     if (value.Matricule__c === matricule && value.Id !== updatedValue.Id) {
                         let matchedMatricules = this.updatedValues.filter(consigne => consigne.Id === value.Id);
-                        console.log("matched matricule" + matchedMatricules);
-                        if ((matchedMatricules === undefined || matchedMatricules.length === 0)) {
-                            this.updatedValues.push({ Id: value.Id, Reponse__c: reponse });
+                        console.log("matched matricule" + JSON.stringify(matchedMatricules));
+                        if (matchedMatricules === undefined || matchedMatricules.length === 0) {
+                            this.updatedValues.push({ Id: value.Id, Reponse__c: reponse, Duree_globale__c: dureeGlobal });
                         }
                     }
                 });
             });
 
-            console.table(this.updatedValues);
+            console.table('those are the updatedValues' + JSON.stringify(this.updatedValues));
             
             this.updatedValues.forEach(updatedResponse => {
                 if (updatedResponse.Reponse__c != 'Différé') {
@@ -354,7 +367,6 @@ export default class Lwc02CascadeAppel extends LightningElement {
 
         }
     }
-
     saveConsignesForDiffere() {
         this.showSpinner = true;
         if (this.updatedValuesForDiffere.length > 0) {
@@ -391,6 +403,7 @@ export default class Lwc02CascadeAppel extends LightningElement {
 
         }
     }
+
 
     setConsigneKeys(data) {
         if (data) {
@@ -482,7 +495,6 @@ export default class Lwc02CascadeAppel extends LightningElement {
         if (this.updatedValues.length > 0) {
             this.recordsNotChanged = false;
         }
-
         this.updatedValuesForDiffere.forEach(consigne => {
             if (consigne.Id === consigneId && consigneReponse == 'Différé') {
                 foundForDiffere = true;
@@ -493,8 +505,6 @@ export default class Lwc02CascadeAppel extends LightningElement {
         if (!foundForDiffere && consigneReponse == 'Différé') {
             this.updatedValuesForDiffere.push({ Id: consigneId, Reponse__c: consigneReponse });
         }
-
-        
     }
 
     showToast(message, variant, title, mode) {
