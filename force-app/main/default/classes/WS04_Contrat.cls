@@ -420,9 +420,11 @@ global class WS04_Contrat {
                     contratFields.proprietesContrat.dateDeFin = contratFields.proprietesContrat.dateDeFin.addSeconds(tz.getOffset(contratFields.proprietesContrat.dateDeFin) / 1000);
                     ws.Request__c = contratFields + '';
                 }
+                /*
                 if(contratFields.proprietesContrat.estContratCadre != null) {
                     cont.EstContratcadre__c = contratFields.proprietesContrat.estContratCadre;
                 }
+				*/
                 if(!String.isBlank(contratFields.proprietesContrat.reportingContrat)) {
                     cont.ReportingContrat__c = contratFields.proprietesContrat.reportingContrat;
                 }
@@ -440,9 +442,11 @@ global class WS04_Contrat {
                     cont.TypeContrat__c = contratFields.proprietesContrat.typeContratFacturation;
                 }
                 //07-03-2022 Added by Jimmy US C360-655
+                /*
                 if(!String.isBlank(contratFields.proprietesContrat.typeContrat)) {
                     cont.NatureContratCadre__c = contratFields.proprietesContrat.typeContrat;
                 }
+				*/
                 //end US C360-655
 
             }
@@ -465,6 +469,7 @@ global class WS04_Contrat {
             //end CVS
 
             //contratCadre
+            /*
             if(contratFields.contratCadre != null && !String.isBlank(contratFields.contratCadre.contratCadre)) {
                 Contrat__c contratParent = new Contrat__c();
                 //its the dk code
@@ -477,7 +482,7 @@ global class WS04_Contrat {
                     cont.ContratCadre__c = contratParent.id;
                 }
             }
-
+			*/
             //documents
             List<Document_Contractuel__c> listDoc = new List<Document_Contractuel__c>();
 

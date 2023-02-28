@@ -134,8 +134,14 @@ public class Demande_OrdreTravailWrapper {
         
         genForDemande.writeStartObject();   
 
-            //genForDemande.writeStringField('NumeroDemande', demande.CaseNumber);  
-            genForDemande.writeStringField('NumeroDemande', demande.CaseNumberMSAD__c);           
+            //genForDemande.writeStringField('NumeroDemande', demande.CaseNumber); 
+            
+            if (String.isEmpty(demande.CaseNumberMSAD__c)) {
+             genForDemande.writeNullField('NumeroDemande');
+            } 
+             else {
+             genForDemande.writeStringField('NumeroDemande', demande.CaseNumberMSAD__c);
+            }       
             
             if (String.isEmpty(demande.Origin)) {
             genForDemande.writeNullField('Origine');
@@ -865,10 +871,16 @@ public class Demande_OrdreTravailWrapper {
            
         genForOrdreTravail.writeFieldName('Site');
         genForOrdreTravail.writeStartObject();
-           genForOrdreTravail.writeStringField('DkCodeEmplacement', ordreTravail.LibelleEmplacement__c);
+          
+           if (String.isEmpty(ordreTravail.LibelleEmplacement__c)) {
+            genForOrdreTravail.writeNullField('DkCodeEmplacement');
+            } 
+            else {
+            genForOrdreTravail.writeStringField('DkCodeEmplacement', ordreTravail.LibelleEmplacement__c);
+            }             
            genForOrdreTravail.writeFieldName('SousEmplacement');
            genForOrdreTravail.writeStartObject();
-              if (String.isEmpty(ordreTravail.LibelleSousEmplacement__c)) {
+            if (String.isEmpty(ordreTravail.LibelleSousEmplacement__c)) {
             genForOrdreTravail.writeNullField('DkCodeSousEmplacement');
             } 
             else {
@@ -882,6 +894,31 @@ public class Demande_OrdreTravailWrapper {
         genForOrdreTravail.writeStartObject();
          genForOrdreTravail.writeStringField('NumeroDemande', ordreTravail.Demande__r.CaseNumberMSAD__c);
         genForOrdreTravail.writeEndObject();  
+        
+       /* genForOrdreTravail.writeFieldName('STI');
+        genForOrdreTravail.writeStartObject();
+          if (String.isEmpty(ordreTravail.ID_STI__c)) {
+            genForOrdreTravail.writeNullField('IdSti');
+            } 
+           else {
+           genForOrdreTravail.writeStringField('IdSti', ordreTravail.ID_STI__c);
+           } 
+                      
+          if (ordreTravail.DATE_DEBUT__c == Null) {
+                genForOrdreTravail.writeNullField('DateDebut');
+               }
+               else {  
+                genForOrdreTravail.writeDateTimeField('DateDebut', ordreTravail.DATE_DEBUT__c);
+               } 
+               
+          if (ordreTravail.DATE_FIN__c == Null) {
+                genForOrdreTravail.writeNullField('DateFin');
+               }
+               else {  
+                genForOrdreTravail.writeDateTimeField('DateFin', ordreTravail.DATE_FIN__c);
+               }      
+        genForOrdreTravail.writeEndObject(); 
+        */
         
         genForOrdreTravail.writeFieldName('Metadonnees');
            genForOrdreTravail.writeStartObject();

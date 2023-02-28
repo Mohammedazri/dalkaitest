@@ -9,10 +9,8 @@ History
 --------------------------------------------------------------------------------------------------------------------------*/
 trigger ObjectifBeforeInsert on Objectif__c (before insert) {
     
-    /*if(PAD.CanTrigger('AP36_UperCase')) 
-    {
-        AP36_UperCase.ModifyToUpper('Objectif__c',trigger.new);
-    }*/
+    AP10_Objectif.copyManagertoOwner(Trigger.new, null);
+
     if(PAD.CanTrigger('AP54_UpdateObjectif')) 
     {
         List<Objectif__c> lstAP54 = new List<Objectif__c>();

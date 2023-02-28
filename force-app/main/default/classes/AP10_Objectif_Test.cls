@@ -24,6 +24,7 @@ public class AP10_Objectif_Test {
             Test.startTest();
             insert obj1;
             obj1.Commercial__c=u2.Id;
+            obj1.ManagerDeObjectif__c = u1.Id;
             update obj1;
             Test.stopTest();
         }

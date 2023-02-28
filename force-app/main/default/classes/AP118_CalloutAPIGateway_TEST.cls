@@ -66,7 +66,10 @@ public with sharing class AP118_CalloutAPIGateway_TEST {
         Id RT_DemandeDepannage = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName()
                             .get('Demande_de_depannage').getRecordTypeId();
                             
-        Emplacement__c emplacement= testUtils.insertEmplacement('Emplacement0', false, 'DKCode0');   
+        Emplacement__c emplacement= testUtils.insertEmplacement('Emplacement0', false, 'DKCode0'); 
+        emplacement.Nature_Emplacement__c = 'SIT'; 
+        update emplacement;
+         
         Contact contact = testUtils.insertContact('FirstName0', 'LastName0', '06123456745', 'test0APIConDACRC@test.com');
         
         Case demande = testUtils.insertDemande('Subject', RT_DemandeDepannage, contact, emplacement, 'A Filtrer'); 
@@ -79,9 +82,54 @@ public with sharing class AP118_CalloutAPIGateway_TEST {
             demande.Reason = 'Alerte environnement';
             demande.Impact__c = 'Général';
             demande.Urgence__c = 'Urgente';
-            update demande;   
-             
+            demande.Service__c = 'S111';
+            demande.Motif_Depannage__c = 'M2111';
+            update demande; 
+            
+            demande.Status = 'Clôturée';
+            update demande;  
+           
             Test.stopTest();
+        }
+        
+    }
+    
+    @isTest
+    static void testCalloutAPIGatewayFuture()
+    {
+        User testUser = testgetenvUser();
+        
+        Id RT_DemandeDepannage = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName()
+                            .get('Demande_de_depannage').getRecordTypeId();
+                            
+        Emplacement__c emplacement2= testUtils.insertEmplacement('Emplacement1', false, 'DKCode1'); 
+        emplacement2.Nature_Emplacement__c = 'SIT'; 
+        update emplacement2;
+         
+        Contact contact2 = testUtils.insertContact('FirstName1', 'LastName1', '06123456747', 'test1APIConDACRC@test.com');
+        
+        Case demande2 = testUtils.insertDemande('Subject', RT_DemandeDepannage, contact2, emplacement2, 'A Traiter'); 
+        demande2.Description = 'Details2';
+        demande2.Details__c = 'TITRE2';
+        demande2.Reason = 'Alerte environnement';
+        demande2.Impact__c = 'Général';
+        demande2.Urgence__c = 'Urgente';
+        demande2.Service__c = 'S111';
+        demande2.Motif_Depannage__c = 'M2111';
+        //update demande2;
+        
+        System.runas(testUser){
+            Test.startTest();
+          update demande2;
+            
+        //if (Test.isRunningTest()) {   
+        //AP118_ConnecteurDACRC.sendCase(demande2.Id,emplacement2.DKCode_Emplacement__c);
+       //}
+            Test.stopTest();
+            
+            demande2.Motif_Depannage__c = 'M2112';
+            update demande2;
+            
         }
         
     }

@@ -102,10 +102,13 @@ public with sharing class AP118_ConnecteurDACRC_TEST {
         AP118_ConnecteurDACRC.Demande_OrdreTravailWrapper demande_OTWrapper;
         
         Id RT_DemandeDepannage = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName()
-                            .get('Demande_de_depannage').getRecordTypeId();
+                            .get('Demande_de_depannage').getRecordTypeId();  
                             
-        Emplacement__c emplacement1 = testUtils.insertEmplacement('Emplacement 1', false, 'DKCode 1');   
-        Contact contact1 = testUtils.insertContact('FirstName1', 'LastName1', '06123456789', 'test1APIConDACRC@test.com');
+        Emplacement__c emplacement1 = testUtils.insertEmplacement('Emplacement 1', false, 'DKCode 1'); 
+        emplacement1.Nature_Emplacement__c = 'SIT'; 
+        update emplacement1;
+          
+        Contact contact1 = testUtils.insertContact('FirstName1', 'LastName1', '+33612345678', 'test1APIConDACRC@test.com');
         
         Case demande1 = testUtils.insertDemande('Subject', RT_DemandeDepannage, contact1, emplacement1, 'A Filtrer');   
             
@@ -180,8 +183,11 @@ public with sharing class AP118_ConnecteurDACRC_TEST {
         Id RT_DemandeDepannage = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName()
                             .get('Demande_de_depannage').getRecordTypeId();
                             
-        Emplacement__c emplacement2= testUtils.insertEmplacement('Emplacement 2', false, 'DKCode 2');   
-        Contact contact2 = testUtils.insertContact('FirstName2', 'LastName2', '06123456788', 'test2APIConDACRC@test.com');
+        Emplacement__c emplacement2= testUtils.insertEmplacement('Emplacement 2', false, 'DKCode 2');       
+        emplacement2.Nature_Emplacement__c = 'SIT'; 
+        update emplacement2;  
+         
+        Contact contact2 = testUtils.insertContact('FirstName2', 'LastName2', '+33612345678', 'test2APIConDACRC@test.com');
         
         Case demande2 = testUtils.insertDemande('Subject', RT_DemandeDepannage, contact2, emplacement2, 'A Filtrer'); 
         AP118_ConnecteurDACRC.Demande_OrdreTravailWrapper demande_OTWrapper = new AP118_ConnecteurDACRC.Demande_OrdreTravailWrapper();
@@ -232,8 +238,11 @@ public with sharing class AP118_ConnecteurDACRC_TEST {
         Id RT_DemandeDepannage = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName()
                             .get('Demande_de_depannage').getRecordTypeId();
                             
-        Emplacement__c emplacement3= testUtils.insertEmplacement('Emplacement 3', false, 'DKCode 3');   
-        Contact contact3 = testUtils.insertContact('FirstName3', 'LastName3', '06123456780', 'test3APIConDACRC@test.com');
+        Emplacement__c emplacement3= testUtils.insertEmplacement('Emplacement 3', false, 'DKCode 3'); 
+        emplacement3.Nature_Emplacement__c = 'SIT'; 
+        update emplacement3;
+          
+        Contact contact3 = testUtils.insertContact('FirstName3', 'LastName3', '+33612345678', 'test3APIConDACRC@test.com');
         
         Case demande3 = testUtils.insertDemande('Subject', RT_DemandeDepannage, contact3, emplacement3, 'A Filtrer'); 
         AP118_ConnecteurDACRC.Demande_OrdreTravailWrapper demande_OTWrapper = new AP118_ConnecteurDACRC.Demande_OrdreTravailWrapper();
@@ -262,8 +271,11 @@ public with sharing class AP118_ConnecteurDACRC_TEST {
         Id RT_DemandeDepannage = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName()
                             .get('Demande_de_depannage').getRecordTypeId();
                             
-        Emplacement__c emplacement4= testUtils.insertEmplacement('Emplacement 4', false, 'DKCode 4');   
-        Contact contact4 = testUtils.insertContact('FirstName4', 'LastName4', '06123456756', 'test4APIConDACRC@test.com');
+        Emplacement__c emplacement4= testUtils.insertEmplacement('Emplacement 4', false, 'DKCode 4');
+        emplacement4.Nature_Emplacement__c = 'SIT'; 
+        update emplacement4;
+           
+        Contact contact4 = testUtils.insertContact('FirstName4', 'LastName4', '+33612345676', 'test4APIConDACRC@test.com');
         
         Case demande4 = testUtils.insertDemande('Subject', RT_DemandeDepannage, contact4, emplacement4, 'A Filtrer'); 
         AP118_ConnecteurDACRC.Demande_OrdreTravailWrapper demande_OTWrapper;
@@ -276,6 +288,8 @@ public with sharing class AP118_ConnecteurDACRC_TEST {
             demande4.Reason = 'Alerte environnement';
             demande4.Impact__c = 'Général';
             demande4.Urgence__c = 'Urgente';
+            demande4.Service__c = 'S111';
+            demande4.Motif_Depannage__c = 'M2111';
             update demande4;
             Test.setMock(HttpCalloutMock.class, 
                 new AP118_ConnecteurDACRC_Mock_TEST(502, 'KO', '{"access_token":"NotGood"}', null, null));

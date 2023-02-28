@@ -45,6 +45,7 @@ export default class Lwc02CascadeAppel extends LightningElement {
     recordTypeId;
     caseRecordTypeName;
     isDifferer = false;
+    numtel = '+33660423635';
     handleSubmit() {
         this.showSpinner = true;
     }
@@ -258,7 +259,12 @@ export default class Lwc02CascadeAppel extends LightningElement {
             { label: 'Ordre', fieldName: 'N_ordre__c', type: 'numeric' },
             { label: 'Matricule', fieldName: 'Matricule__c' },
             { label: 'Nom', fieldName: 'Nom_du_technicien__c' },
-            { label: 'Numéro de téléphone', fieldName: 'Numero_de_telephone__c', type: 'phone' },
+            { label: 'Numéro de téléphone', fieldName: 'Numero_de_telephone__c', type: 'clickToDial', 
+                typeAttributes: {
+                    value: {fieldName: 'Numero_de_telephone__c'}
+                }
+            },
+            
             { label: 'Type de ressource', fieldName: 'TypeRessource__c' },
             { label: 'Id SIA', fieldName: 'IdSIA__c', type: 'text' },
             { label: 'Délai', fieldName: 'Delai__c', type: 'text' },
@@ -281,6 +287,10 @@ export default class Lwc02CascadeAppel extends LightningElement {
                 }
             },
         ];
+    }
+
+    handleChange(evt) {
+        this.myValue = numtel; // updates the internal state
     }
 
     unsubscribeConsigne() {

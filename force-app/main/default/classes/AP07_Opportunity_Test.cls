@@ -58,9 +58,6 @@ public class AP07_Opportunity_Test {
         u3.ManagerId=u1.id;
         insert u3;
         
-        String teamMemberRole = 'Account Manager';
-        AccountTeamMember myaccoutMember= New AccountTeamMember(AccountId = myaccount.id, TeamMemberRole = teamMemberRole, UserId= u1.Id);
-        insert myaccoutMember;
         System.runAs(u2) 
         {
             
@@ -69,6 +66,7 @@ public class AP07_Opportunity_Test {
             List<Objectif__c> ListObj2= new List<Objectif__c>();
             Objectif__c obj1=testUtils.CreateObjectif('testObj1', label.Objectif_RT_Commercial, String.valueof(System.Today().year()));
             obj1.Commercial__c=u1.Id;
+            obj1.AgenceDeObjectif__c=agence1.id;
             ListObj2.add(obj1);
             insert obj1;
             updateobj(obj1);
@@ -82,7 +80,8 @@ public class AP07_Opportunity_Test {
             myOpp.Type_pers__c='Renouvellement';
             myOpp.OwnerId=u1.Id;
             insert myOpp; 
-            System.assertEquals('C' + myOpp.CloseDate.year() + '_' + string.valueof(myOpp.OwnerId).left(15), 'C'+ obj1.Annee__c + '_' + string.valueof(obj1.Commercial__c).left(15));
+            myOpp.Libelle_Agence__c = agence1.id;
+            System.assertEquals('C' + myOpp.CloseDate.year() + '_' + string.valueof(myOpp.OwnerId).left(15) +'_'+string.valueof(myOpp.Libelle_Agence__c).left(15), 'C'+ obj1.Annee__c + '_' + string.valueof(obj1.Commercial__c).left(15)+ '_' +string.valueof(obj1.AgenceDeObjectif__c).left(15));
             
             obj1.Annee__c=String.valueof(System.Today().year()+1);
             obj1.Commercial__c=u2.Id;

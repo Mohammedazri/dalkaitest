@@ -54,7 +54,9 @@ Returns: -
             for(Objectif__c thisObjectif:ObjectifList)
             {
                 objectif__c oldObjectif=oldObjectifMap.get(thisObjectif.Id);
-                if(thisObjectif.Commercial__c !=oldObjectif.Commercial__c || thisObjectif.Annee__c !=oldObjectif.Annee__c)
+                if(thisObjectif.Commercial__c !=oldObjectif.Commercial__c || 
+                   thisObjectif.Annee__c !=oldObjectif.Annee__c ||
+                   thisObjectif.AgenceDeObjectif__c!=oldObjectif.AgenceDeObjectif__c) 
                 {
                     ListObjectifsCommercial.add(thisObjectif);
                     ListOldObjectifsCommercial.add(oldObjectif);

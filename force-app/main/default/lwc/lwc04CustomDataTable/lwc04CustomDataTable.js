@@ -1,5 +1,6 @@
 import LightningDatatable from 'lightning/datatable';
 import normalPicklist from './picklistTemplate.html'
+import clickToDial from './clickToDial.html'
 
 const generateObjValPair = (_dataArray) => {
     return _dataArray.map(element => Object.assign({ value: element, label: element }))
@@ -18,6 +19,10 @@ export default class Lwc04CustomDataTable extends LightningDatatable {
                 'fieldApiName',
                 'context'
             ]
+        },
+        clickToDial: {
+            template: clickToDial,
+            typeAttributes: ['value']
         }
     };
 }

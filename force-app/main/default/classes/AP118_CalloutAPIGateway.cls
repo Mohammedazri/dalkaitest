@@ -14,7 +14,7 @@ public class AP118_CalloutAPIGateway{
 
        system.debug('codeEmplacement :'+codeEmplacement);
        for (Case demande : lstdemandes) {
-           if( System.isFuture() || System.isBatch() ){
+           /*if( System.isFuture() || System.isBatch() ){
              if (demande.Status == 'A traiter' || demande.Status == 'En cours de traitement' || demande.Status == 'Attribuée' || demande.Status == 'Partiellement réalisée') {  
                AP118_ConnecteurDACRC.sendCase(demande.id, demande.Emplacement__r.DKCode_Emplacement__c);
                AP118_ConnecteurDACRC.sendOrdreTravail(demande.id);
@@ -23,7 +23,10 @@ public class AP118_CalloutAPIGateway{
              else if (demande.Status == 'Clôturée') {
                AP118_ConnecteurDACRC.sendCase(demande.id, demande.Emplacement__r.DKCode_Emplacement__c);
               }     
-           }else{
+           }
+           */
+          // else{
+          // Mode Trigger Si probleme decommenter ligne 17 a ligne 28
              if (demande.Status == 'A traiter' || demande.Status == 'En cours de traitement' || demande.Status == 'Attribuée' || demande.Status == 'Partiellement réalisée') {  
                AP118_ConnecteurDACRC.sendCase_trigger(demande.id, demande.Emplacement__r.DKCode_Emplacement__c);
                AP118_ConnecteurDACRC.sendOrdreTravail_trigger(demande.id);
@@ -32,7 +35,7 @@ public class AP118_CalloutAPIGateway{
              else if (demande.Status == 'Clôturée') {
                AP118_ConnecteurDACRC.sendCase_trigger(demande.id, demande.Emplacement__r.DKCode_Emplacement__c);
               }     
-         }      
+         //}      
        } 
      }
   }

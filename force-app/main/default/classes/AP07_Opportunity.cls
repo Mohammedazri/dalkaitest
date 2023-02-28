@@ -27,12 +27,12 @@ Returns: -
         set<Id> setOwnerId = new set<Id>();
         for(Opportunity opp : listOpportunities)
         {
-            setUniqueIds.add('C' + opp.Annee_de_signature__c + '_' + string.valueof(opp.OwnerId).left(15));
+            setUniqueIds.add('C' + opp.Annee_de_signature__c + '_' + string.valueof(opp.OwnerId).left(15)+'_'+(opp.Libelle_Agence__c!=NULL?string.valueof(opp.Libelle_Agence__c).left(15):''));
             
             setOwnerId.add(opp.OwnerId);
         }
         system.debug('!!setUniqueIds  ' + setUniqueIds);
-        list<Objectif__c> listObjectifs = [SELECT Id, Annee__c, Commercial__c, Agence__c, Region__c, Siege__c, recordType.developerName, Siege__r.Code_Siege__c, Region__r.Code_Region__c
+        list<Objectif__c> listObjectifs = [SELECT Id, Annee__c, Commercial__c,AgenceDeObjectif__c ,Region__c, Siege__c, recordType.developerName, Siege__r.Code_Siege__c, Region__r.Code_Region__c
                                            FROM Objectif__c
                                            WHERE TECH_Unique__c IN :setUniqueIds
                                            AND RecordType.DeveloperName !=:Label.Objectif_regional];
@@ -60,13 +60,13 @@ Returns: -
         
         for(Opportunity opp : listOpportunities)
         {
-            setUniqueIds.add('C' + opp.Annee_de_signature__c + '_' + string.valueof(opp.OwnerId).left(15));
+            setUniqueIds.add('C' + opp.Annee_de_signature__c + '_' + string.valueof(opp.OwnerId).left(15)+'_'+(opp.Libelle_Agence__c!=NULL?string.valueof(opp.Libelle_Agence__c).left(15):''));
             
             setOwnerId.add(opp.OwnerId);
         }
         
         
-        list<Objectif__c> listObjectifs = [SELECT Id, Annee__c, Commercial__c, Agence__c, Region__c, Siege__c, recordType.developerName, Siege__r.Code_Siege__c, Region__r.Code_Region__c
+        list<Objectif__c> listObjectifs = [SELECT Id, Annee__c, Commercial__c, AgenceDeObjectif__c,Region__c, Siege__c, recordType.developerName, Siege__r.Code_Siege__c, Region__r.Code_Region__c
                                            FROM Objectif__c
                                            WHERE TECH_Unique__c IN :setUniqueIds
                                            AND RecordType.DeveloperName !=:Label.Objectif_regional];

@@ -20,22 +20,24 @@ Returns: an opportunity List
         {
             set<Id>SetCommercialsId= new set<Id>();
             set<String>SetAnnee= new set<String>();
+            set<id> setAgenceIds = new set<id>();
             for(Objectif__c thisObj: ObjectifList)
             {
                 SetCommercialsId.add(thisObj.Commercial__c);
                 SetAnnee.add(thisObj.Annee__c);
+                setAgenceIds.add(thisObj.AgenceDeObjectif__c);
             }
             
-            listOpportunity = [SELECT id, Type_pers__c, Amount, Segment_client__c, Annee_de_signature__c, OwnerId, TECH_Objectif__c  /*add other filters and MB*/
+            listOpportunity = [SELECT id, Type_pers__c, Amount, Segment_client__c, Annee_de_signature__c, OwnerId, TECH_Objectif__c,Libelle_Agence__c  /*add other filters and MB*/
                                FROM Opportunity
-                               WHERE OwnerId in:SetCommercialsId And Annee_de_signature__c in:SetAnnee];            
+                               WHERE OwnerId in:SetCommercialsId And Annee_de_signature__c in:SetAnnee And Libelle_Agence__c in:setAgenceIds];            
         }
         
         map<string, list<Opportunity>> mapUnique_Opportunity = new map<string, list<Opportunity>>();
         
         for(Opportunity opp : listOpportunity)
         {
-            string newUniqueKey = opp.OwnerId + '_' + opp.Annee_de_signature__c;
+            string newUniqueKey = opp.OwnerId + '_' + opp.Annee_de_signature__c+'_'+opp.Libelle_Agence__c;
             if(!mapUnique_Opportunity.containskey(newUniqueKey)){
                 mapUnique_Opportunity.put(newUniqueKey, new list<Opportunity>());
             }  
@@ -59,7 +61,7 @@ Returns: an opportunity List
         {
             for(Objectif__c thisObj: ObjectifList)
             {
-                string newUniqueKey = thisObj.Commercial__c + '_' + thisObj.Annee__c;
+                string newUniqueKey = thisObj.Commercial__c + '_' + thisObj.Annee__c + '_' + thisObj.AgenceDeObjectif__c;
                 
                 if(mapUnique_Opportunity.containskey(newUniqueKey))
                 {
@@ -135,25 +137,17 @@ Returns:
         {
             pickList.add(pl.getValue()) ;
         }
-        User currentUser = [SELECT id,Bypass_Triggers__c,Bypass_Workflow__c,BypassDuplicateRules__c,BypassFilters__c,
-                            BypassProcessBuilder__c,BypassValidationRules__c
-                            FROM User
-                            WHERE id =:userInfo.getUserId() limit 1];
-        currentUser.techBypassTriggers__c =currentUser.Bypass_Triggers__c;
-        currentUser.TechBypassWorkFlow__c =currentUser.Bypass_Workflow__c ;
-        currentUser.TechBypassDuplicateRules__c =currentUser.BypassDuplicateRules__c ;
-        currentUser.TechBypassFilters__c =currentUser.BypassFilters__c ;
-        currentUser.TechBypassProcessBuilder__c =currentUser.BypassProcessBuilder__c ;
-        currentUser.TechBypassValidationRules__c=currentUser.BypassValidationRules__c;
         
-        currentUser.Bypass_Triggers__c = String.join(pickList, ';');
-        currentUser.Bypass_Workflow__c = true;
-        currentUser.BypassDuplicateRules__c = true;
-        currentUser.BypassFilters__c = true;
-        currentUser.BypassProcessBuilder__c = true;
-        currentUser.BypassValidationRules__c = true;
+        User currUser = new User();
+        currUser.Id = userInfo.getUserId();
+        currUser.Bypass_Triggers__c = String.join(pickList, ';');
+        currUser.Bypass_Workflow__c = true;
+        currUser.BypassDuplicateRules__c = true;
+        currUser.BypassFilters__c = true;
+        currUser.BypassProcessBuilder__c = true;
+        currUser.BypassValidationRules__c = true;
         
-        update currentUser;
+        update currUser;
     }
     
     /*--------------------------------------------------------------------------------------------------------------------------
@@ -165,23 +159,15 @@ Returns:
 ----------------------------------------------------------------------------------------------------------------------------*/ 
     public static void removeBypassUser()
     {
-        User currentUser = [SELECT id,techBypassTriggers__c,TechBypassWorkFlow__c,TechBypassDuplicateRules__c,TechBypassFilters__c,
-                            TechBypassProcessBuilder__c,TechBypassValidationRules__c
-                            FROM User
-                            WHERE id =:userInfo.getUserId() limit 1];
-        currentUser.Bypass_Triggers__c = currentUser.techBypassTriggers__c;
-        currentUser.Bypass_Workflow__c = currentUser.TechBypassWorkFlow__c;
-        currentUser.BypassDuplicateRules__c = currentUser.TechBypassDuplicateRules__c;
-        currentUser.BypassFilters__c = currentUser.TechBypassFilters__c;
-        currentUser.BypassProcessBuilder__c = currentUser.TechBypassProcessBuilder__c;
-        currentUser.BypassValidationRules__c = currentUser.TechBypassValidationRules__c;
-        currentUser.techBypassTriggers__c =null;
-        currentUser.TechBypassWorkFlow__c =false ;
-        currentUser.TechBypassDuplicateRules__c =false ;
-        currentUser.TechBypassFilters__c =false ;
-        currentUser.TechBypassProcessBuilder__c =false ;
-        currentUser.TechBypassValidationRules__c=false;
+        User currUser = new User();
+        currUser.Id = userInfo.getUserId();
+        currUser.Bypass_Triggers__c = '';
+        currUser.Bypass_Workflow__c = false;
+        currUser.BypassDuplicateRules__c = false;
+        currUser.BypassFilters__c = false;
+        currUser.BypassProcessBuilder__c = false;
+        currUser.BypassValidationRules__c = false;
         
-        update currentUser;
+        update currUser;
     }
 }

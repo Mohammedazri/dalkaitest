@@ -46,12 +46,8 @@
                     title="Recupérer les consignes" onclick={loadConsignes} class="slds-m-left_x-small">
                 </lightning-button>
 
-                
-                <p><lightning-click-to-dial value="14155555552"></lightning-click-to-dial> </p>
             </div>
         </div>
-       
-    </div>
         <template if:true={isDifferer}>
             <div>
                 <c-lwc10-differer-quick-action custom-form-modal=true record-id={recordId} updated-list-differer={updatedValues} show-spinner-cascade={showSpinner}></c-lwc10-differer-quick-action>
@@ -91,10 +87,15 @@
                                                                 key={section.label} name={section.label}
                                                                 label={section.label}>
                                                                 <lightning-layout multiple-rows="true">
+                                                                    
                                                                     <template for:each={section.layoutColumns}
+                                                                     
                                                                         for:item="layoutRow">
+                                                                         
                                                                         <template for:each={layoutRow.layoutItems}
+                                                                          
                                                                             for:item="layoutItem">
+                                                                             
                                                                             <lightning-layout-item
                                                                                 key={layoutItem.field} size="6"
                                                                                 padding="horizontal-small">

@@ -9,6 +9,8 @@ History
 --------------------------------------------------------------------------------------------------------------------------*/
 
 trigger ObjectifBeforeUpdate on Objectif__c (before update) {
+
+    AP10_Objectif.copyManagertoOwner(Trigger.new, Trigger.oldmap);
    
     if(PAD.CanTrigger('AP54_UpdateObjectif') ) 
     {

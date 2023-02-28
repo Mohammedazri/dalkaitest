@@ -57,5 +57,20 @@ Returns: -
             Database.SaveResult[] sr = Database.insert(ListObjectifShareObj,false);
         }
     }
-    
+/*--------------------------------------------------------------------------------------------------------------------------
+Author: Jacques Akiki 
+Description: The following function aligns the owner of the Objectif with the manager de l'Objectif
+Inputs: List of new Objectif and map of old Objectif
+Returns: -
+----------------------------------------------------------------------------------------------------------------------------*/  
+public static void copyManagertoOwner(List<Objectif__c> listObjectifs, map<id,Objectif__c> mapObjectif){
+    Id RT_regional = Schema.SObjectType.Objectif__c.getRecordTypeInfosByDeveloperName().get('Objectif_regional').getRecordTypeId();
+    for(Objectif__c obj:listObjectifs){
+        if(obj.RecordTypeId!=RT_regional){
+            if(mapObjectif?.get(obj.id).ManagerDeObjectif__c!=obj.ManagerDeObjectif__c){
+                obj.OwnerId = obj.ManagerDeObjectif__c;
+            }
+        }
+    }
+}
 }

@@ -58,7 +58,9 @@ public class Contrat_Mapper {
         if(cf != null && cf.size() > 0) {
             retVal.contrat.proprietesContrat.UOPiloteContrat = cf[0].DkCode__c != null ? cf[0].DkCode__c : '';
         }
-        retVal.contrat.proprietesContrat.typeContratFacturation = cont.TypeContrat__c != null ? cont.TypeContrat__c : '';
+
+        //17/02/2023: C360-922 Added by Jimmy, TypeContrat__c n'est plus envoyé à la modif du contrat
+        //retVal.contrat.proprietesContrat.typeContratFacturation = cont.TypeContrat__c != null ? cont.TypeContrat__c : '';
         //07-03-2022 Added by Jimmy US C360-655
         retVal.contrat.proprietesContrat.typeContrat = cont.NatureContratCadre__c != null ? cont.NatureContratCadre__c : '';
         //end US C360-655
@@ -1062,12 +1064,12 @@ public class Contrat_Mapper {
                    cont.Datepriseeffetinitiale__c = DatepriseeffetinitialeConverted;
                    }*/
                 /*cont.DureeInitialeContrat__c = retval.contrat.durees.dureeInitialeContrat;
-                cont.TypeReconduction__c = retval.contrat.durees.typeReconduction;
-                cont.DureeReconduction__c = retval.contrat.durees.dureeReconduction;
-                cont.DureePreavis__c = retval.contrat.durees.dureePreavis;
-                cont.NombreReconductionsAutorisees__c = retval.contrat.durees.nombreReconductionAutorise;
-                cont.DureeMaximaleCumulee_del__c = retval.contrat.durees.dureeMaximaleCumulee;
-                cont.ReconductionFaitAutorisee__c = retval.contrat.durees.reconductionFaitAutorisee;*/
+                   cont.TypeReconduction__c = retval.contrat.durees.typeReconduction;
+                   cont.DureeReconduction__c = retval.contrat.durees.dureeReconduction;
+                   cont.DureePreavis__c = retval.contrat.durees.dureePreavis;
+                   cont.NombreReconductionsAutorisees__c = retval.contrat.durees.nombreReconductionAutorise;
+                   cont.DureeMaximaleCumulee_del__c = retval.contrat.durees.dureeMaximaleCumulee;
+                   cont.ReconductionFaitAutorisee__c = retval.contrat.durees.reconductionFaitAutorisee;*/
                 //cont.NombreReconductionsPassees__c = retval.contrat.durees.nombreReconductionsPassees;
                 /*
                    DateTime DateProchainPreavisOriginal = retval.contrat.durees.dateProchainPreavis;
@@ -1440,13 +1442,13 @@ public class Contrat_Mapper {
                    cont.Datepriseeffetinitiale__c = DatepriseeffetinitialeConverted;
                    }*/
                 /*cont.DureeInitialeContrat__c = retval.contrat.durees.dureeInitialeContrat;
-                cont.TypeReconduction__c = retval.contrat.durees.typeReconduction;
-                cont.DureeReconduction__c = retval.contrat.durees.dureeReconduction;
-                cont.DureePreavis__c = retval.contrat.durees.dureePreavis;
-                cont.NombreReconductionsAutorisees__c = retval.contrat.durees.nombreReconductionAutorise;
-                cont.DureeMaximaleCumulee_del__c = retval.contrat.durees.dureeMaximaleCumulee;
-                cont.ReconductionFaitAutorisee__c = retval.contrat.durees.reconductionFaitAutorisee;
-                //cont.NombreReconductionsPassees__c = retval.contrat.durees.nombreReconductionsPassees;*/
+                   cont.TypeReconduction__c = retval.contrat.durees.typeReconduction;
+                   cont.DureeReconduction__c = retval.contrat.durees.dureeReconduction;
+                   cont.DureePreavis__c = retval.contrat.durees.dureePreavis;
+                   cont.NombreReconductionsAutorisees__c = retval.contrat.durees.nombreReconductionAutorise;
+                   cont.DureeMaximaleCumulee_del__c = retval.contrat.durees.dureeMaximaleCumulee;
+                   cont.ReconductionFaitAutorisee__c = retval.contrat.durees.reconductionFaitAutorisee;
+                   //cont.NombreReconductionsPassees__c = retval.contrat.durees.nombreReconductionsPassees;*/
                 /*
                    DateTime DateProchainPreavisOriginal = retval.contrat.durees.dateProchainPreavis;
 

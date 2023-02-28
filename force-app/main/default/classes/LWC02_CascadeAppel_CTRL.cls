@@ -24,7 +24,7 @@ public with sharing class LWC02_CascadeAppel_CTRL {
      * @return  List<Consigne__c>
      */                                                                  
     static List<Consigne__c> getConsignes(String recordId) {
-        return [SELECT Id, Demande__c, Nom_du_technicien__c, toLabel(TypeRessource__c), IdSIA__c, RecordType.DeveloperName, Delai__c, N_ordre__c, Numero_de_telephone__c, Matricule__c, Reponse__c, estHistorique__c, Urgence__c
+        return [SELECT Id, Demande__c, Nom_du_technicien__c, toLabel(TypeRessource__c), IdSIA__c, isSIU__c, RecordType.DeveloperName, Delai__c, N_ordre__c, Numero_de_telephone__c, Matricule__c, Reponse__c, estHistorique__c, Duree_globale__c
                 FROM Consigne__c 
                 WHERE Demande__c = :recordId 
                 AND ((Reponse__c = 'Non Contacté' AND RecordTypeId = :RT_ConsigneManuelle)
@@ -77,7 +77,7 @@ public with sharing class LWC02_CascadeAppel_CTRL {
      * @return               List<Consigne__c>
      */
     static List<Consigne__c> resetConsignesAutomatique(String recordId) {
-        List<Consigne__c> listeConsignes = [SELECT Id, estHistorique__c, Reponse__c, Urgence__c FROM Consigne__c WHERE Demande__c = :recordId 
+        List<Consigne__c> listeConsignes = [SELECT Id, estHistorique__c, Reponse__c, Duree_globale__c FROM Consigne__c WHERE Demande__c = :recordId 
                                                                                                         AND estHistorique__c = false 
                                                                                                         AND RecordTypeId = :RT_ConsigneAuto];
         for (Consigne__c consigne : listeConsignes) {
@@ -99,19 +99,12 @@ public with sharing class LWC02_CascadeAppel_CTRL {
         boolean saved = false;
 
         if (!mapConsignes.isEmpty()) {
-            system.debug('save Consignes :' +mapConsignes);
-            for (consigne__c c : mapConsignes.values()) { 
-               if (c.Reponse__c == 'Différé') {
-                   break;
-                }
-              else
-                try{
-                   update mapConsignes.values();
-                    saved = true;
-                } catch(Exception e){
-                    throw e;
-                }
-         }  
+            try{
+                update mapConsignes.values();
+                saved = true;
+            } catch(Exception e){
+                throw e;
+            }
         }
 
         return saved;
@@ -141,6 +134,7 @@ public with sharing class LWC02_CascadeAppel_CTRL {
         return saved;
     
   }
+
     /**
      * @description Methode qui permet de recupérer les champs d'une demande
      * @param recordId 
@@ -228,6 +222,7 @@ public with sharing class LWC02_CascadeAppel_CTRL {
 
                     Consigne__c tempConsigne = new Consigne__c();
                         tempConsigne.IdSIA__c = consigne.idSIA;
+                        tempConsigne.isSIU__c = webServiceConsignes.isSIU;
                         tempConsigne.N_ordre__c = consigne.numero;
                         tempConsigne.Matricule__c = consigne.matricule;
                         tempConsigne.Delai__c = consigne.delai;
@@ -236,6 +231,7 @@ public with sharing class LWC02_CascadeAppel_CTRL {
                         tempConsigne.Reponse__c = 'Non contacté';
                         tempConsigne.Est_remplacant__c = consigne.isRemplacant == null ? false : (Boolean) consigne.isRemplacant;
                         tempConsigne.RecordTypeId = RT_ConsigneAuto;
+                        tempConsigne.Duree_globale__c = '02:00';
                         tempConsigne.Nom_du_technicien__c = consigne.denomination;
                         tempConsigne.Demande__c = recordId;
                         tempConsigne.estHistorique__c = false;
