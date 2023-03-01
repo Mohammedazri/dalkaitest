@@ -51,7 +51,7 @@ List<String> serviceCodes = new List<String>();
     cvsCodes.add(lcvsw.dk_code_cvs); 
     cvsMap.put(lcvsw.dk_code_cvs, lcvsw);
 
-List<ConventionService__c> Listconventionservice = [SELECT Id,DKCodeEmplacement__c,DKCodeCVS__c, Name, Statut__c, DateDebut__c, DKCodeContrat__c/*, DKCodeEmplacement__c*/ FROM ConventionService__c WHERE DKCodeCVS__c in : cvsCodes];
+List<ConventionService__c> Listconventionservice = [SELECT Id,DKCodeCVS__c, Name, Statut__c, DateDebut__c, DKCodeContrat__c/*, DKCodeEmplacement__c*/ FROM ConventionService__c WHERE DKCodeCVS__c in : cvsCodes];
 List<ConventionService__c> ListConventionServiceUpdate = new List<ConventionService__c>();
 
 List<LienConventionEmplacement__c> emplacementListSup0 = new List<LienConventionEmplacement__c>();
@@ -63,7 +63,6 @@ List<LienConventionService__c> serviceListEgal0 = new List<LienConventionService
 List<String> contratCodes = new List<String>();
 contratCodes.add(lcvsw.contrat.dk_code_contrat);
 
-// contrat part .
 list<Contrat__c> listContract =[select id/*,Contact__c*/,DKCodeSurContrat__c from Contrat__c where DKCodeSurContrat__c in :contratCodes LIMIT 1];
 Contrat__c ctrt =new Contrat__c();
 ctrt.DKCodeSurContrat__c=lcvsw.contrat.dk_code_contrat;
@@ -76,14 +75,6 @@ for(Contrat__c crtList:listContract){
   ctrt.id=null;
   }
 }
-
-// to case listcvs >0
-
-
-
-
-//}
-
 if(Listconventionservice.size() > 0){
     for(ConventionService__c cvs: Listconventionservice){
       system.debug('lock here');
@@ -169,36 +160,36 @@ list<Service__c> listService =[select id, CodeService__c from Service__c where C
 
 
 system.debug('lcvsw.emplacement >>> '+lcvsw.emplacement+' <<< ');
-if(false/*Listconventionemplacement.size() > 0 && Listconventionemplacement.size() == lcvsw.emplacement.size()*/){
-    system.debug('lcvsw.emplacement taille :'+lcvsw.emplacement.size());
- 
-  for(LienConventionEmplacement__c lceSup0 : Listconventionemplacement){
-    for ( Emplacement e : lcvsw.emplacement) {
-   
-        if (lceSup0.DKCodeEmplacement__c == e.dk_code_emplacement) { 
-          system.debug('lock here');
-         if (e.statut_lien == false) {    
-         lceSup0.StatutLien__c = e.statut_lien;
-        ListconventionemplacementExistUpdate.add(lceSup0);
-          }
-        }
-     }
-    }
-   if (ListconventionemplacementExistUpdate.size()>0) {  
-    system.debug('lock here');
-    try{
-        upsert ListconventionemplacementExistUpdate; 
-    }
-    catch(DMLException e) {
-        system.debug('***************************************** ' + e.getMessage()); 
-        system.debug('***************************************** ' + e.getStackTraceString());
-       
-     }
-  } 
-  }
 
-else{
-  system.debug('lock here');
+// if(false/*Listconventionemplacement.size() > 0 && Listconventionemplacement.size() == lcvsw.emplacement.size()*/){
+//     system.debug('lcvsw.emplacement taille :'+lcvsw.emplacement.size());
+ 
+//   for(LienConventionEmplacement__c lceSup0 : Listconventionemplacement){
+//     for ( Emplacement e : lcvsw.emplacement) {
+   
+//         if (lceSup0.DKCodeEmplacement__c == e.dk_code_emplacement) { 
+//           system.debug('lock here');
+//          if (e.statut_lien == false) {    
+//          lceSup0.StatutLien__c = e.statut_lien;
+//         ListconventionemplacementExistUpdate.add(lceSup0);
+//           }
+//         }
+//      }
+//     }
+//    if (ListconventionemplacementExistUpdate.size()>0) {  
+//     system.debug('lock here');
+//     try{
+//         upsert ListconventionemplacementExistUpdate; 
+//     }
+//     catch(DMLException e) {
+//         system.debug('***************************************** ' + e.getMessage()); 
+//         system.debug('***************************************** ' + e.getStackTraceString());
+       
+//      }
+//   } 
+//   }
+
+if(Listconventionemplacement.size() == 0 || (Listconventionemplacement.size() > 0 && Listconventionemplacement.size() <= lcvsw.emplacement.size())){
       system.debug('Listconventionemplacement.size >> '+Listconventionemplacement.size()+' <<');
       system.debug('lcvsw.emplacement.size >> '+lcvsw.emplacement.size()+' <<');
       system.debug('lcvsw.emplacement :'+lcvsw.emplacement);
@@ -262,16 +253,8 @@ listLienConvEmpletodelete.add(lcve);
 
 System.debug('listLienConvEmpletodelete >>>  '+listLienConvEmpletodelete);
 }
-//System.debug('el.statut_lien >>> '+el.statut_lien+'lcve.DKCodeEmplacement__c >>> '+el.dk_code_emplacement+'lcve.StatutLien__c >>> '+lcve.StatutLien__c);
-//el.statut_lien=true  && lcve.DKCodeEmplacement__c!=el.dk_code_emplacement && lcve.StatutLien__c==false
-
-  else if(lcve.DKCodeEmplacement__c!=el.dk_code_emplacement && (el.statut_lien=true  || lcve.StatutLien__c==false)){
-    //system.debug('el.statut_lien  >>>> '+el.statut_lien+'lcve.DKCodeEmplacement__c  >>>> '+lcveI.DKCodeEmplacement__c+'el.dk_code_emplacement   >>>> '+elI.dk_code_emplacement+'');
-    
-    System.debug('el.statut_lien >>> '+el.statut_lien+' lcve.DKCodeEmplacement__c >>> '+lcve.DKCodeEmplacement__c+' el.dk_code_emplacement >>> '+el.dk_code_emplacement+'lcve.StatutLien__c >>> '+lcve.StatutLien__c);
-
-    //  Add 
-   // if(lcve.StatutLien__c==false){
+else if(lcve.DKCodeEmplacement__c!=el.dk_code_emplacement && (el.statut_lien=true  /*&& lcve.StatutLien__c==false*/)){
+System.debug('el.statut_lien >>> '+el.statut_lien+' lcve.DKCodeEmplacement__c >>> '+lcve.DKCodeEmplacement__c+' el.dk_code_emplacement >>> '+el.dk_code_emplacement+'lcve.StatutLien__c >>> '+lcve.StatutLien__c);
     LienConventionEmplacement__c lceEgla0 = new LienConventionEmplacement__c();
     lceEgla0.ConventionService__c = ListConventionServiceUpdate[0].Id;
     lceEgla0.DKCodeEmplacement__c  = el.dk_code_emplacement;
@@ -294,8 +277,8 @@ System.debug('listLienConvEmpletodelete >>>  '+listLienConvEmpletodelete);
 if(listLienConvEmpletodelete.size()>0 || listLienConvEmpletoupsert.size()>0){
 try{
   
-  insert listLienConvEmpletoupsert;
-  //upsert listLienConvEmpletoupsert;
+  //insert listLienConvEmpletoupsert;
+  upsert listLienConvEmpletoupsert;
   delete  listLienConvEmpletodelete;
   
 }
